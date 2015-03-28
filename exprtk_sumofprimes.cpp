@@ -1,0 +1,79 @@
+/*
+ **************************************************************
+ *         C++ Mathematical Expression Toolkit Library        *
+ *                                                            *
+ * ExprTk Summation of Prime Factors                          *
+ * Author: Arash Partow (1999-2015)                           *
+ * URL: http://www.partow.net/programming/exprtk/index.html   *
+ *                                                            *
+ * Copyright notice:                                          *
+ * Free use of the Mathematical Expression Toolkit Library is *
+ * permitted under the guidelines and in accordance with the  *
+ * most current version of the Common Public License.         *
+ * http://www.opensource.org/licenses/cpl1.0.php              *
+ *                                                            *
+ **************************************************************
+*/
+
+
+#include <cstdio>
+#include <iostream>
+#include <string>
+
+#include "exprtk.hpp"
+
+
+template <typename T>
+void sum_of_primes()
+{
+   typedef exprtk::symbol_table<T>      symbol_table_t;
+   typedef exprtk::expression<T>          expression_t;
+   typedef exprtk::parser<T>                  parser_t;
+   typedef exprtk::function_compositor<T> compositor_t;
+
+   symbol_table_t symbol_table;
+
+   compositor_t compositor(symbol_table);
+
+   compositor
+      .add("sum_of_primes",
+           " var i     := 2;    "
+           " var total := 0;    "
+           " while (z > 1)      "
+           " {                  "
+           "    if (0 == z % i) "
+           "    {               "
+           "       total += i;  "
+           "       z /= i;      "
+           "    }               "
+           "    else            "
+           "       i += 1;      "
+           " };                 "
+           " total;             ",
+           "z");
+
+   exprtk::helper::println<T> println;
+
+   symbol_table.add_function("println",println);
+
+   std::string sum_of_primes_program =
+                  " for (var i := 1; i <= 100; i += 1) "
+                  " {                                  "
+                  "   println(i,sum_of_primes(i));     "
+                  " }                                  ";
+
+   parser_t parser;
+
+   expression_t expression;
+   expression.register_symbol_table(symbol_table);
+
+   parser.compile(sum_of_primes_program,expression);
+
+   expression.value();
+}
+
+int main()
+{
+   sum_of_primes<double>();
+   return 0;
+}
