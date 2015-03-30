@@ -90,10 +90,12 @@ public:
       symbol_table_.add_function("poly11", poly11_);
       symbol_table_.add_function("poly12", poly12_);
 
+      #ifndef exprtk_disable_string_capabilities
       symbol_table_.add_stringvar("s0",local_str_[0]);
       symbol_table_.add_stringvar("s1",local_str_[1]);
       symbol_table_.add_stringvar("s2",local_str_[2]);
       symbol_table_.add_stringvar("s3",local_str_[3]);
+      #endif
    }
 
    bool& persist_symbol_table()
@@ -133,10 +135,13 @@ public:
          symbol_table_.clear_variables();
          symbol_table_.add_constants();
          symbol_table_.add_constant ("e",exprtk::details::numeric::constant::e);
+
+         #ifndef exprtk_disable_string_capabilities
          symbol_table_.add_stringvar("s0",local_str_[0]);
          symbol_table_.add_stringvar("s1",local_str_[1]);
          symbol_table_.add_stringvar("s2",local_str_[2]);
          symbol_table_.add_stringvar("s3",local_str_[3]);
+         #endif
       }
    }
 
