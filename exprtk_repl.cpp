@@ -213,6 +213,11 @@ public:
 
       timer.stop();
 
+      if (expression.results().count())
+      {
+         print_results(expression.results());
+      }
+
       printf("\nresult: %10.5f\n",result);
 
       if (display_total_time_)
@@ -241,6 +246,58 @@ public:
          perform_symbol_dump(assignment_list);
          printf("---------------------\n");
       }
+   }
+
+   void print_results(const exprtk::results_context<T>& results)
+   {
+      typedef exprtk::results_context<T> results_context_t;
+      typedef typename results_context_t::type_store_t type_t;
+      typedef typename type_t::scalar_view scalar_t;
+      typedef typename type_t::vector_view vector_t;
+      typedef typename type_t::string_view string_t;
+
+      typename exprtk::details::numeric::details::number_type<T>::type num_type;
+
+      printf("%s\n",std::string(10,'-').c_str());
+      printf("Return Results (#%d)\n",static_cast<int>(results.count()));
+
+      for (std::size_t i = 0; i < results.count(); ++i)
+      {
+         printf("[%02d]  ",static_cast<int>(i));
+
+         type_t t = results[i];
+
+         switch (t.type)
+         {
+            case type_t::e_scalar : printf("Scalar\t");
+                                    exprtk::helper::details::print_type("%10.5f",scalar_t(t)(),num_type);
+                                    break;
+
+            case type_t::e_vector : {
+                                       printf("Vector\t");
+                                       vector_t vector(t);
+
+                                       for (std::size_t x = 0; x < vector.size(); ++x)
+                                       {
+                                          exprtk::helper::details::print_type("%10.5f",vector[x],num_type);
+
+                                          if ((x + 1) < vector.size())
+                                             printf(" ");
+                                       }
+                                    }
+                                    break;
+
+            case type_t::e_string : printf("String\t");
+                                    printf("%s",to_str(string_t(t)).c_str());
+                                    break;
+
+            default               : continue;
+         }
+
+         printf("\n");
+      }
+
+      printf("%s\n",std::string(10,'-').c_str());
    }
 
    void perform_symbol_dump(const symbol_list_t& variable_list) const
