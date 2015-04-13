@@ -47,14 +47,7 @@ void sieve_of_eratosthenes()
                      "   }                                             "
                      " };                                              "
                      "                                                 "
-                     " var prime_count := 0;                           "
-                     " for (var i := 0; i < sieve[]; i += 1)           "
-                     " {                                               "
-                     "   if (false == sieve[i])                        "
-                     "   {                                             "
-                     "     prime_count += 1;                           "
-                     "   };                                            "
-                     " };                                              "
+                     " var prime_count := sieve[] - sum(sieve);        "
                      "                                                 "
                      " prime_count == 5761455;                         ";
 
