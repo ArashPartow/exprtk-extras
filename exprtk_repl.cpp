@@ -231,9 +231,9 @@ public:
 
          parser_.dec().symbols(symbol_list);
 
-         printf("---- Symbols ----\n");
+         printf("------ Symbols ------\n");
          perform_symbol_dump(symbol_list);
-         printf("-----------------\n");
+         printf("---------------------\n");
       }
 
       if (assignment_dump_)
