@@ -25,12 +25,11 @@
 template <typename T>
 void truth_table_generator(const std::string& boolean_expression)
 {
-   typedef exprtk::symbol_table<T>    symbol_table_t;
-   typedef exprtk::expression<T>        expression_t;
-   typedef exprtk::parser<T>                parser_t;
-   typedef exprtk::parser_error::type        error_t;
-   typedef typename parser_t::settings    settings_t;
-
+   typedef exprtk::symbol_table<T>       symbol_table_t;
+   typedef exprtk::expression<T>           expression_t;
+   typedef exprtk::parser<T>                   parser_t;
+   typedef exprtk::parser_error::type           error_t;
+   typedef typename parser_t::settings_store settings_t;
 
    symbol_table_t symbol_table;
 
@@ -40,7 +39,7 @@ void truth_table_generator(const std::string& boolean_expression)
    parser_t parser(
                     settings_t(
                         settings_t::compile_all_opts +
-                        settings_t::e_disble_usr_on_rsrvd)
+                        settings_t::e_disable_usr_on_rsrvd)
                      .disable_all_base_functions()
                      .disable_all_control_structures()
                   );
@@ -154,3 +153,10 @@ int main(int argc, char* argv[])
 
    return 0;
 }
+
+/*
+   Examples:
+   ./exprtk_truthtable_gen 'A and B or C or not(D)'
+   ./exprtk_truthtable_gen '(A and not(B)) nor not(C xor D)'
+   ./exprtk_truthtable_gen '(A nand not(B or C)) xor not(D xor E)'
+*/
