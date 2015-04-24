@@ -30,26 +30,26 @@ void sieve_of_eratosthenes()
    typedef exprtk::parser<T>         parser_t;
 
    std::string sieve_of_eratosthenes_program =
-                     " var sieve[10^8] := [false];                     "
-                     " var m := trunc(sqrt(sieve[]));                  "
-                     "                                                 "
-                     " sieve[0] := true;                               "
-                     " sieve[1] := true;                               "
-                     "                                                 "
-                     " for (var i := 0; i <= m; i += 1)                "
-                     " {                                               "
-                     "   if (false == sieve[i])                        "
-                     "   {                                             "
-                     "     for (var j := (i * i); j < sieve[]; j += i) "
-                     "     {                                           "
-                     "       sieve[j] := true;                         "
-                     "     }                                           "
-                     "   }                                             "
-                     " };                                              "
-                     "                                                 "
-                     " var prime_count := sieve[] - sum(sieve);        "
-                     "                                                 "
-                     " prime_count == 5761455;                         ";
+                     " var sieve[10^8] := [false];                  "
+                     " var m := trunc(sqrt(sieve[]));               "
+                     "                                              "
+                     " sieve[0] := true;                            "
+                     " sieve[1] := true;                            "
+                     "                                              "
+                     " for (var i := 0; i <= m; i += 1)             "
+                     " {                                            "
+                     "   if (false == sieve[i])                     "
+                     "   {                                          "
+                     "     for (var j := i^2); j < sieve[]; j += i) "
+                     "     {                                        "
+                     "       sieve[j] := true;                      "
+                     "     }                                        "
+                     "   }                                          "
+                     " };                                           "
+                     "                                              "
+                     " var prime_count := sieve[] - sum(sieve);     "
+                     "                                              "
+                     " prime_count == 5761455;                      ";
 
    parser_t parser;
 
