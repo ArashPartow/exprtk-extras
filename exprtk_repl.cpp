@@ -54,10 +54,12 @@ class expression_processor
 {
 public:
 
-   typedef exprtk::symbol_table<T>    symbol_table_t;
-   typedef exprtk::expression<T>        expression_t;
-   typedef exprtk::parser<T>                parser_t;
-   typedef exprtk::parser_error::type        error_t;
+   typedef exprtk::symbol_table<T>         symbol_table_t;
+   typedef exprtk::expression<T>             expression_t;
+   typedef exprtk::parser<T>                     parser_t;
+   typedef exprtk::parser_error::type             error_t;
+   typedef exprtk::function_compositor<T>    compositor_t;
+   typedef typename compositor_t::function     function_t;
 
    typedef typename parser_t::dependent_entity_collector::symbol_t symbol_t;
    typedef std::vector<symbol_t> symbol_list_t;
@@ -96,6 +98,13 @@ public:
       symbol_table_.add_stringvar("s2",local_str_[2]);
       symbol_table_.add_stringvar("s3",local_str_[3]);
       #endif
+
+      clear_functions();
+   }
+
+  ~expression_processor()
+   {
+      clear_functions();
    }
 
    bool& persist_symbol_table()
@@ -151,6 +160,7 @@ public:
 
       expression_t expression;
       expression.register_symbol_table(symbol_table_);
+      expression.register_symbol_table(function_symbol_table_);
 
       exprtk::timer compile_timer;
       compile_timer.start();
@@ -218,7 +228,7 @@ public:
          print_results(expression.results());
       }
 
-      printf("\nresult: %10.5f\n",result);
+      printf("\nResult: %10.5f\n",result);
 
       if (display_total_time_)
       {
@@ -247,6 +257,71 @@ public:
          printf("---------------------\n");
       }
    }
+
+   void process_from_file(const std::string& file_name)
+   {
+      if (file_name.empty())
+         return;
+
+      std::ifstream stream(file_name.c_str());
+
+      if (!stream)
+      {
+         printf("ERROR: Failed to open file: %s\n\n",file_name.c_str());
+         return;
+      }
+
+      std::string program(
+                           (std::istreambuf_iterator<char>(stream)),
+                           (std::istreambuf_iterator<char>())
+                         );
+
+      process(program);
+   }
+
+   void process_directive(const std::string expression)
+   {
+      if ('$' != expression[0])
+         return;
+      if ("$enable_cache" == expression)
+         persist_symbol_table() = true;
+      else if ("$disable_cache" == expression)
+         persist_symbol_table() = false;
+      else if ("$enable_symbol_dump" == expression)
+         symbol_dump() = true;
+      else if ("$disable_symbol_dump" == expression)
+         symbol_dump() = false;
+      else if ("$enable_assignment_dump" == expression)
+         assignment_dump() = true;
+      else if ("$disable_assignment_dump" == expression)
+         assignment_dump() = false;
+      else if ("$enable_timer" == expression)
+         display_total_time() = true;
+      else if ("$enable_compile_timer" == expression)
+         display_total_compile_time() = true;
+      else if ("$disable_timer" == expression)
+         display_total_time() = false;
+      else if ("$disable_compile_timer" == expression)
+         display_total_compile_time() = false;
+      else if ("$enable_usr" == expression)
+         enable_usr() = true;
+      else if ("$disable_usr" == expression)
+         enable_usr() = false;
+      else if ("$list_vars" == expression)
+         list_symbols();
+      else if ("$clear_functions" == expression)
+         clear_functions();
+      else if ((0 == expression.find("$load ")) && (expression.size() > 7))
+         process_from_file(expression.substr(6,expression.size() - 6));
+      else if ("$begin" == expression)
+         process_multiline();
+      else if (0 == expression.find("$function"))
+         process_function_definition(expression);
+      else
+         printf("\nERROR - Invalid directive: %s\n",expression.c_str());
+   }
+
+private:
 
    void print_results(const exprtk::results_context<T>& results)
    {
@@ -344,27 +419,6 @@ public:
       }
    }
 
-   void process_from_file(const std::string& file_name)
-   {
-      if (file_name.empty())
-         return;
-
-      std::ifstream stream(file_name.c_str());
-
-      if (!stream)
-      {
-         printf("ERROR: Failed to open file: %s\n\n",file_name.c_str());
-         return;
-      }
-
-      std::string program(
-                           (std::istreambuf_iterator<char>(stream)),
-                           (std::istreambuf_iterator<char>())
-                         );
-
-      process(program);
-   }
-
    void process_multiline()
    {
       std::string program;
@@ -385,6 +439,207 @@ public:
       }
 
       process(program);
+   }
+
+   struct function_definition
+   {
+      std::string name;
+      std::string body;
+      std::vector<std::string> var_list;
+
+      void clear()
+      {
+         name    .clear();
+         body    .clear();
+         var_list.clear();
+      }
+   };
+
+   typedef std::pair<function_definition,compositor_t*> func_t;
+
+   struct parse_function_definition_impl : public exprtk::lexer::parser_helper
+   {
+      bool process(std::string& func_def, function_definition& fd)
+      {
+         if (!init(func_def))
+            return false;
+
+         if (!token_is(token_t::e_symbol,"function"))
+            return false;
+
+         if (!token_is(token_t::e_symbol,false))
+            return false;
+
+         fd.name = current_token().value;
+
+         next_token();
+
+         if (!token_is(token_t::e_lbracket))
+            return false;
+
+         if (!token_is(token_t::e_rbracket))
+         {
+            std::vector<std::string> var_list;
+
+            for ( ; ; )
+            {
+               // (x,y,z,....w)
+               if (!token_is(token_t::e_symbol,false))
+                  return false;
+
+               var_list.push_back(current_token().value);
+
+               next_token();
+
+               if (token_is(token_t::e_rbracket))
+                  break;
+
+               if (!token_is(token_t::e_comma))
+                  return false;
+            }
+
+            var_list.swap(fd.var_list);
+         }
+
+         std::size_t body_begin = current_token().position;
+         std::size_t body_end   = current_token().position;
+
+         int bracket_stack = 0;
+
+         if (!token_is(token_t::e_lcrlbracket,false))
+            return false;
+
+         for ( ; ; )
+         {
+            body_end = current_token().position;
+
+            if (token_is(token_t::e_lcrlbracket))
+               bracket_stack++;
+            else if (token_is(token_t::e_rcrlbracket))
+            {
+               if (0 == --bracket_stack)
+                  break;
+            }
+            else
+            {
+               if (lexer().finished())
+                  return false;
+
+               next_token();
+            }
+         }
+
+         std::size_t size = body_end - body_begin + 1;
+
+         fd.body = func_def.substr(body_begin,size);
+
+         const std::size_t index = body_begin + size;
+
+         if (index < func_def.size())
+            func_def = func_def.substr(index,func_def.size() - index);
+         else
+            func_def = "";
+
+         return true;
+      }
+   };
+
+   bool parse_function_definition(std::string& func_def, function_definition& cf)
+   {
+      parse_function_definition_impl parser;
+      return parser.process(func_def,cf);
+   }
+
+   void process_function_definition(const std::string& func_def_header)
+   {
+      std::string func_def;
+
+      for ( ; ; )
+      {
+         std::string line;
+
+         std::cout << ">> ";
+         std::getline(std::cin,line);
+
+         if (line.empty())
+            continue;
+         else if ("$end" == line)
+            break;
+         else
+            func_def += (line + "\n");
+      }
+
+      func_def = func_def_header + '\n' + func_def;
+
+      func_def.erase(func_def.begin()  );
+      func_def.erase(func_def.end() - 1);
+
+      do
+      {
+         function_definition fd;
+
+         if (parse_function_definition(func_def,fd))
+         {
+            std::string vars;
+
+            for (std::size_t i = 0; i < fd.var_list.size(); ++i)
+            {
+               vars += fd.var_list[i] + ((i < fd.var_list.size() - 1) ? "," : "");
+            }
+
+            function_t f(fd.name);
+
+            for (std::size_t i = 0; i < fd.var_list.size(); ++i)
+            {
+               f.var(fd.var_list[i]);
+            }
+
+            f.expression(fd.body);
+
+            compositor_t* compositor = new compositor_t(function_symbol_table_);
+
+            if (function_symbol_table_.get_function(fd.name))
+            {
+               function_symbol_table_.remove_function(fd.name);
+
+               for (std::size_t i = 0; i < func_def_list_.size(); ++i)
+               {
+                  if (exprtk::details::imatch(fd.name, func_def_list_[i].first.name))
+                  {
+                     delete func_def_list_[i].second;
+
+                     func_def_list_.erase(func_def_list_.begin() + i);
+
+                     break;
+                  }
+               }
+            }
+
+            if (!compositor->add(f))
+            {
+               function_symbol_table_.remove_function(fd.name);
+
+               printf("Error - Failed to add function: %s\n",fd.name.c_str());
+
+               return;
+            }
+
+            printf("Function[%02d]\n",static_cast<int>(func_def_list_.size()));
+            printf("Name: %s      \n",fd.name.c_str()                        );
+            printf("Vars: (%s)    \n",vars.c_str()                           );
+            printf("------------------------------------------------------\n");
+
+            func_def_list_.push_back(std::make_pair(fd,compositor));
+         }
+         else
+            break;
+      }
+      while (!func_def.empty());
+
+      if (!func_def.empty())
+      {
+         process(func_def);
+      }
    }
 
    void list_symbols()
@@ -418,42 +673,20 @@ public:
       }
    }
 
-   void process_directive(const std::string expression)
+   void clear_functions()
    {
-      if ('$' != expression[0])
-         return;
-      if ("$enable_cache" == expression)
-         persist_symbol_table() = true;
-      else if ("$disable_cache" == expression)
-         persist_symbol_table() = false;
-      else if ("$enable_symbol_dump" == expression)
-         symbol_dump() = true;
-      else if ("$disable_symbol_dump" == expression)
-         symbol_dump() = false;
-      else if ("$enable_assignment_dump" == expression)
-         assignment_dump() = true;
-      else if ("$disable_assignment_dump" == expression)
-         assignment_dump() = false;
-      else if ("$enable_timer" == expression)
-         display_total_time() = true;
-      else if ("$enable_compile_timer" == expression)
-         display_total_compile_time() = true;
-      else if ("$disable_timer" == expression)
-         display_total_time() = false;
-      else if ("$disable_compile_timer" == expression)
-         display_total_compile_time() = false;
-      else if ("$enable_usr" == expression)
-         enable_usr() = true;
-      else if ("$disable_usr" == expression)
-         enable_usr() = false;
-      else if ("$list_vars" == expression)
-         list_symbols();
-      else if (expression.find("$load ") == 0 && (expression.size() > 7))
-         process_from_file(expression.substr(6,expression.size() - 6));
-      else if ("$begin" == expression)
-         process_multiline();
-      else
-         printf("\nERROR - Invalid directive: %s\n",expression.c_str());
+      for (std::size_t i = 0; i < func_def_list_.size(); ++i)
+      {
+         delete func_def_list_[i].second;
+      }
+
+      func_def_list_.clear();
+      function_symbol_table_.clear();
+
+      function_symbol_table_.add_function("putch"  ,putch_  );
+      function_symbol_table_.add_function("putint" ,putint_ );
+      function_symbol_table_.add_function("print"  ,print_  );
+      function_symbol_table_.add_function("println",println_);
    }
 
 private:
@@ -465,6 +698,7 @@ private:
    bool display_total_compile_time_;
    bool enable_usr_;
    symbol_table_t symbol_table_;
+   symbol_table_t function_symbol_table_;
    parser_t parser_;
    putch  <T> putch_;
    putint <T> putint_;
@@ -483,6 +717,7 @@ private:
    exprtk::polynomial<T,11> poly11_;
    exprtk::polynomial<T,12> poly12_;
    std::string local_str_[4];
+   std::vector<func_t> func_def_list_;
 };
 
 template <typename T>
