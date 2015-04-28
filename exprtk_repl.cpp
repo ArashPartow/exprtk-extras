@@ -92,13 +92,6 @@ public:
       symbol_table_.add_function("poly11", poly11_);
       symbol_table_.add_function("poly12", poly12_);
 
-      #ifndef exprtk_disable_string_capabilities
-      symbol_table_.add_stringvar("s0",local_str_[0]);
-      symbol_table_.add_stringvar("s1",local_str_[1]);
-      symbol_table_.add_stringvar("s2",local_str_[2]);
-      symbol_table_.add_stringvar("s3",local_str_[3]);
-      #endif
-
       clear_functions();
    }
 
@@ -144,18 +137,16 @@ public:
          symbol_table_.clear_variables();
          symbol_table_.add_constants();
          symbol_table_.add_constant ("e",exprtk::details::numeric::constant::e);
-
-         #ifndef exprtk_disable_string_capabilities
-         symbol_table_.add_stringvar("s0",local_str_[0]);
-         symbol_table_.add_stringvar("s1",local_str_[1]);
-         symbol_table_.add_stringvar("s2",local_str_[2]);
-         symbol_table_.add_stringvar("s3",local_str_[3]);
-         #endif
       }
    }
 
-   void process(const std::string& program)
+   void process(std::string program)
    {
+      program = trim_whitespace(program);
+
+      if (program.empty())
+         return;
+
       setup_symbol_table();
 
       expression_t expression;
@@ -279,11 +270,13 @@ public:
       process(program);
    }
 
-   void process_directive(const std::string expression)
+   void process_directive(std::string expression)
    {
+      expression = trim_whitespace(expression);
+
       if ('$' != expression[0])
          return;
-      if ("$enable_cache" == expression)
+      else if ("$enable_cache" == expression)
          persist_symbol_table() = true;
       else if ("$disable_cache" == expression)
          persist_symbol_table() = false;
@@ -429,6 +422,8 @@ private:
 
          std::cout << ">> ";
          std::getline(std::cin,line);
+
+         line = trim_whitespace(line);
 
          if (line.empty())
             continue;
@@ -689,6 +684,28 @@ private:
       function_symbol_table_.add_function("println",println_);
    }
 
+   std::string trim_whitespace(std::string s)
+   {
+      static const std::string whitespace(" \n\r\t\b\v\f");
+
+      if (!s.empty())
+      {
+         s.erase(0,s.find_first_not_of(whitespace));
+
+         if (!s.empty())
+         {
+            std::size_t index = s.find_last_not_of(whitespace);
+
+            if (std::string::npos != index)
+               s.erase(index + 1);
+            else
+               s.clear();
+         }
+      }
+
+      return s;
+   }
+
 private:
 
    bool persist_symbol_table_;
@@ -716,7 +733,6 @@ private:
    exprtk::polynomial<T,10> poly10_;
    exprtk::polynomial<T,11> poly11_;
    exprtk::polynomial<T,12> poly12_;
-   std::string local_str_[4];
    std::vector<func_t> func_def_list_;
 };
 
