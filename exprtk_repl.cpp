@@ -267,7 +267,7 @@ public:
                            (std::istreambuf_iterator<char>())
                          );
 
-      process(program);
+      process_function_definition(program,false);
    }
 
    void process_directive(std::string expression)
@@ -545,9 +545,9 @@ private:
       return parser.process(func_def,cf);
    }
 
-   void process_function_definition(const std::string& func_def_header)
+   std::string read_from_stdin()
    {
-      std::string func_def;
+      std::string input;
 
       for ( ; ; )
       {
@@ -561,13 +561,23 @@ private:
          else if ("$end" == line)
             break;
          else
-            func_def += (line + "\n");
+            input += (line + "\n");
       }
 
-      func_def = func_def_header + '\n' + func_def;
+      input.erase(input.begin()  );
+      input.erase(input.end() - 1);
 
-      func_def.erase(func_def.begin()  );
-      func_def.erase(func_def.end() - 1);
+      return input;
+   }
+
+   void process_function_definition(const std::string& func_def_header, bool read_stdin = true)
+   {
+      std::string func_def = func_def_header;
+
+      if (read_stdin)
+      {
+         func_def += read_from_stdin();
+      }
 
       do
       {
