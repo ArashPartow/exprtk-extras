@@ -30,6 +30,7 @@ void collatz()
    typedef exprtk::expression<T>          expression_t;
    typedef exprtk::parser<T>                  parser_t;
    typedef exprtk::function_compositor<T> compositor_t;
+   typedef typename compositor_t::function  function_t;
 
    symbol_table_t symbol_table;
 
@@ -40,13 +41,15 @@ void collatz()
    compositor_t compositor(symbol_table);
 
    compositor
-      .add("collatz_trace",
+      .add(
+      function_t(
+           "collatz_trace",
            " while(x > 1)                           "
            " {                                      "
            "   x := if (x % 2 == 0, x / 2, 3x + 1); "
            "   print(x);                            "
            " }                                      ",
-           "x");
+           "x"));
 
    std::string collatz_program =
                   "x := 0;             "

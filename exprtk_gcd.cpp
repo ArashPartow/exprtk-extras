@@ -45,6 +45,7 @@ void gcd()
    typedef exprtk::expression<T>          expression_t;
    typedef exprtk::parser<T>                  parser_t;
    typedef exprtk::function_compositor<T> compositor_t;
+   typedef typename compositor_t::function  function_t;
 
    symbol_table_t symbol_table;
 
@@ -55,7 +56,9 @@ void gcd()
    compositor_t compositor(symbol_table);
 
    compositor
-      .add("gcd",
+      .add(
+      function_t(
+           "gcd",
            "switch                        "
            "{                             "
            "  case 0 = x : 0;             "
@@ -64,7 +67,7 @@ void gcd()
            "  case x > y : gcd(x - y, y); "
            "  default    : gcd(x, y - x); "
            "}                             ",
-           "x","y");
+           "x","y"));
 
    std::string gcd_program =
                   "i := 0;                    "

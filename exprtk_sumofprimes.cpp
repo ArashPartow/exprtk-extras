@@ -30,13 +30,16 @@ void sum_of_primes()
    typedef exprtk::expression<T>          expression_t;
    typedef exprtk::parser<T>                  parser_t;
    typedef exprtk::function_compositor<T> compositor_t;
+   typedef typename compositor_t::function  function_t;
 
    symbol_table_t symbol_table;
 
    compositor_t compositor(symbol_table);
 
    compositor
-      .add("sum_of_primes",
+      .add(
+      function_t(
+           "sum_of_primes",
            " var i     := 2;    "
            " var total := 0;    "
            " while (z > 1)      "
@@ -50,7 +53,7 @@ void sum_of_primes()
            "       i += 1;      "
            " };                 "
            " total;             ",
-           "z");
+           "z"));
 
    exprtk::helper::println<T> println;
 

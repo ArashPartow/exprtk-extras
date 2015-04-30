@@ -48,6 +48,7 @@ void function_call_benchmark()
    typedef exprtk::expression<T>          expression_t;
    typedef exprtk::parser<T>                  parser_t;
    typedef exprtk::function_compositor<T> compositor_t;
+   typedef typename compositor_t::function  function_t;
 
    T v1 = T(1);
    T v2 = T(2);
@@ -65,9 +66,11 @@ void function_call_benchmark()
    compositor_t compositor(symbol_table);
 
    compositor
-      .add("func1",
+      .add(
+      function_t(
+           "func1",
            " 1 + cos(v1 * v2) / 3;",
-           "v1","v2");
+           "v1","v2"));
 
    std::string program0 = "func0(v1,v2);";
    std::string program1 = "func1(v1,v2);";
