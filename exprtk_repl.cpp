@@ -2,7 +2,7 @@
  **************************************************************
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
- * ExprTk REPL Interface                                      *
+ * ExprTk REPL (Read Evaluate Print Loop) Interface           *
  * Author: Arash Partow (1999-2015)                           *
  * URL: http://www.partow.net/programming/exprtk/index.html   *
  *                                                            *
@@ -70,7 +70,8 @@ public:
      assignment_dump_           (false),
      display_total_time_        (false),
      display_total_compile_time_(false),
-     enable_usr_                (false)
+     enable_usr_                (false),
+     compositor_(function_symbol_table_)
    {
       symbol_table_.add_constants();
 
@@ -91,6 +92,8 @@ public:
       symbol_table_.add_function("poly10", poly10_);
       symbol_table_.add_function("poly11", poly11_);
       symbol_table_.add_function("poly12", poly12_);
+
+      compositor_.add_auxiliary_symtab(symbol_table_);
 
       clear_functions();
    }
@@ -450,27 +453,34 @@ private:
       }
    };
 
-   typedef std::pair<function_definition,compositor_t*> func_t;
+   enum func_parse_result
+   {
+      e_parse_unknown = 0,
+      e_parse_success = 1,
+      e_parse_partial = 2,
+      e_parse_lexfail = 4,
+      e_parse_notfunc = 8
+   };
 
    struct parse_function_definition_impl : public exprtk::lexer::parser_helper
    {
-      bool process(std::string& func_def, function_definition& fd)
+      func_parse_result process(std::string& func_def, function_definition& fd)
       {
          if (!init(func_def))
-            return false;
+            return e_parse_lexfail;
 
          if (!token_is(token_t::e_symbol,"function"))
-            return false;
+            return e_parse_notfunc;
 
          if (!token_is(token_t::e_symbol,false))
-            return false;
+            return e_parse_partial;
 
          fd.name = current_token().value;
 
          next_token();
 
          if (!token_is(token_t::e_lbracket))
-            return false;
+            return e_parse_partial;
 
          if (!token_is(token_t::e_rbracket))
          {
@@ -480,7 +490,7 @@ private:
             {
                // (x,y,z,....w)
                if (!token_is(token_t::e_symbol,false))
-                  return false;
+                  return e_parse_partial;
 
                var_list.push_back(current_token().value);
 
@@ -490,7 +500,7 @@ private:
                   break;
 
                if (!token_is(token_t::e_comma))
-                  return false;
+                  return e_parse_partial;
             }
 
             var_list.swap(fd.var_list);
@@ -502,7 +512,7 @@ private:
          int bracket_stack = 0;
 
          if (!token_is(token_t::e_lcrlbracket,false))
-            return false;
+            return e_parse_partial;
 
          for ( ; ; )
          {
@@ -518,7 +528,7 @@ private:
             else
             {
                if (lexer().finished())
-                  return false;
+                  return e_parse_partial;
 
                next_token();
             }
@@ -535,11 +545,11 @@ private:
          else
             func_def = "";
 
-         return true;
+         return e_parse_success;
       }
    };
 
-   bool parse_function_definition(std::string& func_def, function_definition& cf)
+   func_parse_result parse_function_definition(std::string& func_def, function_definition& cf)
    {
       parse_function_definition_impl parser;
       return parser.process(func_def,cf);
@@ -564,7 +574,6 @@ private:
             input += (line + "\n");
       }
 
-      input.erase(input.begin()  );
       input.erase(input.end() - 1);
 
       return input;
@@ -577,13 +586,18 @@ private:
       if (read_stdin)
       {
          func_def += read_from_stdin();
+
+         if ('$' == func_def[0])
+            func_def.erase(func_def.begin());
       }
 
       do
       {
          function_definition fd;
 
-         if (parse_function_definition(func_def,fd))
+         func_parse_result fp_result = parse_function_definition(func_def,fd);
+
+         if (e_parse_success == fp_result)
          {
             std::string vars;
 
@@ -601,18 +615,14 @@ private:
 
             f.expression(fd.body);
 
-            compositor_t* compositor = new compositor_t(function_symbol_table_);
-
             if (function_symbol_table_.get_function(fd.name))
             {
                function_symbol_table_.remove_function(fd.name);
 
                for (std::size_t i = 0; i < func_def_list_.size(); ++i)
                {
-                  if (exprtk::details::imatch(fd.name, func_def_list_[i].first.name))
+                  if (exprtk::details::imatch(fd.name, func_def_list_[i].name))
                   {
-                     delete func_def_list_[i].second;
-
                      func_def_list_.erase(func_def_list_.begin() + i);
 
                      break;
@@ -620,7 +630,7 @@ private:
                }
             }
 
-            if (!compositor->add(f))
+            if (!compositor_.add(f,true))
             {
                function_symbol_table_.remove_function(fd.name);
 
@@ -634,7 +644,12 @@ private:
             printf("Vars: (%s)    \n",vars.c_str()                           );
             printf("------------------------------------------------------\n");
 
-            func_def_list_.push_back(std::make_pair(fd,compositor));
+            func_def_list_.push_back(fd);
+         }
+         else if (e_parse_notfunc != fp_result)
+         {
+            printf("Error - Critical parsing error - partial parse occured\n");
+            return;
          }
          else
             break;
@@ -680,18 +695,8 @@ private:
 
    void clear_functions()
    {
-      for (std::size_t i = 0; i < func_def_list_.size(); ++i)
-      {
-         delete func_def_list_[i].second;
-      }
-
       func_def_list_.clear();
       function_symbol_table_.clear();
-
-      function_symbol_table_.add_function("putch"  ,putch_  );
-      function_symbol_table_.add_function("putint" ,putint_ );
-      function_symbol_table_.add_function("print"  ,print_  );
-      function_symbol_table_.add_function("println",println_);
    }
 
    std::string trim_whitespace(std::string s)
@@ -724,13 +729,17 @@ private:
    bool display_total_time_;
    bool display_total_compile_time_;
    bool enable_usr_;
+
    symbol_table_t symbol_table_;
    symbol_table_t function_symbol_table_;
    parser_t parser_;
+   compositor_t compositor_;
+
    putch  <T> putch_;
    putint <T> putint_;
    exprtk::helper::print<T>   print_;
    exprtk::helper::println<T> println_;
+
    exprtk::polynomial<T, 1> poly01_;
    exprtk::polynomial<T, 2> poly02_;
    exprtk::polynomial<T, 3> poly03_;
@@ -743,7 +752,8 @@ private:
    exprtk::polynomial<T,10> poly10_;
    exprtk::polynomial<T,11> poly11_;
    exprtk::polynomial<T,12> poly12_;
-   std::vector<func_t> func_def_list_;
+
+   std::vector<function_definition> func_def_list_;
 };
 
 template <typename T>
@@ -790,6 +800,41 @@ int main(int argc, char* argv[])
 
 /*
 
+REPL commands:
+
+  $enable_cache/$disable_cache
+  Enable or disable caching of variables.
+
+  $enable_symbol_dump/$disable_symbol_dump
+  Enable or disable dumping of symbols found in expression during
+  compilation process.
+
+  $enable_assignment_dump/$disable_assignment_dump
+  Enable or disable dumping of symbols that undergo assignment in
+  expression.
+
+  $enable_timer/$disable_timer
+  Enable or disable expression evaluation timer.
+
+  $enable_compile_timer/$disable_compile_timer
+  Enable or disable compilation timer
+
+  $enable_usr/$disable_usr
+  Enable or disable unknown symbol resolver.
+
+  $list_vars
+  List variables found in the global symbol table.
+
+  $clear_functions
+  Clear all functions found in the global function symbol table.
+
+  $load <program file name>
+  Load the file as a complete program and execute.
+
+  $begin/$end
+  Pre/post-ambles for multiline expressions.
+
+
 Example REPL Instructions:
  Step 1.1 Enter: var x := 3; var y := 4; var z := x + y; println(z / 2);
  Step 1.2 Enter: var x := 3; var y := 4; var z := x - y; putint(z / 2);
@@ -824,6 +869,7 @@ var real_max := +1;
 var real_min := -2.5;
 var x_step   := (real_max - real_min) / width;
 var y_step   := (imag_max - imag_min) / height;
+
 for (var y := 0; y < height; y += 1)
 {
   var imag := imag_min + (y_step * y);
@@ -833,11 +879,14 @@ for (var y := 0; y < height; y += 1)
     var z_real := real;
     var z_imag := imag;
     var plot_value := 0;
+
     for (var n := 0; n < 30; n += 1)
     {
       var a := z_real^2;
       var b := z_imag^2;
+
       plot_value := n;
+
       if ((a + b) < 4)
       {
         z_imag := 2 * z_real * z_imag + imag;
@@ -846,10 +895,47 @@ for (var y := 0; y < height; y += 1)
       else
         break;
     };
+
     putch(61 - plot_value);
+
   };
   println()
 }
+
+---- snip ----
+
+
+ Step 5.1 Copy into the REPL the contents of the snippet below:
+---- snip ----
+$function is_prime(x)
+{
+  if (x == 1)
+    return [false];
+  else if (x == 2)
+    return [true];
+  else if ((x % 2) == 0)
+    return [false];
+
+  var upper_bound := sqrt(x) + 1;
+
+  for (var i := 3; i <= upper_bound; i += 2)
+  {
+    if (0 == (x % i))
+      return[false];
+  }
+
+  return [true];
+}
+$end
+
+$begin
+for (var i := 1; i < 50; i += 1)
+{
+   if (is_prime(i))
+     println(i);
+}
+$end
+
 ---- snip ----
 
 */
