@@ -20,7 +20,7 @@
 #include <string>
 #include "exprtk.hpp"
 
-static const std::size_t rounds = 2000000;
+static const std::size_t rounds = 5000000;
 
 template <typename T>
 struct bsm_parameters
