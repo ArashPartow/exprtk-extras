@@ -38,9 +38,9 @@ void truth_table_generator(const std::string& boolean_expression)
 
    parser_t parser(
                     settings_t(
-                        settings_t::compile_all_opts +
-                        settings_t::e_disable_usr_on_rsrvd)
-                     .disable_all_base_functions()
+                      settings_t::compile_all_opts +
+                      settings_t::e_disable_usr_on_rsrvd)
+                     .disable_all_base_functions    ()
                      .disable_all_control_structures()
                   );
 

@@ -54,12 +54,13 @@ class expression_processor
 {
 public:
 
-   typedef exprtk::symbol_table<T>         symbol_table_t;
-   typedef exprtk::expression<T>             expression_t;
-   typedef exprtk::parser<T>                     parser_t;
-   typedef exprtk::parser_error::type             error_t;
-   typedef exprtk::function_compositor<T>    compositor_t;
-   typedef typename compositor_t::function     function_t;
+   typedef exprtk::symbol_table<T>             symbol_table_t;
+   typedef exprtk::expression<T>                 expression_t;
+   typedef exprtk::parser<T>                         parser_t;
+   typedef exprtk::parser_error::type                 error_t;
+   typedef exprtk::function_compositor<T>        compositor_t;
+   typedef typename compositor_t::function         function_t;
+   typedef typename parser_t::settings_store settings_store_t;
 
    typedef typename parser_t::dependent_entity_collector::symbol_t symbol_t;
    typedef std::vector<symbol_t> symbol_list_t;
@@ -71,6 +72,7 @@ public:
      display_total_time_        (false),
      display_total_compile_time_(false),
      enable_usr_                (false),
+     disable_local_vardef_      (false),
      compositor_(function_symbol_table_)
    {
       symbol_table_.add_constants();
@@ -94,6 +96,29 @@ public:
       symbol_table_.add_function("poly12", poly12_);
 
       compositor_.add_auxiliary_symtab(symbol_table_);
+
+      arith_opr_["+"] = typename settings_store_t::e_arith_add;
+      arith_opr_["-"] = typename settings_store_t::e_arith_sub;
+      arith_opr_["*"] = typename settings_store_t::e_arith_mul;
+      arith_opr_["/"] = typename settings_store_t::e_arith_div;
+      arith_opr_["%"] = typename settings_store_t::e_arith_mod;
+      arith_opr_["^"] = typename settings_store_t::e_arith_pow;
+
+      assign_opr_[":="] = typename settings_store_t::e_assign_assign;
+      assign_opr_["+="] = typename settings_store_t::e_assign_addass;
+      assign_opr_["-="] = typename settings_store_t::e_assign_subass;
+      assign_opr_["*="] = typename settings_store_t::e_assign_mulass;
+      assign_opr_["/="] = typename settings_store_t::e_assign_divass;
+      assign_opr_["%="] = typename settings_store_t::e_assign_modass;
+
+      inequality_opr_[ "<"] = typename settings_store_t::e_ineq_lt;
+      inequality_opr_["<="] = typename settings_store_t::e_ineq_lte;
+      inequality_opr_["=="] = typename settings_store_t::e_ineq_eq;
+      inequality_opr_[ "="] = typename settings_store_t::e_ineq_equal;
+      inequality_opr_["!="] = typename settings_store_t::e_ineq_ne;
+      inequality_opr_["<>"] = typename settings_store_t::e_ineq_nequal;
+      inequality_opr_[">="] = typename settings_store_t::e_ineq_gte;
+      inequality_opr_[ ">"] = typename settings_store_t::e_ineq_gt;
 
       clear_functions();
    }
@@ -133,6 +158,11 @@ public:
       return enable_usr_;
    }
 
+   bool& disable_local_vardef()
+   {
+      return disable_local_vardef_;
+   }
+
    void setup_symbol_table()
    {
       if (!persist_symbol_table_)
@@ -163,6 +193,11 @@ public:
          parser_.enable_unknown_symbol_resolver();
       else
          parser_.disable_unknown_symbol_resolver();
+
+      if (disable_local_vardef_)
+         parser_.settings().disable_local_vardef();
+      else
+         parser_.settings().enable_local_vardef();
 
       parser_.dec().collect_variables() = symbol_dump_;
       parser_.dec().collect_functions() = symbol_dump_;
@@ -303,12 +338,28 @@ public:
          enable_usr() = true;
       else if ("$disable_usr" == expression)
          enable_usr() = false;
+      else if ("$enable_local_vardef" == expression)
+         disable_local_vardef() = false;
+      else if ("$disable_local_vardef" == expression)
+         disable_local_vardef() = true;
       else if ("$list_vars" == expression)
          list_symbols();
       else if ("$clear_functions" == expression)
          clear_functions();
       else if ((0 == expression.find("$load ")) && (expression.size() > 7))
          process_from_file(expression.substr(6,expression.size() - 6));
+      else if ((0 == expression.find("$disable arithmetic ")) && (expression.size() >= 21))
+         process_disable_arithmetic(expression.substr(20,expression.size() - 20));
+      else if ((0 == expression.find("$disable assignment ")) && (expression.size() >= 21))
+         process_disable_assignment(expression.substr(20,expression.size() - 20));
+      else if ((0 == expression.find("$disable inequality ")) && (expression.size() >= 21))
+         process_disable_inequality(expression.substr(20,expression.size() - 20));
+      else if ((0 == expression.find("$enable arithmetic ")) && (expression.size() >= 20))
+         process_enable_arithmetic(expression.substr(19,expression.size() - 19));
+      else if ((0 == expression.find("$enable assignment ")) && (expression.size() >= 20))
+         process_enable_assignment(expression.substr(19,expression.size() - 19));
+      else if ((0 == expression.find("$enable inequality ")) && (expression.size() >= 20))
+         process_enable_inequality(expression.substr(19,expression.size() - 19));
       else if ("$begin" == expression)
          process_multiline();
       else if (0 == expression.find("$function"))
@@ -721,6 +772,73 @@ private:
       return s;
    }
 
+   void process_disable_arithmetic(const std::string& arithmetic)
+   {
+      std::map<std::string,settings_store_t::settings_arithmetic_opr>::iterator itr;
+
+      if (arith_opr_.end() != (itr = arith_opr_.find(arithmetic)))
+      {
+         parser_.settings()
+            .disable_arithmetic_operation(itr->second);
+      }
+   }
+
+   void process_disable_assignment(const std::string& assignment)
+   {
+      std::map<std::string,settings_store_t::settings_assignment_opr>::iterator itr;
+
+      if (assign_opr_.end() != (itr = assign_opr_.find(assignment)))
+      {
+         parser_.settings()
+            .disable_assignment_operation(itr->second);
+      }
+   }
+
+   void process_disable_inequality(const std::string& inequality)
+   {
+      std::map<std::string,settings_store_t::settings_inequality_opr>::iterator itr;
+
+      if (inequality_opr_.end() != (itr = inequality_opr_.find(inequality)))
+      {
+         parser_.settings()
+            .disable_inequality_operation(itr->second);
+      }
+   }
+
+   void process_enable_arithmetic(const std::string& arithmetic)
+   {
+      std::map<std::string,settings_store_t::settings_arithmetic_opr>::iterator itr;
+
+      if (arith_opr_.end() != (itr = arith_opr_.find(arithmetic)))
+      {
+         parser_.settings()
+            .enable_arithmetic_operation(itr->second);
+      }
+   }
+
+   void process_enable_assignment(const std::string& assignment)
+   {
+      std::map<std::string,settings_store_t::settings_assignment_opr>::iterator itr;
+
+      if (assign_opr_.end() != (itr = assign_opr_.find(assignment)))
+      {
+         parser_.settings()
+            .enable_assignment_operation(itr->second);
+      }
+   }
+
+   void process_enable_inequality(const std::string& inequality)
+   {
+      std::map<std::string,settings_store_t::settings_inequality_opr>::iterator itr;
+
+      if (inequality_opr_.end() != (itr = inequality_opr_.find(inequality)))
+      {
+         parser_.settings()
+            .enable_inequality_operation(itr->second);
+      }
+   }
+
+
 private:
 
    bool persist_symbol_table_;
@@ -729,6 +847,7 @@ private:
    bool display_total_time_;
    bool display_total_compile_time_;
    bool enable_usr_;
+   bool disable_local_vardef_;
 
    symbol_table_t symbol_table_;
    symbol_table_t function_symbol_table_;
@@ -754,6 +873,10 @@ private:
    exprtk::polynomial<T,12> poly12_;
 
    std::vector<function_definition> func_def_list_;
+
+   std::map<std::string,typename settings_store_t::settings_arithmetic_opr> arith_opr_;
+   std::map<std::string,typename settings_store_t::settings_assignment_opr> assign_opr_;
+   std::map<std::string,typename settings_store_t::settings_inequality_opr> inequality_opr_;
 };
 
 template <typename T>
