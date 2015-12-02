@@ -97,28 +97,28 @@ public:
 
       compositor_.add_auxiliary_symtab(symbol_table_);
 
-      arith_opr_["+"] = typename settings_store_t::e_arith_add;
-      arith_opr_["-"] = typename settings_store_t::e_arith_sub;
-      arith_opr_["*"] = typename settings_store_t::e_arith_mul;
-      arith_opr_["/"] = typename settings_store_t::e_arith_div;
-      arith_opr_["%"] = typename settings_store_t::e_arith_mod;
-      arith_opr_["^"] = typename settings_store_t::e_arith_pow;
+      arith_opr_["+"] = settings_store_t::e_arith_add;
+      arith_opr_["-"] = settings_store_t::e_arith_sub;
+      arith_opr_["*"] = settings_store_t::e_arith_mul;
+      arith_opr_["/"] = settings_store_t::e_arith_div;
+      arith_opr_["%"] = settings_store_t::e_arith_mod;
+      arith_opr_["^"] = settings_store_t::e_arith_pow;
 
-      assign_opr_[":="] = typename settings_store_t::e_assign_assign;
-      assign_opr_["+="] = typename settings_store_t::e_assign_addass;
-      assign_opr_["-="] = typename settings_store_t::e_assign_subass;
-      assign_opr_["*="] = typename settings_store_t::e_assign_mulass;
-      assign_opr_["/="] = typename settings_store_t::e_assign_divass;
-      assign_opr_["%="] = typename settings_store_t::e_assign_modass;
+      assign_opr_[":="] = settings_store_t::e_assign_assign;
+      assign_opr_["+="] = settings_store_t::e_assign_addass;
+      assign_opr_["-="] = settings_store_t::e_assign_subass;
+      assign_opr_["*="] = settings_store_t::e_assign_mulass;
+      assign_opr_["/="] = settings_store_t::e_assign_divass;
+      assign_opr_["%="] = settings_store_t::e_assign_modass;
 
-      inequality_opr_[ "<"] = typename settings_store_t::e_ineq_lt;
-      inequality_opr_["<="] = typename settings_store_t::e_ineq_lte;
-      inequality_opr_["=="] = typename settings_store_t::e_ineq_eq;
-      inequality_opr_[ "="] = typename settings_store_t::e_ineq_equal;
-      inequality_opr_["!="] = typename settings_store_t::e_ineq_ne;
-      inequality_opr_["<>"] = typename settings_store_t::e_ineq_nequal;
-      inequality_opr_[">="] = typename settings_store_t::e_ineq_gte;
-      inequality_opr_[ ">"] = typename settings_store_t::e_ineq_gt;
+      inequality_opr_[ "<"] = settings_store_t::e_ineq_lt;
+      inequality_opr_["<="] = settings_store_t::e_ineq_lte;
+      inequality_opr_["=="] = settings_store_t::e_ineq_eq;
+      inequality_opr_[ "="] = settings_store_t::e_ineq_equal;
+      inequality_opr_["!="] = settings_store_t::e_ineq_ne;
+      inequality_opr_["<>"] = settings_store_t::e_ineq_nequal;
+      inequality_opr_[">="] = settings_store_t::e_ineq_gte;
+      inequality_opr_[ ">"] = settings_store_t::e_ineq_gt;
 
       clear_functions();
    }
@@ -731,7 +731,7 @@ private:
 
          if (max_varname_length > variable_list[i].first.size())
          {
-            pad_length = max_varname_length - variable_list[i].first.size();
+            pad_length = static_cast<int>(max_varname_length - variable_list[i].first.size());
          }
 
          printf("%02d %s%*.*s %25.10f\n",
