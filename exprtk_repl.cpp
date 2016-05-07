@@ -774,7 +774,7 @@ private:
 
    void process_disable_arithmetic(const std::string& arithmetic)
    {
-      std::map<std::string,settings_store_t::settings_arithmetic_opr>::iterator itr;
+      typename std::map<std::string,typename settings_store_t::settings_arithmetic_opr>::iterator itr;
 
       if (arith_opr_.end() != (itr = arith_opr_.find(arithmetic)))
       {
@@ -785,7 +785,7 @@ private:
 
    void process_disable_assignment(const std::string& assignment)
    {
-      std::map<std::string,settings_store_t::settings_assignment_opr>::iterator itr;
+      typename std::map<std::string,typename settings_store_t::settings_assignment_opr>::iterator itr;
 
       if (assign_opr_.end() != (itr = assign_opr_.find(assignment)))
       {
@@ -796,7 +796,7 @@ private:
 
    void process_disable_inequality(const std::string& inequality)
    {
-      std::map<std::string,settings_store_t::settings_inequality_opr>::iterator itr;
+      typename std::map<std::string,typename settings_store_t::settings_inequality_opr>::iterator itr;
 
       if (inequality_opr_.end() != (itr = inequality_opr_.find(inequality)))
       {
@@ -807,7 +807,7 @@ private:
 
    void process_enable_arithmetic(const std::string& arithmetic)
    {
-      std::map<std::string,settings_store_t::settings_arithmetic_opr>::iterator itr;
+      typename std::map<std::string,typename settings_store_t::settings_arithmetic_opr>::iterator itr;
 
       if (arith_opr_.end() != (itr = arith_opr_.find(arithmetic)))
       {
@@ -818,7 +818,7 @@ private:
 
    void process_enable_assignment(const std::string& assignment)
    {
-      std::map<std::string,settings_store_t::settings_assignment_opr>::iterator itr;
+      typename std::map<std::string,typename settings_store_t::settings_assignment_opr>::iterator itr;
 
       if (assign_opr_.end() != (itr = assign_opr_.find(assignment)))
       {
@@ -829,7 +829,7 @@ private:
 
    void process_enable_inequality(const std::string& inequality)
    {
-      std::map<std::string,settings_store_t::settings_inequality_opr>::iterator itr;
+      typename std::map<std::string,typename settings_store_t::settings_inequality_opr>::iterator itr;
 
       if (inequality_opr_.end() != (itr = inequality_opr_.find(inequality)))
       {
