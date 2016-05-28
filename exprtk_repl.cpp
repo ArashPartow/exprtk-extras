@@ -61,6 +61,7 @@ public:
    typedef exprtk::function_compositor<T>        compositor_t;
    typedef typename compositor_t::function         function_t;
    typedef typename parser_t::settings_store settings_store_t;
+   typedef exprtk::lexer::parser_helper            prsrhlpr_t;
 
    typedef typename parser_t::dependent_entity_collector::symbol_t symbol_t;
    typedef std::vector<symbol_t> symbol_list_t;
@@ -523,7 +524,7 @@ private:
          if (!token_is(token_t::e_symbol,"function"))
             return e_parse_notfunc;
 
-         if (!token_is(token_t::e_symbol,false))
+         if (!token_is(token_t::e_symbol,prsrhlpr_t::e_hold))
             return e_parse_partial;
 
          fd.name = current_token().value;
@@ -540,7 +541,7 @@ private:
             for ( ; ; )
             {
                // (x,y,z,....w)
-               if (!token_is(token_t::e_symbol,false))
+               if (!token_is(token_t::e_symbol,prsrhlpr_t::e_hold))
                   return e_parse_partial;
 
                var_list.push_back(current_token().value);
@@ -562,7 +563,7 @@ private:
 
          int bracket_stack = 0;
 
-         if (!token_is(token_t::e_lcrlbracket,false))
+         if (!token_is(token_t::e_lcrlbracket,prsrhlpr_t::e_hold))
             return e_parse_partial;
 
          for ( ; ; )
