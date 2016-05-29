@@ -18,22 +18,22 @@ The ExprTk Extras implementation is fully compatible with the following C++ comp
 
 
 #### List Of Examples
-|#   | Description                            | File                         |
-|:--:|:---------------------------------------|:-----------------------------|
-|00  | Black–Scholes-Merton model benchmark   |exprtk_bsm_benchmark.cpp      |
-|01  | Simple calculator                      |exprtk_calc.cpp               |
-|02  | Collatz conjecture                     |exprtk_collatz.cpp            |
-|03  | Expression generator                   |exprtk_exprgen.cpp            |
-|04  | Fizz-Buzz problem                      |exprtk_fizzbuzz.cpp           |
-|05  | Function call benchmark                |exprtk_funcall_benchmark.cpp  |
-|06  | GCD implementation                     |exprtk_gcd.cpp                |
-|07  | GNUplot single curve example           |exprtk_gnuplot.cpp            |
-|08  | GNUplot multi-curve example            |exprtk_gnuplot_multi.cpp      |
-|09  | Mandelbrot Fractal generator           |exprtk_mandelbrot.cpp         |
-|10  | Sieve of Eratosthenes                  |exprtk_prime_sieve.cpp        |
-|11  | ExprTk Read-Evaluate-Print-Loop (REPL) |exprtk_repl.cpp               |
-|12  | Skeleton for string APIs               |exprtk_str_funcs.hpp          |
-|13  | Sum of the first N prime numbers       |exprtk_sumofprimes.cpp        |
-|14  | Test expression generator              |exprtk_testgen.cpp            |
+|#   | Description                              | File                         |
+|:--:|:-----------------------------------------|:-----------------------------|
+|00  | Black–Scholes-Merton model benchmark     |exprtk_bsm_benchmark.cpp      |
+|01  | Simple calculator                        |exprtk_calc.cpp               |
+|02  | Collatz conjecture                       |exprtk_collatz.cpp            |
+|03  | Expression generator                     |exprtk_exprgen.cpp            |
+|04  | Fizz-Buzz problem                        |exprtk_fizzbuzz.cpp           |
+|05  | Function call benchmark                  |exprtk_funcall_benchmark.cpp  |
+|06  | GCD implementation                       |exprtk_gcd.cpp                |
+|07  | GNUplot single curve example             |exprtk_gnuplot.cpp            |
+|08  | GNUplot multi-curve example              |exprtk_gnuplot_multi.cpp      |
+|09  | Mandelbrot Fractal generator             |exprtk_mandelbrot.cpp         |
+|10  | Sieve of Eratosthenes                    |exprtk_prime_sieve.cpp        |
+|11  | ExprTk Read-Evaluate-Print-Loop (REPL)   |exprtk_repl.cpp               |
+|12  | Skeleton for string APIs                 |exprtk_str_funcs.hpp          |
+|13  | Sum of prime factors for first N numbers |exprtk_sumofprimes.cpp        |
+|14  | Test expression generator                |exprtk_testgen.cpp            |
 |15  | Truth table generator from arbitrary expressions |exprtk_truthtable_gen.cpp|
 
