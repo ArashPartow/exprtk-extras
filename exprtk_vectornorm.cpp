@@ -19,6 +19,7 @@
 #include <cstdio>
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include "exprtk.hpp"
 
@@ -111,9 +112,16 @@ void norm_of_vector()
 
    symbol_table_t symbol_table;
 
-   T x[] = { T(1), T(2), T(3) , T(4) };
+   T x[] = { T(1), T(2), T(3), T(4) };
+
+   std::vector<T> y;
+
+   y.push_back(T(5)); y.push_back(T(6));
+   y.push_back(T(7)); y.push_back(T(6));
+   y.push_back(T(9)); y.push_back(T(0));
 
    symbol_table.add_vector("x", x);
+   symbol_table.add_vector("y", y);
 
    norm<T> norm_;
 
@@ -121,18 +129,24 @@ void norm_of_vector()
 
    std::string vector_norm_program[] =
                {
-                  "norm(x)     ",
-                  "norm(x,1)   ",
-                  "norm(x,2)   ",
-                  "norm(x,3)   ",
-                  "norm(x,4)   ",
-                  "norm(x,5)   ",
-                  "norm(2x+1)  ",
-                  "norm(2x+1,1)",
-                  "norm(2x+1,2)",
-                  "norm(2x+1,3)",
-                  "norm(2x+1,4)",
-                  "norm(2x+1,5)"
+                  "norm(x)         ",
+                  "norm(x,1)       ",
+                  "norm(x,2)       ",
+                  "norm(x,3)       ",
+                  "norm(x,4)       ",
+                  "norm(x,5)       ",
+                  "norm(2x+1)      ",
+                  "norm(2x+1,1)    ",
+                  "norm(2x+1,2)    ",
+                  "norm(2x+1,3)    ",
+                  "norm(2x+1,4)    ",
+                  "norm(2x+1,5)    ",
+                  "norm(2x+y/3-4)  ",
+                  "norm(2x+y/3-4,1)",
+                  "norm(2x+y/3-4,2)",
+                  "norm(2x+y/3-4,3)",
+                  "norm(2x+y/3-4,4)",
+                  "norm(2x+y/3-4,5)"
                };
 
    const std::size_t vecnorm_program_size = sizeof(vector_norm_program) / sizeof(std::string);

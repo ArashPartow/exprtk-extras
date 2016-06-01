@@ -20,7 +20,7 @@
 #include <string>
 #include "exprtk.hpp"
 
-static const std::size_t rounds = 5000000;
+static const std::size_t rounds = 10000000;
 
 template <typename T>
 struct bsm_parameters
@@ -182,7 +182,7 @@ inline T bsm_model(const std::string& callput_flag, T s, T x, T t, T r, T v)
 }
 
 template <typename T>
-void bms_native()
+void bsm_native()
 {
    T s = T(0);
    T x = T(0);
@@ -221,7 +221,7 @@ void bms_native()
 int main()
 {
    black_scholes_merton_model<double>();
-   bms_native<double>();
+   bsm_native<double>();
    return 0;
 }
 
