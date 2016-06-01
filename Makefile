@@ -37,6 +37,7 @@ BUILD_LIST+=exprtk_repl
 BUILD_LIST+=exprtk_sumofprimes
 BUILD_LIST+=exprtk_testgen
 BUILD_LIST+=exprtk_truthtable_gen
+BUILD_LIST+=exprtk_vectornorm
 
 all: $(BUILD_LIST)
 

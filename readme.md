@@ -36,4 +36,4 @@ The ExprTk Extras implementation is fully compatible with the following C++ comp
 |13  | Sum of prime factors for first N numbers |exprtk_sumofprimes.cpp        |
 |14  | Test expression generator                |exprtk_testgen.cpp            |
 |15  | Truth table generator from arbitrary expressions |exprtk_truthtable_gen.cpp|
-
+|16  | L-Norm of vectors                        |exprtk_vectornorm.cpp         |
