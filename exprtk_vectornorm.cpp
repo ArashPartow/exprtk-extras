@@ -117,7 +117,7 @@ void norm_of_vector()
    std::vector<T> y;
 
    y.push_back(T(5)); y.push_back(T(6));
-   y.push_back(T(7)); y.push_back(T(6));
+   y.push_back(T(7)); y.push_back(T(8));
    y.push_back(T(9)); y.push_back(T(0));
 
    symbol_table.add_vector("x", x);
