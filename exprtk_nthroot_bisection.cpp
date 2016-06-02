@@ -1,0 +1,102 @@
+/*
+ **************************************************************
+ *         C++ Mathematical Expression Toolkit Library        *
+ *                                                            *
+ * ExprTk Nth-Root via Bisection Method                       *
+ * Author: Arash Partow (1999-2016)                           *
+ * URL: http://www.partow.net/programming/exprtk/index.html   *
+ *                                                            *
+ * Copyright notice:                                          *
+ * Free use of the Mathematical Expression Toolkit Library is *
+ * permitted under the guidelines and in accordance with the  *
+ * most current version of the Common Public License.         *
+ * http://www.opensource.org/licenses/cpl1.0.php              *
+ *                                                            *
+ **************************************************************
+*/
+
+
+#include <cmath>
+#include <cstdio>
+#include <string>
+
+#include "exprtk.hpp"
+
+
+template <typename T>
+void nthroot_via_bisection()
+{
+   typedef exprtk::symbol_table<T>      symbol_table_t;
+   typedef exprtk::expression<T>          expression_t;
+   typedef exprtk::parser<T>                  parser_t;
+   typedef exprtk::function_compositor<T> compositor_t;
+   typedef typename compositor_t::function  function_t;
+
+   symbol_table_t symbol_table;
+
+   exprtk::helper::println<T> println;
+
+   symbol_table.add_function("println",println);
+
+   compositor_t compositor(symbol_table);
+
+   compositor
+      .add(
+         function_t("nthroot")
+         .var("x")
+         .var("n")
+         .expression
+         (
+           " if (abs(frac(n)) > 0)            "
+           "   return [null];                 "
+           " else if (x < 0 and (n % 2 == 0)) "
+           "   return [null];                 "
+           "                                  "
+           " var lo := 0;                     "
+           " var hi := x;                     "
+           "                                  "
+           " while (true)                     "
+           " {                                "
+           "   var mid := avg(lo,hi);         "
+           "   var y   := pow(mid,n);         "
+           "                                  "
+           "   if (equal(y, x))               "
+           "    break [mid];                  "
+           "   else if (y < x)                "
+           "     lo := mid;                   "
+           "   else                           "
+           "     hi := mid;                   "
+           " };                               "
+          ));
+
+   const std::string nthroot_via_bisection_program =
+                  " for (var x := 1; x < 100; x += 1)   "
+                  " {                                   "
+                  "   println('[', x, ']',              "
+                  "           ' sqrt = ', nthroot(x,2), "
+                  "           ' cbrt = ', nthroot(x,3));"
+                  " }                                   ";
+
+   expression_t expression;
+
+   expression.register_symbol_table(symbol_table);
+
+   parser_t parser;
+
+   if (!parser.compile(nthroot_via_bisection_program, expression))
+   {
+      printf("Error: %s\tExpression: %s\n",
+             parser.error().c_str(),
+             nthroot_via_bisection_program.c_str());
+
+      return;
+   }
+
+   expression.value();
+}
+
+int main()
+{
+   nthroot_via_bisection<double>();
+   return 0;
+}

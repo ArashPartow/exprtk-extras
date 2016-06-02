@@ -3,7 +3,7 @@
 # *         C++ Mathematical Expression Toolkit Library        *
 # *                                                            *
 # * Extra Examples                                             *
-# * Author: Arash Partow (1999-2015)                           *
+# * Author: Arash Partow (1999-2016)                           *
 # * URL: http://www.partow.net/programming/exprtk/index.html   *
 # *                                                            *
 # * Copyright notice:                                          *
@@ -32,6 +32,7 @@ BUILD_LIST+=exprtk_gcd
 BUILD_LIST+=exprtk_gnuplot
 BUILD_LIST+=exprtk_gnuplot_multi
 BUILD_LIST+=exprtk_mandelbrot
+BUILD_LIST+=exprtk_nthroot_bisection.cpp
 BUILD_LIST+=exprtk_prime_sieve
 BUILD_LIST+=exprtk_repl
 BUILD_LIST+=exprtk_sumofprimes
