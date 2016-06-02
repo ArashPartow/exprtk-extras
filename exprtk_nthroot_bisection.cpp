@@ -26,11 +26,11 @@
 template <typename T>
 void nthroot_via_bisection()
 {
-   typedef exprtk::symbol_table<T>      symbol_table_t;
-   typedef exprtk::expression<T>          expression_t;
-   typedef exprtk::parser<T>                  parser_t;
-   typedef exprtk::function_compositor<T> compositor_t;
-   typedef typename compositor_t::function  function_t;
+   typedef exprtk::symbol_table<T>       symbol_table_t;
+   typedef exprtk::expression<T>           expression_t;
+   typedef exprtk::parser<T>                   parser_t;
+   typedef exprtk::function_compositor<T>  compositor_t;
+   typedef typename compositor_t::function   function_t;
 
    symbol_table_t symbol_table;
 
@@ -52,8 +52,8 @@ void nthroot_via_bisection()
            " else if (x < 0 and (n % 2 == 0)) "
            "   return [null];                 "
            "                                  "
-           " var lo := 0;                     "
-           " var hi := x;                     "
+           " var lo := min(0,x);              "
+           " var hi := max(0,x);              "
            "                                  "
            " while (true)                     "
            " {                                "
@@ -61,7 +61,7 @@ void nthroot_via_bisection()
            "   var y   := pow(mid,n);         "
            "                                  "
            "   if (equal(y, x))               "
-           "    break [mid];                  "
+           "     break [mid];                 "
            "   else if (y < x)                "
            "     lo := mid;                   "
            "   else                           "
@@ -70,12 +70,12 @@ void nthroot_via_bisection()
           ));
 
    const std::string nthroot_via_bisection_program =
-                  " for (var x := 1; x < 100; x += 1)   "
-                  " {                                   "
-                  "   println('[', x, ']',              "
-                  "           ' sqrt = ', nthroot(x,2), "
-                  "           ' cbrt = ', nthroot(x,3));"
-                  " }                                   ";
+                  " for (var x := -30; x <= 30; x += 1)  "
+                  " {                                    "
+                  "   println('[', x, ']',               "
+                  "           ' sqrt = ', nthroot(x,2),  "
+                  "           ' cbrt = ', nthroot(x,3)); "
+                  " }                                    ";
 
    expression_t expression;
 
@@ -83,14 +83,7 @@ void nthroot_via_bisection()
 
    parser_t parser;
 
-   if (!parser.compile(nthroot_via_bisection_program, expression))
-   {
-      printf("Error: %s\tExpression: %s\n",
-             parser.error().c_str(),
-             nthroot_via_bisection_program.c_str());
-
-      return;
-   }
+   parser.compile(nthroot_via_bisection_program, expression);
 
    expression.value();
 }
