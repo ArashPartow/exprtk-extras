@@ -30,11 +30,11 @@ The ExprTk Extras implementation is fully compatible with the following C++ comp
 |07  | GNUplot single curve example                     |[exprtk_gnuplot.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_gnuplot.cpp)                     |
 |08  | GNUplot multi-curve example                      |[exprtk_gnuplot_multi.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_gnuplot_multi.cpp)         |
 |09  | Mandelbrot Fractal generator                     |[exprtk_mandelbrot.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_mandelbrot.cpp)               |
-|10  | Sieve of Eratosthenes                            |[exprtk_prime_sieve.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_prime_sieve.cpp)             |
-|11  | ExprTk Read-Evaluate-Print-Loop (REPL)           |[exprtk_repl.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_repl.cpp)                           |
-|12  | Skeleton for string APIs                         |[exprtk_str_funcs.hpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_str_funcs.hpp)                 |
-|13  | Sum of prime factors for first N numbers         |[exprtk_sumofprimes.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_sumofprimes.cpp)             |
-|14  | Test expression generator                        |[exprtk_testgen.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_testgen.cpp)                     |
-|15  | Truth table generator from arbitrary expressions |[exprtk_truthtable_gen.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_truthtable_gen.cpp)       |
-|16  | L-Norm of vectors                                |[exprtk_vectornorm.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_vectornorm.cpp)               |
-
+|10  | Nth-root via the bisection method                |[exprtk_nthroot_bisection.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_nthroot_bisection.cpp) |
+|11  | Sieve of Eratosthenes                            |[exprtk_prime_sieve.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_prime_sieve.cpp)             |
+|12  | ExprTk Read-Evaluate-Print-Loop (REPL)           |[exprtk_repl.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_repl.cpp)                           |
+|13  | Skeleton for string APIs                         |[exprtk_str_funcs.hpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_str_funcs.hpp)                 |
+|14  | Sum of prime factors for first N numbers         |[exprtk_sumofprimes.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_sumofprimes.cpp)             |
+|15  | Test expression generator                        |[exprtk_testgen.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_testgen.cpp)                     |
+|16  | Truth table generator from arbitrary expressions |[exprtk_truthtable_gen.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_truthtable_gen.cpp)       |
+|17  | L-Norm of vectors                                |[exprtk_vectornorm.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_vectornorm.cpp)               |
