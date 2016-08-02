@@ -18,7 +18,6 @@
 
 #include <cstdio>
 #include <string>
-
 #include "exprtk.hpp"
 
 static const std::size_t rounds = 10000000;
