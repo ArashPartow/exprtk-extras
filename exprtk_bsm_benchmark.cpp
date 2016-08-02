@@ -65,9 +65,9 @@ void black_scholes_merton_model()
                   " var d1 := (log(s / x) + (r + v^2 / 2) * t) / (v * sqrt(t)); "
                   " var d2 := d1 - v * sqrt(t);                                 "
                   "                                                             "
-                  " if(callput_flag == 'call')                                  "
+                  " if (callput_flag == 'call')                                 "
                   "   s * ncdf(d1) - x * e^(-r * t) * ncdf(d2);                 "
-                  " else if(callput_flag == 'put')                              "
+                  " else if (callput_flag == 'put')                             "
                   "   x * e^(-r * t) * ncdf(-d2) - s * ncdf(-d1);               "
                   "                                                             ";
 
@@ -77,9 +77,9 @@ void black_scholes_merton_model()
                   " var d2   := d1 - v_sqrtt;                                   "
                   " var xert := x * exp(-r * t);                                "
                   "                                                             "
-                  " if(callput_flag == 'call')                                  "
+                  " if (callput_flag == 'call')                                 "
                   "   s * ncdf(d1) - xert * ncdf(d2);                           "
-                  " else if(callput_flag == 'put')                              "
+                  " else if (callput_flag == 'put')                             "
                   "   xert * ncdf(-d2) - s * ncdf(-d1);                         "
                   "                                                             ";
 
@@ -173,9 +173,9 @@ inline T bsm_model(const std::string& callput_flag, T s, T x, T t, T r, T v)
 {
    T d1 = (std::log(s / x) + (r + (v * v) / 2) * t) / (v * std::sqrt(t));
    T d2 = d1 - v * sqrt(t);
-   if(callput_flag == "call")
+   if (callput_flag == "call")
       return  s * exprtk::details::numeric::ncdf(d1) - x * exp(-r * t) * exprtk::details::numeric::ncdf(d2);
-   else if(callput_flag == "put")
+   else if (callput_flag == "put")
       return x * exp(-r * t) * exprtk::details::numeric::ncdf(-d2) - s * exprtk::details::numeric::ncdf(-d1);
    else
       return T(0);
