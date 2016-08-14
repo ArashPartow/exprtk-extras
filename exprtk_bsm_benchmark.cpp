@@ -116,7 +116,9 @@ void black_scholes_merton_model()
    {
       exprtk::timer timer;
       timer.start();
+
       T total = T(0);
+
       for (std::size_t k = 0; k < rounds; ++k)
       {
          bsm_parameters<T>& params = bsm_list[k % bsm_list_size];
@@ -129,9 +131,11 @@ void black_scholes_merton_model()
 
          callput_flag = "call";
          total += bsm_expression.value();
+
          callput_flag = "put";
          total += bsm_expression.value();
       }
+
       timer.stop();
 
       printf("[exprtk0] Total: %16.5f\tTime:%8.3fsec\tRate:%16.3f\n",
@@ -143,7 +147,9 @@ void black_scholes_merton_model()
    {
       exprtk::timer timer;
       timer.start();
+
       T total = T(0);
+
       for (std::size_t k = 0; k < rounds; ++k)
       {
          bsm_parameters<T>& params = bsm_list[k % bsm_list_size];
@@ -156,9 +162,11 @@ void black_scholes_merton_model()
 
          callput_flag = "call";
          total += bsm_expression_opt.value();
+
          callput_flag = "put";
          total += bsm_expression_opt.value();
       }
+
       timer.stop();
 
       printf("[exprtk1] Total: %16.5f\tTime:%8.3fsec\tRate:%16.3f\n",
@@ -173,6 +181,7 @@ inline T bsm_model(const std::string& callput_flag, T s, T x, T t, T r, T v)
 {
    T d1 = (std::log(s / x) + (r + (v * v) / 2) * t) / (v * std::sqrt(t));
    T d2 = d1 - v * sqrt(t);
+
    if (callput_flag == "call")
       return  s * exprtk::details::numeric::ncdf(d1) - x * exp(-r * t) * exprtk::details::numeric::ncdf(d2);
    else if (callput_flag == "put")
@@ -194,7 +203,9 @@ void bsm_native()
 
    exprtk::timer timer;
    timer.start();
+
    T total = T(0);
+
    for (std::size_t k = 0; k < rounds; ++k)
    {
       bsm_parameters<T>& params = bsm_list[k % bsm_list_size];
@@ -207,9 +218,11 @@ void bsm_native()
 
       callput_flag = "call";
       total += bsm_model(callput_flag,s,x,t,r,v);
+
       callput_flag = "put";
       total += bsm_model(callput_flag,s,x,t,r,v);
    }
+
    timer.stop();
 
    printf("[native ] Total: %16.5f\tTime:%8.3fsec\tRate:%16.3f\n",

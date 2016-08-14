@@ -38,22 +38,22 @@ void sum_of_primes()
 
    compositor
       .add(
-      function_t(
-           "sum_of_primes",
-           " var i     := 2;    "
-           " var total := 0;    "
-           " while (z > 1)      "
-           " {                  "
-           "    if (0 == z % i) "
-           "    {               "
-           "       total += i;  "
-           "       z /= i;      "
-           "    }               "
-           "    else            "
-           "       i += 1;      "
-           " };                 "
-           " total;             ",
-           "z"));
+         function_t("sum_of_primes")
+           .var("z")
+           .expression(
+             " var i     := 2;      "
+             " var total := 0;      "
+             " while (z > 1)        "
+             " {                    "
+             "    if (0 == (z % i)) "
+             "    {                 "
+             "       total += i;    "
+             "       z /= i;        "
+             "    }                 "
+             "    else              "
+             "       i += 1;        "
+             " };                   "
+             " total;               ");
 
    exprtk::helper::println<T> println;
 

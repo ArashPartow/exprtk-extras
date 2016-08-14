@@ -87,6 +87,7 @@ private:
    bool generate_gp_script()
    {
       std::ofstream stream("plot.gp");
+
       if (!stream)
       {
          return false;
@@ -100,6 +101,7 @@ private:
       for (std::size_t i = 0; i < curve_list_.size(); ++i)
       {
          exprtk_fx_curve& curve = curve_list_[i];
+
          if (curve.min_x_ < min_x) min_x = curve.min_x_;
          if (curve.max_x_ > max_x) max_x = curve.max_x_;
          if (curve.min_y_ < min_y) min_y = curve.min_y_;
@@ -130,6 +132,7 @@ private:
       typedef exprtk::parser<double>             parser_t;
 
       double x = 0.0;
+
       symbol_table_t symbol_table;
       symbol_table.add_constants();
       symbol_table.add_variable("x",x);
@@ -163,8 +166,10 @@ private:
       for (x = curve.min_x_; x <= curve.max_x_; x += increment)
       {
          double y = expression.value();
+
               if (y < curve.min_y_) curve.min_y_ = y;
          else if (y > curve.max_y_) curve.max_y_ = y;
+
          stream << x << "\t" << y << "\n";
       }
 

@@ -626,7 +626,8 @@ private:
             input += (line + "\n");
       }
 
-      input.erase(input.end() - 1);
+      if (!input.empty())
+         input.erase(input.end() - 1);
 
       return input;
    }
@@ -639,7 +640,7 @@ private:
       {
          func_def += read_from_stdin();
 
-         if ('$' == func_def[0])
+         if (!func_def.empty() && ('$' == func_def[0]))
             func_def.erase(func_def.begin());
       }
 

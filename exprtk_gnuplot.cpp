@@ -68,6 +68,7 @@ private:
    bool generate_gp_script()
    {
       std::ofstream stream("plot.gp");
+
       if (!stream)
       {
          return false;
@@ -80,6 +81,7 @@ private:
       stream << "set xzeroaxis\n";
       stream << "set yzeroaxis\n";
       stream << "plot 'data.dat' using 1:2:(1.0) smooth unique title '" << title_ <<"'\n";
+
       return true;
    }
 
@@ -90,6 +92,7 @@ private:
       typedef exprtk::parser<double>             parser_t;
 
       double x = 0.0;
+
       symbol_table_t symbol_table;
       symbol_table.add_constants();
       symbol_table.add_variable("x",x);
@@ -121,8 +124,10 @@ private:
       for (x = min_x_; x <= max_x_; x += increment)
       {
          double y = expression.value();
+
               if (y < min_y_) min_y_ = y;
          else if (y > max_y_) max_y_ = y;
+
          stream << x << "\t" << y << "\n";
       }
 

@@ -45,6 +45,7 @@ void truth_table_generator(const std::string& boolean_expression)
                   );
 
    parser.enable_unknown_symbol_resolver();
+
    parser.dec().collect_variables() = true;
    parser.dec().collect_functions() = true;
 
