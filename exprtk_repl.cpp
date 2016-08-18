@@ -16,10 +16,12 @@
 */
 
 
+#include <algorithm>
 #include <cstdio>
 #include <deque>
 #include <fstream>
 #include <iostream>
+#include <numeric>
 #include <string>
 
 #include "exprtk.hpp"
@@ -74,6 +76,7 @@ public:
      display_total_compile_time_(false),
      enable_usr_                (false),
      disable_local_vardef_      (false),
+     batch_runs_cnt_            (0),
      compositor_(function_symbol_table_)
    {
       symbol_table_.add_constants();
@@ -246,6 +249,44 @@ public:
          printf("\nCompile time: %6.3fms\n",compile_timer.time() * 1000.0);
       }
 
+      if (batch_runs_cnt_)
+      {
+         std::vector<double> timings(batch_runs_cnt_,0.0);
+
+         exprtk::timer total_timer;
+         exprtk::timer timer;
+
+         T result = T(0);
+
+         total_timer.start();
+
+         for (std::size_t i = 0; i < batch_runs_cnt_; ++i)
+         {
+            timer.start();
+
+            result = expression.value();
+
+            timer.stop();
+
+            timings[i] = timer.time() * 1000.0;
+         }
+
+         total_timer.stop();
+
+         printf("\nResult: %10.5f\n",result);
+
+         std::sort(timings.begin(),timings.end());
+
+         printf("\nRuns: %4d  Time min %7.3fms\tmax: %7.3fms\tavg: %7.3fms\ttot: %7.3fms\n",
+                static_cast<unsigned int>(batch_runs_cnt_),
+                timings.front(),
+                timings.back (),
+                std::accumulate(timings.begin(),timings.end(),0.0) / timings.size(),
+                total_timer.time() * 1000.0);
+
+         return;
+      }
+
       exprtk::timer timer;
       timer.start();
 
@@ -347,6 +388,8 @@ public:
          list_symbols();
       else if ("$clear_functions" == expression)
          clear_functions();
+      else if ((0 == expression.find("$batch_run ")) && (expression.size() > 12))
+         process_batch_run(expression.substr(11,expression.size() - 11));
       else if ((0 == expression.find("$load ")) && (expression.size() > 7))
          process_from_file(expression.substr(6,expression.size() - 6));
       else if ((0 == expression.find("$disable arithmetic ")) && (expression.size() >= 21))
@@ -465,6 +508,11 @@ private:
             default                      : break;
          }
       }
+   }
+
+   void process_batch_run(const std::string& batch_runs_cnt)
+   {
+      batch_runs_cnt_ = atoi(batch_runs_cnt.c_str());
    }
 
    void process_multiline()
@@ -850,6 +898,7 @@ private:
    bool display_total_compile_time_;
    bool enable_usr_;
    bool disable_local_vardef_;
+   std::size_t batch_runs_cnt_;
 
    symbol_table_t symbol_table_;
    symbol_table_t function_symbol_table_;
@@ -1063,4 +1112,18 @@ $end
 
 ---- snip ----
 
+
+ Step 6.1 Copy into the REPL the contents of the snippet below:
+---- snip ----
+$begin
+var s := 'abcdefghijkl';
+for (var i := 0; i < (s[] / 2); i+= 1)
+{
+   var j := s[] - i - 1;
+   s[i:i] <=> s[j:j];
+}
+println(s)
+$end
+
+---- snip ----
 */
