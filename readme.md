@@ -20,7 +20,7 @@ The ExprTk Extras implementation is fully compatible with the following C++ comp
 #### List Of Examples
 |#   | Description                                      | File                                                                                                                 |
 |:--:|:-------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------|
-|00  | Black–Scholes-Merton model benchmark             |[exprtk_bsm_benchmark.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_bsm_benchmark.cpp)         |
+|00  | Black-Scholes-Merton model benchmark             |[exprtk_bsm_benchmark.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_bsm_benchmark.cpp)         |
 |01  | Simple calculator                                |[exprtk_calc.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_calc.cpp)                           |
 |02  | Collatz conjecture                               |[exprtk_collatz.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_collatz.cpp)                     |
 |03  | Expression generator                             |[exprtk_exprgen.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_exprgen.cpp)                     |
@@ -37,4 +37,5 @@ The ExprTk Extras implementation is fully compatible with the following C++ comp
 |14  | Sum of prime factors for first N numbers         |[exprtk_sumofprimes.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_sumofprimes.cpp)             |
 |15  | Test expression generator                        |[exprtk_testgen.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_testgen.cpp)                     |
 |16  | Truth table generator from arbitrary expressions |[exprtk_truthtable_gen.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_truthtable_gen.cpp)       |
-|17  | L-Norm of vectors                                |[exprtk_vectornorm.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_vectornorm.cpp)               |
+|17  | Vector processing benchmark                      |[exprtk_vector_benchmark.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_vector_benchmark.cpp)   |
+|18  | L-Norm of vectors                                |[exprtk_vectornorm.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_vectornorm.cpp)               |
