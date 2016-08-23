@@ -53,7 +53,7 @@ void sum_of_primes()
              "    else              "
              "       i += 1;        "
              " };                   "
-             " total;               ");
+             " total;               "));
 
    exprtk::helper::println<T> println;
 

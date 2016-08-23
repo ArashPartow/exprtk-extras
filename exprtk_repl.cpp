@@ -78,6 +78,14 @@ public:
      disable_local_vardef_      (false),
      batch_runs_cnt_            (0),
      compositor_(function_symbol_table_)
+     #ifdef exprtk_enable_repl_variables
+     ,s0_("abcdefghijk"),
+      s1_("abcdefghijk0123456789"),
+      s2_("012345678901234567890123456789"),
+      v0_({1,1,1}),
+      v1_({2,2,2,2,2}),
+      v2_({3,3,3,3,3,3,3})
+     #endif
    {
       symbol_table_.add_constants();
 
@@ -98,6 +106,15 @@ public:
       symbol_table_.add_function("poly10", poly10_);
       symbol_table_.add_function("poly11", poly11_);
       symbol_table_.add_function("poly12", poly12_);
+
+      #ifdef exprtk_enable_repl_variables
+      symbol_table_.add_stringvar("s0",s0_);
+      symbol_table_.add_stringvar("s1",s1_);
+      symbol_table_.add_stringvar("s2",s2_);
+      symbol_table_.add_vector   ("v0",v0_);
+      symbol_table_.add_vector   ("v1",v1_);
+      symbol_table_.add_vector   ("v2",v2_);
+      #endif
 
       compositor_.add_auxiliary_symtab(symbol_table_);
 
@@ -277,12 +294,13 @@ public:
 
          std::sort(timings.begin(),timings.end());
 
-         printf("\nRuns: %4d  Time min %7.3fms\tmax: %7.3fms\tavg: %7.3fms\ttot: %7.3fms\n",
+         printf("\nRuns: %4d  Time min: %7.3fms   max: %7.3fms   avg: %7.3fms   tot: %7.3fms   90%%:%7.3fms\n",
                 static_cast<unsigned int>(batch_runs_cnt_),
                 timings.front(),
                 timings.back (),
                 std::accumulate(timings.begin(),timings.end(),0.0) / timings.size(),
-                total_timer.time() * 1000.0);
+                total_timer.time() * 1000.0,
+                timings[static_cast<int>(timings.size() * 0.90)]);
 
          return;
       }
@@ -928,6 +946,15 @@ private:
    std::map<std::string,typename settings_store_t::settings_arithmetic_opr> arith_opr_;
    std::map<std::string,typename settings_store_t::settings_assignment_opr> assign_opr_;
    std::map<std::string,typename settings_store_t::settings_inequality_opr> inequality_opr_;
+
+   #ifdef exprtk_enable_repl_variables
+   std::string    s0_;
+   std::string    s1_;
+   std::string    s2_;
+   std::vector<T> v0_;
+   std::vector<T> v1_;
+   std::vector<T> v2_;
+   #endif
 };
 
 template <typename T>
@@ -1126,4 +1153,48 @@ println(s)
 $end
 
 ---- snip ----
+
+
+ Step 7.1 Copy into the REPL the contents of the snippet below:
+---- snip ----
+$begin
+var vec[11]    := { -1, -2, 3, 5, 6, -2, -1, 4, -4, 2, -1 };
+var zero       := 0;
+var max_sum    := 0;
+var max_start  := 0;
+var max_end    := 0;
+var curr_sum   := 0;
+var curr_start := 0;
+
+for (var i := 0; i < vec[]; i += 1)
+{
+   curr_sum += vec[i];
+
+   if (curr_sum < zero)
+   {
+     curr_sum   := 0;
+     curr_start := i + 1;
+   }
+   else if (curr_sum > max_sum)
+   {
+     max_sum   := curr_sum;
+     max_start := curr_start;
+     max_end   := i;
+   }
+}
+
+println('vec: ',vec);
+
+println('Max sum:     ', max_sum  );
+println('Start index: ', max_start);
+println('End index:   ', max_end  );
+
+for (var i := max_start; i <= max_end; i += 1)
+{
+   print(vec[i],' ');
+}
+$end
+
+---- snip ----
+
 */
