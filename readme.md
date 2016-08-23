@@ -39,3 +39,4 @@ The ExprTk Extras implementation is fully compatible with the following C++ comp
 |16  | Truth table generator from arbitrary expressions |[exprtk_truthtable_gen.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_truthtable_gen.cpp)       |
 |17  | Vector processing benchmark                      |[exprtk_vector_benchmark.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_vector_benchmark.cpp)   |
 |18  | L-Norm of vectors                                |[exprtk_vectornorm.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_vectornorm.cpp)               |
+|19  | Maximum subarray sum (Kadane's algorithm)        |[exprtk_max_subarray_sum.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_max_subarray_sum.cpp)   |
