@@ -16,6 +16,7 @@
 */
 
 
+#include <cmath>
 #include <cstdio>
 #include <iostream>
 #include <string>
@@ -79,7 +80,7 @@ struct norm : public exprtk::igeneric_function<T>
 
       for (std::size_t i = 0; i < vector.size(); ++i)
       {
-         sum += exprtk::details::numeric::fast_exp<T,Pow>::result(vector[i]);
+         sum += exprtk::details::numeric::fast_exp<T,Pow>::result(std::abs(vector[i]));
       }
 
       switch (Pow)
@@ -96,7 +97,7 @@ struct norm : public exprtk::igeneric_function<T>
 
       for (std::size_t i = 0; i < vector.size(); ++i)
       {
-         sum += exprtk::details::numeric::pow(vector[i],T(pow));
+         sum += exprtk::details::numeric::pow(std::abs(vector[i]),T(pow));
       }
 
       return exprtk::details::numeric::pow(sum,T(1) / pow);
@@ -112,7 +113,7 @@ void norm_of_vector()
 
    symbol_table_t symbol_table;
 
-   T x[] = { T(1), T(2), T(3), T(4) };
+   T x[] = { T(1), T(2), T(3), T(4), T(5) };
 
    std::vector<T> y;
 
