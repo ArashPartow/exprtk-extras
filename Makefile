@@ -24,6 +24,7 @@ OPTIONS          = $(BASE_OPTIONS) $(OPTIMIZATION_OPT)
 LINKER_OPT       = -L/usr/lib -lstdc++ -lm
 
 BUILD_LIST+=exprtk_bsm_benchmark
+BUILD_LIST+=exprtk_binomial_coefficient
 BUILD_LIST+=exprtk_calc
 BUILD_LIST+=exprtk_collatz
 BUILD_LIST+=exprtk_fizzbuzz
