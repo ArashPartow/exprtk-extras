@@ -41,19 +41,19 @@ void sum_of_primes()
          function_t("sum_of_primes")
            .var("z")
            .expression(
-             " var i     := 2;      "
-             " var total := 0;      "
-             " while (z > 1)        "
-             " {                    "
-             "    if (0 == (z % i)) "
-             "    {                 "
-             "       total += i;    "
-             "       z /= i;        "
-             "    }                 "
-             "    else              "
-             "       i += 1;        "
-             " };                   "
-             " total;               "));
+             " var i     := 2;     "
+             " var total := 0;     "
+             " while (z > 1)       "
+             " {                   "
+             "   if (0 == (z % i)) "
+             "   {                 "
+             "     total += i;     "
+             "     z /= i;         "
+             "   }                 "
+             "   else              "
+             "     i += 1;         "
+             " };                  "
+             " total;              "));
 
    exprtk::helper::println<T> println;
 
