@@ -78,11 +78,9 @@ void nthroot_via_bisection()
                   " }                                    ";
 
    expression_t expression;
-
    expression.register_symbol_table(symbol_table);
 
    parser_t parser;
-
    parser.compile(nthroot_via_bisection_program, expression);
 
    expression.value();

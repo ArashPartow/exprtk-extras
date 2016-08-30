@@ -51,10 +51,9 @@ void sieve_of_eratosthenes()
                      "                                             "
                      " prime_count == 5761455;                     ";
 
-   parser_t parser;
-
    expression_t expression;
 
+   parser_t parser;
    parser.compile(sieve_of_eratosthenes_program,expression);
 
    exprtk::timer timer;

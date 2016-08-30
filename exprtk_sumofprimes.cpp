@@ -65,11 +65,10 @@ void sum_of_primes()
                   "   println(i,sum_of_primes(i));     "
                   " }                                  ";
 
-   parser_t parser;
-
    expression_t expression;
    expression.register_symbol_table(symbol_table);
 
+   parser_t parser;
    parser.compile(sum_of_primes_program,expression);
 
    expression.value();

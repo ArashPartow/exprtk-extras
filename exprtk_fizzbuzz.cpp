@@ -50,11 +50,10 @@ void fizzbuzz()
 
    symbol_table.add_function("print",print);
 
-   parser_t parser;
-
    expression_t expression;
    expression.register_symbol_table(symbol_table);
 
+   parser_t parser;
    parser.compile(fizzbuzz_program,expression);
 
    expression.value();

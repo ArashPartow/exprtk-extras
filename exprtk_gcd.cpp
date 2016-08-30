@@ -59,33 +59,31 @@ void gcd()
       .add(
       function_t(
            "gcd",
-           "switch                        "
-           "{                             "
-           "  case 0 = x : 0;             "
-           "  case 0 = y : x;             "
-           "  case x = y : x;             "
-           "  case x > y : gcd(x - y, y); "
-           "  default    : gcd(x, y - x); "
-           "}                             ",
+           " switch                        "
+           " {                             "
+           "   case 0 = x : 0;             "
+           "   case 0 = y : x;             "
+           "   case x = y : x;             "
+           "   case x > y : gcd(x - y, y); "
+           "   default    : gcd(x, y - x); "
+           " }                             ",
            "x","y"));
 
    std::string gcd_program =
-                  "i := 0;                    "
-                  "while ((i += 1) < 100)     "
-                  "{                          "
-                  "  j := 0;                  "
-                  "  repeat                   "
-                  "    println(i,j,gcd(i,j)); "
-                  "  until ((j += 1) >= 100); "
-                  "};                         ";
-
-   parser_t parser;
-
-   parser.enable_unknown_symbol_resolver();
+                  " i := 0;                    "
+                  " while ((i += 1) < 100)     "
+                  " {                          "
+                  "   j := 0;                  "
+                  "   repeat                   "
+                  "     println(i,j,gcd(i,j)); "
+                  "   until ((j += 1) >= 100); "
+                  " };                         ";
 
    expression_t expression;
    expression.register_symbol_table(symbol_table);
 
+   parser_t parser;
+   parser.enable_unknown_symbol_resolver();
    parser.compile(gcd_program,expression);
 
    expression.value();

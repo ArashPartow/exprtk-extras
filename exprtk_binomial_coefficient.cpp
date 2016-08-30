@@ -78,11 +78,10 @@ void ncr()
                   "   println(n, r, ncr(n,r));      "
                   " };                              ";
 
-   parser_t parser;
-
    expression_t expression;
    expression.register_symbol_table(symbol_table);
 
+   parser_t parser;
    parser.compile(ncr_program,expression);
 
    expression.value();

@@ -51,47 +51,46 @@ void mandelbrot()
    symbol_table.add_function("println",println);
 
    std::string mandelbrot_program =
-                  " width    := 118;                             "
-                  " height   := 41;                              "
-                  " imag_max := +1;                              "
-                  " imag_min := -1;                              "
-                  " real_max := +1;                              "
-                  " real_min := -2.5;                            "
-                  " x_step   := (real_max - real_min) / width;   "
-                  " y_step   := (imag_max - imag_min) / height;  "
-                  " for (var y := 0; y < height; y += 1)         "
-                  " {                                            "
-                  "   imag := imag_min + (y_step * y);           "
-                  "   for (var x := 0; x < width; x += 1)        "
-                  "   {                                          "
-                  "     real   := real_min + x_step * x;         "
-                  "     z_real := real;                          "
-                  "     z_imag := imag;                          "
-                  "     for (var n := 0; n < 30; n += 1)         "
-                  "     {                                        "
-                  "       a := z_real^2;                         "
-                  "       b := z_imag^2;                         "
-                  "       plot_value := n;                       "
-                  "       if ((a + b) < 4)                       "
-                  "       {                                      "
-                  "         z_imag := 2 * z_real * z_imag + imag;"
-                  "         z_real := a - b + real;              "
-                  "       }                                      "
-                  "       else                                   "
-                  "         break;                               "
-                  "     };                                       "
-                  "     putch(61 - plot_value);                  "
-                  "   };                                         "
-                  "   println()                                  "
-                  " }                                            ";
+                  " width    := 118;                              "
+                  " height   := 41;                               "
+                  " imag_max := +1;                               "
+                  " imag_min := -1;                               "
+                  " real_max := +1;                               "
+                  " real_min := -2.5;                             "
+                  " x_step   := (real_max - real_min) / width;    "
+                  " y_step   := (imag_max - imag_min) / height;   "
+                  " for (var y := 0; y < height; y += 1)          "
+                  " {                                             "
+                  "   imag := imag_min + (y_step * y);            "
+                  "   for (var x := 0; x < width; x += 1)         "
+                  "   {                                           "
+                  "     real   := real_min + x_step * x;          "
+                  "     z_real := real;                           "
+                  "     z_imag := imag;                           "
+                  "     for (var n := 0; n < 30; n += 1)          "
+                  "     {                                         "
+                  "       a := z_real^2;                          "
+                  "       b := z_imag^2;                          "
+                  "       plot_value := n;                        "
+                  "       if ((a + b) < 4)                        "
+                  "       {                                       "
+                  "         z_imag := 2 * z_real * z_imag + imag; "
+                  "         z_real := a - b + real;               "
+                  "       }                                       "
+                  "       else                                    "
+                  "         break;                                "
+                  "     };                                        "
+                  "     putch(61 - plot_value);                   "
+                  "   };                                          "
+                  "   println()                                   "
+                  " }                                             ";
 
-   parser_t parser;
-
-   parser.enable_unknown_symbol_resolver();
 
    expression_t expression;
    expression.register_symbol_table(symbol_table);
 
+   parser_t parser;
+   parser.enable_unknown_symbol_resolver();
    parser.compile(mandelbrot_program,expression);
 
    expression.value();

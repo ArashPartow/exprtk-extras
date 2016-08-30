@@ -69,7 +69,6 @@ void max_subarray_sum()
    expression.register_symbol_table(symbol_table);
 
    parser_t parser;
-
    parser.compile(max_subarray_sum_program,expression);
 
    expression.value();

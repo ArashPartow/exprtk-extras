@@ -1197,4 +1197,78 @@ $end
 
 ---- snip ----
 
+
+ Step 8.1 Copy into the REPL the contents of the snippet below:
+---- snip ----
+
+$function is_prime(x)
+{
+  if (x <= 0)
+    return [false];
+  else if (frac(x) != 0)
+    return [false];
+  else
+  {
+    switch
+    {
+      case 1 == x : return [false];
+      case 2 == x : return [true ];
+      default     :
+      {
+        var prime_lut[160] :=
+             {
+                 2,  3,  5,  7, 11, 13, 17, 19, 23, 29,
+                31, 37, 41, 43, 47, 53, 59, 61, 67, 71,
+                73, 79, 83, 89, 97,101,103,107,109,113,
+               127,131,137,139,149,151,157,163,167,173,
+               179,181,191,193,197,199,211,223,227,229,
+               233,239,241,251,257,263,269,271,277,281,
+               283,293,307,311,313,317,331,337,347,349,
+               353,359,367,373,379,383,389,397,401,409,
+               419,421,431,433,439,443,449,457,461,463,
+               467,479,487,491,499,503,509,521,523,541,
+               547,557,563,569,571,577,587,593,599,601,
+               607,613,617,619,631,641,643,647,653,659,
+               661,673,677,683,691,701,709,719,727,733,
+               739,743,751,757,761,769,773,787,797,809,
+               811,821,823,827,829,839,853,857,859,863,
+               877,881,883,887,907,911,919,929,937,941
+             };
+
+        var upper_bound := min(x - 1,trunc(sqrt(x)) + 1);
+
+        for (var i := 0; i < prime_lut[]; i += 1)
+        {
+          if (prime_lut[i] >= upper_bound)
+            break;
+          else if ((x % prime_lut[i]) == 0)
+            return [false];
+        };
+
+        var lower_bound := prime_lut[prime_lut[] - 1] + 2;
+
+        for (var i := lower_bound; i < upper_bound; i += 2)
+        {
+          if ((x % i) == 0)
+            return [false];
+        }
+      };
+    }
+  };
+
+  return [true];
+}
+
+var prime_count := 0;
+
+for (var i := 1; i < 10^6; i += 1)
+{
+   if (is_prime(i))
+     prime_count += 1;
+};
+
+prime_count
+$end
+---- snip ----
+
 */
