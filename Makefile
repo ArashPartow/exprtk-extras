@@ -35,7 +35,6 @@ BUILD_LIST+=exprtk_gnuplot_multi
 BUILD_LIST+=exprtk_mandelbrot
 BUILD_LIST+=exprtk_max_subarray_sum
 BUILD_LIST+=exprtk_montecarlo_pi
-BUILD_LIST+=exprtk_montecarlo_pi_v2
 BUILD_LIST+=exprtk_nthroot_bisection
 BUILD_LIST+=exprtk_prime_sieve
 BUILD_LIST+=exprtk_repl
