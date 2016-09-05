@@ -52,6 +52,20 @@ struct putint : public exprtk::ifunction<T>
 };
 
 template <typename T>
+struct rnd_01 : public exprtk::ifunction<T>
+{
+   rnd_01() : exprtk::ifunction<T>(0)
+   { ::srand(static_cast<unsigned int>(time(NULL))); }
+
+   inline T operator()()
+   {
+      // Note: Do not use this in production
+      // Result is in the interval [0,1)
+      return T(::rand() / T(RAND_MAX + 1.0));
+   }
+};
+
+template <typename T>
 class expression_processor
 {
 public:
@@ -93,6 +107,7 @@ public:
       symbol_table_.add_function("putint" ,putint_ );
       symbol_table_.add_function("print"  ,print_  );
       symbol_table_.add_function("println",println_);
+      symbol_table_.add_function("rnd_01" ,rnd_01_ );
 
       symbol_table_.add_function("poly01", poly01_);
       symbol_table_.add_function("poly02", poly02_);
@@ -290,7 +305,7 @@ public:
 
          total_timer.stop();
 
-         printf("\nResult: %10.5f\n",result);
+         printf("\nResult: %15.9f\n",result);
 
          std::sort(timings.begin(),timings.end());
 
@@ -317,7 +332,7 @@ public:
          print_results(expression.results());
       }
 
-      printf("\nResult: %10.5f\n",result);
+      printf("\nResult: %15.9f\n",result);
 
       if (display_total_time_)
       {
@@ -925,6 +940,7 @@ private:
 
    putch  <T> putch_;
    putint <T> putint_;
+   rnd_01 <T> rnd_01_;
    exprtk::helper::print<T>   print_;
    exprtk::helper::println<T> println_;
 

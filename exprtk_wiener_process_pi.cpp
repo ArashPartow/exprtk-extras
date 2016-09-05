@@ -2,7 +2,7 @@
  **************************************************************
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
- * Approximation of Pi via Monte-Carlo Method                 *
+ * Approximation of Pi via Wiener Process based Monte Carlo   *
  * Author: Arash Partow (1999-2016)                           *
  * URL: http://www.partow.net/programming/exprtk/index.html   *
  *                                                            *
@@ -39,23 +39,22 @@ struct rnd_01 : public exprtk::ifunction<T>
 };
 
 template <typename T>
-void monte_carlo_pi()
+void wiener_process_pi()
 {
    typedef exprtk::symbol_table<T> symbol_table_t;
    typedef exprtk::expression<T>     expression_t;
    typedef exprtk::parser<T>             parser_t;
 
-   std::string monte_carlo_pi_program =
-                  " var max_samples := 5 * 10^7;              "
-                  " var count       := 0;                     "
-                  "                                           "
-                  " for (var i := 0; i < max_samples; i += 1) "
-                  " {                                         "
-                  "   if ((rnd_01^2 + rnd_01^2) <= 1)         "
-                  "    count += 1;                            "
-                  " };                                        "
-                  "                                           "
-                  " (4 * count) / max_samples;                ";
+   const std::string wiener_process_pi_program =
+                        " var w[10^4] := [0];                         "
+                        "                                             "
+                        " for (var i := 0; i < w[]; i += 1)           "
+                        " {                                           "
+                        "   var x[10^4] := [(rnd_01 < 0.5) ? -1 : 1]; "
+                        "   w[i]        := sum(x);                    "
+                        " }                                           "
+                        "                                             "
+                        " (2 * w[]) / avg(abs(w))^2;                  ";
 
    rnd_01<T> rnd01;
 
@@ -66,7 +65,7 @@ void monte_carlo_pi()
    expression.register_symbol_table(symbol_table);
 
    parser_t parser;
-   parser.compile(monte_carlo_pi_program,expression);
+   parser.compile(wiener_process_pi_program,expression);
 
    const T approximate_pi = expression.value();
 
@@ -79,6 +78,6 @@ void monte_carlo_pi()
 
 int main()
 {
-   monte_carlo_pi<double>();
+   wiener_process_pi<double>();
    return 0;
 }

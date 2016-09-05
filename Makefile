@@ -43,6 +43,7 @@ BUILD_LIST+=exprtk_testgen
 BUILD_LIST+=exprtk_truthtable_gen
 BUILD_LIST+=exprtk_vectornorm
 BUILD_LIST+=exprtk_vector_benchmark
+BUILD_LIST+=exprtk_wiener_process_pi
 
 all: $(BUILD_LIST)
 
