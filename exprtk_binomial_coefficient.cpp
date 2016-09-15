@@ -26,6 +26,8 @@
 template <typename T>
 struct ncr_println : public exprtk::ifunction<T>
 {
+   using exprtk::ifunction<T>::operator();
+
    ncr_println() : exprtk::ifunction<T>(3) {}
 
    inline T operator()(const T& n, const T& r, const T& ncr)

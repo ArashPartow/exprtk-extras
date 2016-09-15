@@ -30,6 +30,8 @@
 template <typename T>
 struct putch : public exprtk::ifunction<T>
 {
+   using exprtk::ifunction<T>::operator();
+
    putch() : exprtk::ifunction<T>(1) {}
 
    inline T operator()(const T& v)
@@ -42,6 +44,8 @@ struct putch : public exprtk::ifunction<T>
 template <typename T>
 struct putint : public exprtk::ifunction<T>
 {
+   using exprtk::ifunction<T>::operator();
+
    putint() : exprtk::ifunction<T>(1) {}
 
    inline T operator()(const T& v)
@@ -54,6 +58,8 @@ struct putint : public exprtk::ifunction<T>
 template <typename T>
 struct rnd_01 : public exprtk::ifunction<T>
 {
+   using exprtk::ifunction<T>::operator();
+
    rnd_01() : exprtk::ifunction<T>(0)
    { ::srand(static_cast<unsigned int>(time(NULL))); }
 

@@ -25,6 +25,8 @@
 template <typename T>
 struct func0 : public exprtk::ifunction<T>
 {
+   using exprtk::ifunction<T>::operator();
+
    func0()
    : exprtk::ifunction<T>(2)
    {}

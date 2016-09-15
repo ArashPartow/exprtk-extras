@@ -26,6 +26,8 @@
 template <typename T>
 struct gcd_println : public exprtk::ifunction<T>
 {
+   using exprtk::ifunction<T>::operator();
+
    gcd_println() : exprtk::ifunction<T>(3) {}
 
    inline T operator()(const T& x, const T& y, const T& z)
@@ -70,14 +72,14 @@ void gcd()
            "x","y"));
 
    std::string gcd_program =
-                  " i := 0;                    "
-                  " while ((i += 1) < 100)     "
-                  " {                          "
-                  "   j := 0;                  "
-                  "   repeat                   "
-                  "     println(i,j,gcd(i,j)); "
-                  "   until ((j += 1) >= 100); "
-                  " };                         ";
+                  " i := 0;                      "
+                  " while ((i += 1) < 100)       "
+                  " {                            "
+                  "   j := 0;                    "
+                  "   repeat                     "
+                  "     println(i, j, gcd(i,j)); "
+                  "   until ((j += 1) >= 100);   "
+                  " };                           ";
 
    expression_t expression;
    expression.register_symbol_table(symbol_table);
