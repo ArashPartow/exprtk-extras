@@ -62,7 +62,7 @@ void sum_of_primes()
    std::string sum_of_primes_program =
                   " for (var i := 1; i <= 100; i += 1) "
                   " {                                  "
-                  "   println(i,sum_of_primes(i));     "
+                  "   println(i, sum_of_primes(i));    "
                   " }                                  ";
 
    expression_t expression;
