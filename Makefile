@@ -18,7 +18,7 @@
 
 COMPILER         = -c++
 #COMPILER        = -clang
-OPTIMIZATION_OPT = -O1
+OPTIMIZATION_OPT = -O2
 BASE_OPTIONS     = -pedantic-errors -Wall -Wextra -Werror -Wno-long-long
 OPTIONS          = $(BASE_OPTIONS) $(OPTIMIZATION_OPT)
 LINKER_OPT       = -L/usr/lib -lstdc++ -lm

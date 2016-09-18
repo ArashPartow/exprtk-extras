@@ -24,41 +24,72 @@
 
 #include "exprtk.hpp"
 
+struct test_expression
+{
+   std::size_t cost;
+   std::string e;
 
-const std::string global_expression_list[] =
+   test_expression(const std::size_t c, const std::string& ex)
+   : cost(c),
+     e(ex)
+   {}
+};
+
+const test_expression global_expression_list[] =
                   {
-                     "2v0",
-                     "2v0 + 3",
-                     "v0 + v1",
-                     "2v0 + 3v1",
-                     "2v0 - v1 / 3",
-                     "v0 * v1 / v2",
-                     "2(v0 * v1 / v2)",
-                     "2(v0 / 3 + v1 / 4)",
-                     "(2v0 - v1 / v2)",
-                     "3(2v0 - v1 / v2)",
-                     "7(5v0 * 3v1 / 2v2)",
-                     "sum(2v0)",
-                     "sum(2v0 + 3)",
-                     "sum(v0 + v1)",
-                     "sum(2v0 + 3v1)",
-                     "sum(v0^2.2 + v1^3.3)",
-                     "sum((2v0 - v1 / v2))",
-                     "sum(3(2v0 - v1 / v2))",
-                     "sum(abs(v0 * v1) / v2)",
-                     "sum(v0 + v1) + avg(v0 - v1)",
-                     "7(sum(abs(5v0 * 3v1) / 2v2))",
-                     "sum(2v0 + 3v1) + sum(4 / v0 - 5 / v1)"
+                     test_expression( 1,"2 * v0"                               ),
+                     test_expression( 1,"v0 * 2"                               ),
+                     test_expression( 2,"2v0 + 3"                              ),
+                     test_expression( 2,"3 + 2v0"                              ),
+                     test_expression( 5,"(2v0 + 3) * (2v0 + 3)"                ),
+                     test_expression( 5,"(3 + 2v0) * (3 + 2v0)"                ),
+                     test_expression( 1,"v0 + v1"                              ),
+                     test_expression( 3,"(v0 + v1) * (v0 - v1)"                ),
+                     test_expression( 3,"2v0 + 3v1"                            ),
+                     test_expression( 3,"2v0 - v1 / 3"                         ),
+                     test_expression( 2,"v0 * v1 / v2"                         ),
+                     test_expression( 3,"2(v0 * v1 / v2)"                      ),
+                     test_expression( 4,"2(v0 / 3 + v1 / 4)"                   ),
+                     test_expression( 3,"(2v0 - v1 / v2)"                      ),
+                     test_expression( 4,"3(2v0 - v1 / v2)"                     ),
+                     test_expression( 5,"7(5v0 * 3v1 / 2v2)"                   ),
+                     test_expression( 5,"abs(v0 - v1) * abs(v1 - v0)"          ),
+                     test_expression( 7,"abs(2v0 - v1) * abs(v1 - 2v0)"        ),
+                     test_expression( 9,"abs(2v0 - 3v1) * abs(3v1 - 5v0)"      ),
+                     test_expression( 2,"sum(2 * v0)"                          ),
+                     test_expression( 2,"sum(v0 * 2)"                          ),
+                     test_expression( 2,"sum(v0 * v1)"                         ),
+                     test_expression( 3,"sum(2v0 + 3)"                         ),
+                     test_expression( 3,"sum(3 + 2v0)"                         ),
+                     test_expression( 6,"sum((2v0 + 3) * (2v0 + 3))"           ),
+                     test_expression( 6,"sum((3 + 2v0) * (3 + 2v0))"           ),
+                     test_expression( 2,"sum(v0 + v1)"                         ),
+                     test_expression( 4,"sum((v0 + v1) * (v0 - v1))"           ),
+                     test_expression( 4,"sum(2v0 + 3v1)"                       ),
+                     test_expression( 4,"sum((2v0 - v1 / v2))"                 ),
+                     test_expression( 5,"sum(3(2v0 - v1 / v2))"                ),
+                     test_expression( 4,"sum(abs(v0 * v1) / v2)"               ),
+                     test_expression( 5,"sum(v0 + v1) + avg(v0 - v1)"          ),
+                     test_expression( 8,"7(sum(abs(5v0 * 3v1) / 2v2))"         ),
+                     test_expression( 9,"sum(2v0 + 3v1) + sum(4 / v0 - 5 / v1)"),
+                     test_expression( 6,"sum(abs(v0 - v1) * abs(v1 - v0))"     ),
+                     test_expression( 8,"sum(abs(2v0 - v1) * abs(v1 - 2v0))"   ),
+                     test_expression(10,"sum(abs(2v0 - 3v1) * abs(3v1 - 5v0))" ),
+                   //test_expression( 4,"sum(v0^2.2 + v1^3.3)"                 ),
+                   //test_expression( 4,"exp(-1 / (v0^2))"                     ),
+                   //test_expression( 5,"exp(-1 / (v0^2)) / v1"                )
                   };
 
-const std::size_t global_expression_list_size = sizeof(global_expression_list) / sizeof(std::string);
+const std::size_t global_expression_list_size = sizeof(global_expression_list) / sizeof(test_expression);
 
 const std::size_t rounds = 2000;
 
 typedef double numeric_type;
 
 template <typename T>
-void run_expression_benchmark(const std::size_t vec_size, const std::string& expr_string)
+double run_expression_benchmark(const std::size_t vec_size,
+                                const std::string& expr_string,
+                                const std::size_t& cost)
 {
    typedef exprtk::symbol_table<numeric_type> symbol_table_t;
    typedef exprtk::expression<numeric_type>     expression_t;
@@ -85,7 +116,7 @@ void run_expression_benchmark(const std::size_t vec_size, const std::string& exp
              parser.error().c_str(),
              expr_string.c_str());
 
-      return;
+      return std::numeric_limits<double>::quiet_NaN();
    }
 
    exprtk::timer timer;
@@ -102,22 +133,44 @@ void run_expression_benchmark(const std::size_t vec_size, const std::string& exp
    timer.stop();
 
    if (T(0) != total)
-      printf("Total Time:%12.8f  Rate:%14.3fevals/sec Expression: %s\n",
+      printf("Total Time:%10.7f Rate:%11.3fevals/sec Perf: %5.3fGFLOPS Expression: %s\n",
              timer.time(),
              rounds / timer.time(),
+             (rounds * vec_size * cost) / (1e+9 * timer.time()),
              expr_string.c_str());
    else
       printf("run_expression_benchmark() - Error running benchmark for expression: %s\n",
              expr_string.c_str());
+
+   return timer.time();
 }
 
 template <typename T>
 void run_benchmark(const std::size_t& vec_size)
 {
+   double total_time = 0.0;
+
    for (std::size_t i = 0; i < global_expression_list_size; ++i)
    {
-      run_expression_benchmark<T>(vec_size,global_expression_list[i]);
+      total_time +=
+      run_expression_benchmark<T>(vec_size,
+                                  global_expression_list[i].e,
+                                  global_expression_list[i].cost);
    }
+
+   unsigned long long total_flop = 0;
+
+   for (std::size_t i = 0; i < global_expression_list_size; ++i)
+   {
+      total_flop += global_expression_list[i].cost;
+   }
+
+   total_flop *= (rounds * vec_size);
+
+   printf("Total Time:%10.7f FLOP: %llu Perf: %7.4fGLOPS\n",
+          total_time,
+          total_flop,
+          total_flop / (1e9 * total_time));
 }
 
 template <typename T>
@@ -145,16 +198,20 @@ void run_file_benchmark(const std::size_t& vec_size, const std::string& file_nam
       expr_list.push_back(line);
    }
 
+   T total_time = T(0);
+
    for (std::size_t i = 0; i < expr_list.size(); ++i)
    {
-      run_expression_benchmark<T>(vec_size,expr_list[i]);
+      total_time += run_expression_benchmark<T>(vec_size,expr_list[i],0);
    }
+
+   printf("Total Time:%10.7f\n", total_time);
 }
 
 int main(int argc, char* argv[])
 {
-   const std::size_t vec_size  = ((argc >= 2) ? atoi(argv[1]) : 100000);
-   const std::string file_name = ((argc == 3) ? argv[2] : ""          );
+   const std::size_t vec_size   = ((argc >= 2) ? atoi(argv[1]) : 100000);
+   const std::string file_name  = ((argc >  3) ? argv[2] : ""          );
 
    switch (argc)
    {
