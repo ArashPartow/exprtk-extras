@@ -2,7 +2,7 @@
  **************************************************************
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
- * ExprTk Vector Processing Benchmark                         *
+ * ExprTk Multi-Threaded Vector Processing Benchmark          *
  * Author: Arash Partow (1999-2016)                           *
  * URL: http://www.partow.net/programming/exprtk/index.html   *
  *                                                            *
@@ -204,12 +204,13 @@ int main(int argc, char* argv[])
 }
 
 /*
- Build command:
+Build command:
 
- c++ -pedantic-errors -Wall -Wextra -Werror -Wno-long-long \
- -std=c++11                                                \
- -O3 -mtune=native -march=native -ftree-vectorize          \
- -o exprtk_vector_benchmark exprtk_vector_benchmark.cpp    \
- -L/usr/lib -lstdc++ -lm -lpthread                         \
+c++ -pedantic-errors -Wall -Wextra -Werror -Wno-long-long \
+-std=c++11                                                \
+-O3 -mtune=native -march=native -ftree-vectorize          \
+-o exprtk_vector_benchmark_multithreaded                  \
+exprtk_vector_benchmark_multithreaded.cpp                 \
+-L/usr/lib -lstdc++ -lm -lpthread                         \
 
 */
