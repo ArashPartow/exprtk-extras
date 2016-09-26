@@ -210,8 +210,8 @@ void run_file_benchmark(const std::size_t& vec_size, const std::string& file_nam
 
 int main(int argc, char* argv[])
 {
-   const std::size_t vec_size   = ((argc >= 2) ? atoi(argv[1]) : 100000);
-   const std::string file_name  = ((argc >  3) ? argv[2] : ""          );
+   const std::size_t vec_size  = ((argc >= 2) ? atoi(argv[1]) : 100000);
+   const std::string file_name = ((argc >  3) ? argv[2] : ""          );
 
    switch (argc)
    {
