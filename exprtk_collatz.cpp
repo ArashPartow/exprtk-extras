@@ -44,7 +44,7 @@ void collatz()
       .add(
       function_t(
            "collatz_trace",
-           " while(x > 1)                           "
+           " while (x > 1)                          "
            " {                                      "
            "   x := if (x % 2 == 0, x / 2, 3x + 1); "
            "   print(x);                            "

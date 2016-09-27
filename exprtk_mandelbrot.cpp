@@ -24,18 +24,11 @@
 
 
 template <typename T>
-struct putch : public exprtk::ifunction<T>
+inline T putch(T v)
 {
-   using exprtk::ifunction<T>::operator();
-
-   putch() : exprtk::ifunction<T>(1) {}
-
-   inline T operator()(const T& v)
-   {
-      printf("%c",static_cast<int>(v));
-      return T(0);
-   }
-};
+   printf("%c",static_cast<int>(v));
+   return T(0);
+}
 
 template <typename T>
 void mandelbrot()
@@ -46,10 +39,9 @@ void mandelbrot()
 
    symbol_table_t symbol_table;
 
-   putch<T> putch_;
    exprtk::helper::println<T> println;
 
-   symbol_table.add_function("putch"  ,putch_ );
+   symbol_table.add_function("putch"  ,putch  );
    symbol_table.add_function("println",println);
 
    std::string mandelbrot_program =

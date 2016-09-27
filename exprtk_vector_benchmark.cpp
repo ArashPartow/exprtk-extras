@@ -188,7 +188,7 @@ void run_file_benchmark(const std::size_t& vec_size, const std::string& file_nam
    std::string line;
    std::vector<std::string> expr_list;
 
-   while(std::getline(stream, line))
+   while (std::getline(stream, line))
    {
       if (line.empty())
          continue;

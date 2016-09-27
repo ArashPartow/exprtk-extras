@@ -24,21 +24,15 @@
 
 
 template <typename T>
-struct ncr_println : public exprtk::ifunction<T>
+inline T ncr_println(T n, T r, T ncr)
 {
-   using exprtk::ifunction<T>::operator();
+   printf("ncr(%2d,%2d) = %2llu\n",
+          static_cast<int>(n),
+          static_cast<int>(r),
+          static_cast<unsigned long long>(ncr));
 
-   ncr_println() : exprtk::ifunction<T>(3) {}
-
-   inline T operator()(const T& n, const T& r, const T& ncr)
-   {
-      printf("ncr(%2d,%2d) = %2llu\n",
-             static_cast<int>(n),
-             static_cast<int>(r),
-             static_cast<unsigned long long>(ncr));
-      return T(0);
-   }
-};
+   return T(0);
+}
 
 template <typename T>
 void ncr()
@@ -51,9 +45,7 @@ void ncr()
 
    symbol_table_t symbol_table;
 
-   ncr_println<T> prtln;
-
-   symbol_table.add_function("println",prtln);
+   symbol_table.add_function("println",ncr_println);
 
    compositor_t compositor(symbol_table);
 
