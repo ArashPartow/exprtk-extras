@@ -91,9 +91,9 @@ double run_expression_benchmark(const std::size_t vec_size,
                                 const std::string& expr_string,
                                 const std::size_t& cost)
 {
-   typedef exprtk::symbol_table<numeric_type> symbol_table_t;
-   typedef exprtk::expression<numeric_type>     expression_t;
-   typedef exprtk::parser<numeric_type>             parser_t;
+   typedef exprtk::symbol_table<T> symbol_table_t;
+   typedef exprtk::expression<T>     expression_t;
+   typedef exprtk::parser<T>             parser_t;
 
    std::vector<T> v0(vec_size, T(2.1234567890));
    std::vector<T> v1(vec_size, T(3.1234567890));
