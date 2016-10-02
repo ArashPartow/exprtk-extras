@@ -32,17 +32,16 @@ void collatz()
    typedef exprtk::function_compositor<T> compositor_t;
    typedef typename compositor_t::function  function_t;
 
+   exprtk::rtl::io::print<T> print("%3.0f ");
+
    symbol_table_t symbol_table;
-
-   exprtk::helper::print<T> print("%3.0f ");
-
    symbol_table.add_function("print",print);
 
    compositor_t compositor(symbol_table);
 
    compositor
       .add(
-      function_t(
+      function_t( // define function: collatz_trace(x)
            "collatz_trace",
            " while (x > 1)                          "
            " {                                      "

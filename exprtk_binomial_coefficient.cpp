@@ -50,7 +50,7 @@ void ncr()
    compositor_t compositor(symbol_table);
 
    compositor
-      .add(
+      .add( // define function: ncr(n,r)
          function_t("ncr")
          .var("n")
          .var("r")

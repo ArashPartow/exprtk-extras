@@ -114,6 +114,7 @@ public:
       symbol_table_.add_function("print"  ,print_  );
       symbol_table_.add_function("println",println_);
       symbol_table_.add_function("rnd_01" ,rnd_01_ );
+      symbol_table_.add_package (package_);
 
       symbol_table_.add_function("poly01", poly01_);
       symbol_table_.add_function("poly02", poly02_);
@@ -475,7 +476,7 @@ private:
          switch (t.type)
          {
             case type_t::e_scalar : printf("Scalar\t");
-                                    exprtk::helper::details::print_type("%10.5f",scalar_t(t)(),num_type);
+                                    exprtk::rtl::io::details::print_type("%10.5f",scalar_t(t)(),num_type);
                                     break;
 
             case type_t::e_vector : {
@@ -484,7 +485,7 @@ private:
 
                                        for (std::size_t x = 0; x < vector.size(); ++x)
                                        {
-                                          exprtk::helper::details::print_type("%10.5f",vector[x],num_type);
+                                          exprtk::rtl::io::details::print_type("%10.5f",vector[x],num_type);
 
                                           if ((x + 1) < vector.size())
                                              printf(" ");
@@ -947,8 +948,9 @@ private:
    putch  <T> putch_;
    putint <T> putint_;
    rnd_01 <T> rnd_01_;
-   exprtk::helper::print<T>   print_;
-   exprtk::helper::println<T> println_;
+   exprtk::rtl::io::print<T>   print_;
+   exprtk::rtl::io::println<T> println_;
+   exprtk::rtl::io::file::package<T> package_;
 
    exprtk::polynomial<T, 1> poly01_;
    exprtk::polynomial<T, 2> poly02_;
@@ -1293,4 +1295,76 @@ prime_count
 $end
 ---- snip ----
 
+
+Step 9.1 Copy into the REPL the contents of the snippet below:
+---- snip ----
+$begin
+var file := open('file.txt','w');
+
+var s := 'Hello world...\n';
+
+for (var i := 0; i < 10; i += 1)
+{
+  write(file,s);
+}
+
+close(file);
+
+println('~~~~~~~~~~~~~~~~~~~~~~');
+
+file  := open('file.txt','r');
+var i := 0;
+
+while(not(eof(file)))
+{
+  s := getline(file);
+  if (s[] > 0)
+  {
+    println('[',i+=1,'] - ',s);
+  }
+}
+
+close(file);
+$end
+---- snip ----
+
+
+Step 10.1 Copy into the REPL the contents of the snippet below:
+---- snip ----
+$begin
+var v0[1000] := [rnd_01];
+var v1[1000] := [0];
+
+~{
+   var file := open('data.dat','w');
+
+   if (not(write(file,v0)))
+   {
+     println('failed to write vector 0\n');
+     return [false];
+   }
+   close(file);
+ };
+
+~{
+   var file := open('data.dat','r');
+
+   if (not(read(file,v1)))
+   {
+     println('failed to read vector 1\n');
+     return [false];
+   }
+   close(file);
+ };
+
+if (sum(v0 != v1) > 0)
+  println('error: v0 != v1');
+else
+{
+  println('success: v0 == v1');
+  println('sum(v0) = ',sum(v0),'  avg(v0) = ',avg(v0));
+  println('sum(v1) = ',sum(v1),'  avg(v1) = ',avg(v1));
+}
+$end
+---- snip ----
 */

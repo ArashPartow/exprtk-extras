@@ -24,21 +24,15 @@
 
 
 template <typename T>
-struct gcd_println : public exprtk::ifunction<T>
+inline T gcd_println(const T& x, const T& y, const T& z)
 {
-   using exprtk::ifunction<T>::operator();
+   printf("gcd(%2d,%2d) = %2d\n",
+          static_cast<int>(x),
+          static_cast<int>(y),
+          static_cast<int>(z));
 
-   gcd_println() : exprtk::ifunction<T>(3) {}
-
-   inline T operator()(const T& x, const T& y, const T& z)
-   {
-      printf("gcd(%2d,%2d) = %2d\n",
-             static_cast<int>(x),
-             static_cast<int>(y),
-             static_cast<int>(z));
-      return T(0);
-   }
-};
+   return T(0);
+}
 
 template <typename T>
 void gcd()
@@ -49,17 +43,23 @@ void gcd()
    typedef exprtk::function_compositor<T> compositor_t;
    typedef typename compositor_t::function  function_t;
 
+   std::string gcd_program =
+                  " i := 0;                      "
+                  " while ((i += 1) < 100)       "
+                  " {                            "
+                  "   j := 0;                    "
+                  "   repeat                     "
+                  "     println(i, j, gcd(i,j)); "
+                  "   until ((j += 1) >= 100);   "
+                  " };                           ";
+
    symbol_table_t symbol_table;
-
-   gcd_println<T> prtln;
-
-   symbol_table.add_function("println",prtln);
+   symbol_table.add_function("println",gcd_println);
 
    compositor_t compositor(symbol_table);
-
    compositor
       .add(
-      function_t(
+      function_t( // define function: gcd(x,y)
            "gcd",
            " switch                        "
            " {                             "
@@ -70,16 +70,6 @@ void gcd()
            "   default    : gcd(x, y - x); "
            " }                             ",
            "x","y"));
-
-   std::string gcd_program =
-                  " i := 0;                      "
-                  " while ((i += 1) < 100)       "
-                  " {                            "
-                  "   j := 0;                    "
-                  "   repeat                     "
-                  "     println(i, j, gcd(i,j)); "
-                  "   until ((j += 1) >= 100);   "
-                  " };                           ";
 
    expression_t expression;
    expression.register_symbol_table(symbol_table);

@@ -37,7 +37,7 @@ void sum_of_primes()
    compositor_t compositor(symbol_table);
 
    compositor
-      .add(
+      .add( // define function: sum_of_primes(x)
          function_t("sum_of_primes")
            .var("z")
            .expression(
@@ -55,7 +55,7 @@ void sum_of_primes()
              " };                  "
              " total;              "));
 
-   exprtk::helper::println<T> println;
+   exprtk::rtl::io::println<T> println;
 
    symbol_table.add_function("println",println);
 

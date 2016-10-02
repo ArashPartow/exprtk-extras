@@ -32,16 +32,15 @@ void nthroot_via_bisection()
    typedef exprtk::function_compositor<T>  compositor_t;
    typedef typename compositor_t::function   function_t;
 
+   exprtk::rtl::io::println<T> println;
+
    symbol_table_t symbol_table;
-
-   exprtk::helper::println<T> println;
-
    symbol_table.add_function("println",println);
 
    compositor_t compositor(symbol_table);
 
    compositor
-      .add(
+      .add( // define function: nthroot(x,n)
          function_t("nthroot")
          .var("x")
          .var("n")

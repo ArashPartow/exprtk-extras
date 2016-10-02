@@ -44,10 +44,10 @@ void fizzbuzz()
                   "  print('\n')                           "
                   " until ((x += 1) > 100);                ";
 
+
+   exprtk::rtl::io::print<T> print;
+
    symbol_table_t symbol_table;
-
-   exprtk::helper::print<T> print;
-
    symbol_table.add_function("print",print);
 
    expression_t expression;
