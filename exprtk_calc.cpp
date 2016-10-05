@@ -25,20 +25,13 @@
 
 int main()
 {
-   typedef exprtk::symbol_table<double>      symbol_table_t;
-   typedef exprtk::expression<double>          expression_t;
-   typedef exprtk::parser<double>                  parser_t;
-   typedef exprtk::parser_error::type               error_t;
+   typedef exprtk::symbol_table<double> symbol_table_t;
+   typedef exprtk::expression<double>     expression_t;
+   typedef exprtk::parser<double>             parser_t;
+   typedef exprtk::parser_error::type          error_t;
 
    for ( ; ; )
    {
-      std::string expression_str;
-
-      symbol_table_t symbol_table;
-
-      expression_t expression;
-      expression.register_symbol_table(symbol_table);
-
       double x = 1.0;
       double y = 2.0;
       double z = 3.0;
@@ -46,6 +39,7 @@ int main()
       double u = 5.0;
       double v = 6.0;
 
+      symbol_table_t symbol_table;
       symbol_table.add_variable("x",x);
       symbol_table.add_variable("y",y);
       symbol_table.add_variable("z",z);
@@ -53,6 +47,11 @@ int main()
       symbol_table.add_variable("u",u);
       symbol_table.add_variable("v",v);
       symbol_table.add_constants();
+
+      expression_t expression;
+      expression.register_symbol_table(symbol_table);
+
+      std::string expression_str;
 
       std::cout << ">> ";
       std::getline(std::cin,expression_str);

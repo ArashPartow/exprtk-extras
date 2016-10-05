@@ -44,7 +44,6 @@ void ncr()
    typedef typename compositor_t::function  function_t;
 
    symbol_table_t symbol_table;
-
    symbol_table.add_function("println",ncr_println);
 
    compositor_t compositor(symbol_table);
