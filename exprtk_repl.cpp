@@ -104,7 +104,9 @@ public:
       s2_("012345678901234567890123456789"),
       v0_({1,1,1}),
       v1_({2,2,2,2,2}),
-      v2_({3,3,3,3,3,3,3})
+      v2_({3,3,3,3,3,3,3}),
+      v3_({4,4,4,4,4,4,4,4}),
+      vv_(exprtk::make_vector_view(v2_,v2_.size()))
      #endif
    {
       symbol_table_.add_constants();
@@ -136,6 +138,10 @@ public:
       symbol_table_.add_vector   ("v0",v0_);
       symbol_table_.add_vector   ("v1",v1_);
       symbol_table_.add_vector   ("v2",v2_);
+      symbol_table_.add_vector   ("v3",v3_);
+
+      vv_ = exprtk::make_vector_view(v2_,v2_.size());
+      symbol_table_.add_vector   ("vv",vv_);
       #endif
 
       compositor_.add_auxiliary_symtab(symbol_table_);
@@ -978,6 +984,8 @@ private:
    std::vector<T> v0_;
    std::vector<T> v1_;
    std::vector<T> v2_;
+   std::vector<T> v3_;
+   exprtk::vector_view<T> vv_;
    #endif
 };
 
