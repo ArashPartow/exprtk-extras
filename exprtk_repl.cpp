@@ -1323,7 +1323,7 @@ println('~~~~~~~~~~~~~~~~~~~~~~');
 file  := open('file.txt','r');
 var i := 0;
 
-while(not(eof(file)))
+while (not(eof(file)))
 {
   s := getline(file);
   if (s[] > 0)

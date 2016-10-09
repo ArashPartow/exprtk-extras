@@ -40,29 +40,51 @@ struct norm : public exprtk::igeneric_function<T>
    using exprtk::igeneric_function<T>::operator();
 
    norm()
-   : exprtk::igeneric_function<T>("V|VT")
+   : exprtk::igeneric_function<T>("V|VTT|VT|VTTT")
+     /*
+        Overloads:
+        0. V    - vector
+        1. VTT  - vector, r0, r1
+        2. VT   - vector, l-power
+        3. VTTT - vector, l-power, r0, r1
+     */
    {}
 
    inline T operator()(const std::size_t& ps_index, parameter_list_t parameters)
    {
       unsigned int l = 2;
 
-      if (1 == ps_index)
+      // Determine the l-power
+      if (
+           (2 == ps_index) ||
+           (3 == ps_index)
+         )
       {
-         scalar_t scalar(parameters[1]);
+         if (!scalar_t(parameters[1]).to_uint(l))
+            return std::numeric_limits<T>::quiet_NaN();
+      }
 
-         if (scalar() < T(1))
+      const vector_t& vec(parameters[0]);
+
+      std::size_t r0 = 0;
+      std::size_t r1 = vec.size() - 1;
+
+      // Determine the range over the vector
+      if (
+           (1 == ps_index) ||
+           (3 == ps_index)
+         )
+      {
+         if (!scalar_t(parameters[(1 == ps_index) ? 1 : 2]).to_uint(r0))
             return std::numeric_limits<T>::quiet_NaN();
 
-         if (!exprtk::details::numeric::is_integer(scalar()))
+         if (!scalar_t(parameters[(1 == ps_index) ? 2 : 3]).to_uint(r1))
             return std::numeric_limits<T>::quiet_NaN();
-
-         l = static_cast<int>(scalar());
       }
 
       switch (l)
       {
-         #define norm_def(N) case  N : return norm_impl<N>(vector_t(parameters[0]));
+         #define norm_def(N) case  N : return norm_impl<N>(vec,r0,r1);
          norm_def( 1) norm_def( 2) norm_def( 3) norm_def( 4)
          norm_def( 5) norm_def( 6) norm_def( 7) norm_def( 8)
          norm_def( 9) norm_def(10) norm_def(11) norm_def(12)
@@ -71,16 +93,16 @@ struct norm : public exprtk::igeneric_function<T>
          norm_def(21) norm_def(22) norm_def(23) norm_def(24)
          norm_def(25) norm_def(26) norm_def(27) norm_def(28)
          norm_def(29) norm_def(30) norm_def(31) norm_def(32)
-         default : return norm_impl(vector_t(parameters[0]),l);
+         default : return norm_impl(vec,l,r0,r1);
       }
    }
 
    template <unsigned int Pow>
-   inline T norm_impl(const vector_t& vector)
+   inline T norm_impl(const vector_t& vector, const std::size_t r0, const std::size_t r1)
    {
       T sum = T(0);
 
-      for (std::size_t i = 0; i < vector.size(); ++i)
+      for (std::size_t i = r0; i <= r1; ++i)
       {
          sum += exprtk::details::numeric::fast_exp<T,Pow>::result(std::abs(vector[i]));
       }
@@ -93,11 +115,11 @@ struct norm : public exprtk::igeneric_function<T>
       }
    }
 
-   inline T norm_impl(const vector_t& vector, unsigned int pow)
+   inline T norm_impl(const vector_t& vector, unsigned int pow, const std::size_t r0, const std::size_t r1)
    {
       T sum = T(0);
 
-      for (std::size_t i = 0; i < vector.size(); ++i)
+      for (std::size_t i = r0; i <= r1; ++i)
       {
          sum += exprtk::details::numeric::pow(std::abs(vector[i]),T(pow));
       }

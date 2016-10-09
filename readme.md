@@ -32,7 +32,7 @@ The ExprTk Extras implementation is fully compatible with the following C++ comp
 |09  | GNUplot multi-curve example                      |[exprtk_gnuplot_multi.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_gnuplot_multi.cpp)                                  |
 |00  | Mandelbrot fractal generator                     |[exprtk_mandelbrot.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_mandelbrot.cpp)                                        |
 |11  | Approximation of Pi via the Monte-Carlo method   |[exprtk_montecarlo_pi.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_montecarlo_pi.cpp)                                  |
-|12  | Approximation of Pi via Wiener Process           |[exprtk_wiener_process_pi.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_wiener_process_pi.cpp)                          |
+|12  | Approximation of Pi via Wiener process           |[exprtk_wiener_process_pi.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_wiener_process_pi.cpp)                          |
 |13  | Maximum subarray sum (Kadane's algorithm)        |[exprtk_max_subarray_sum.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_max_subarray_sum.cpp)                            |
 |14  | Nth-root via the bisection method                |[exprtk_nthroot_bisection.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_nthroot_bisection.cpp)                          |
 |15  | Sieve of Eratosthenes                            |[exprtk_prime_sieve.cpp](https://github.com/ArashPartow/exprtk-extras/blob/master/exprtk_prime_sieve.cpp)                                      |

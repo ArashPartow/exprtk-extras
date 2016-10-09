@@ -37,12 +37,6 @@ void mandelbrot()
    typedef exprtk::expression<T>     expression_t;
    typedef exprtk::parser<T>             parser_t;
 
-   exprtk::rtl::io::println<T> println;
-
-   symbol_table_t symbol_table;
-   symbol_table.add_function("putch"  ,putch  );
-   symbol_table.add_function("println",println);
-
    std::string mandelbrot_program =
                   " width    := 118;                              "
                   " height   := 41;                               "
@@ -84,6 +78,11 @@ void mandelbrot()
                   "   println()                                   "
                   " }                                             ";
 
+   exprtk::rtl::io::println<T> println;
+
+   symbol_table_t symbol_table;
+   symbol_table.add_function("putch"  ,putch  );
+   symbol_table.add_function("println",println);
 
    expression_t expression;
    expression.register_symbol_table(symbol_table);
