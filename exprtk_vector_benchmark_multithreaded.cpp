@@ -77,6 +77,8 @@ const test_expression global_expression_list[] =
                      test_expression( 6,"sum(abs(v0 - v1) * abs(v1 - v0))"     ),
                      test_expression( 8,"sum(abs(2v0 - v1) * abs(v1 - 2v0))"   ),
                      test_expression(10,"sum(abs(2v0 - 3v1) * abs(3v1 - 5v0))" ),
+                     test_expression( 2,"axpbz(2,v0,3,v1)"                     ),
+                     test_expression( 2,"axpy(2,v0,v1)"                        ),
                    //test_expression( 4,"sum(v0^2.2 + v1^3.3)"                 ),
                    //test_expression( 4,"exp(-1 / (v0^2))"                     ),
                    //test_expression( 5,"exp(-1 / (v0^2)) / v1"                )
@@ -101,11 +103,13 @@ void run_expression_benchmark(const std::size_t& vec_size,
    std::vector<T> v1(vec_size, T(5.1234567890));
    std::vector<T> v2(vec_size, T(7.1234567890));
 
-   symbol_table_t symbol_table;
+   exprtk::rtl::vecops::package<T> vecops_package;
 
+   symbol_table_t symbol_table;
    symbol_table.add_vector("v0",v0);
    symbol_table.add_vector("v1",v1);
    symbol_table.add_vector("v2",v2);
+   symbol_table.add_package(vecops_package);
 
    expression_t expression;
    expression.register_symbol_table(symbol_table);
