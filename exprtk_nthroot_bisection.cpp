@@ -32,6 +32,14 @@ void nthroot_via_bisection()
    typedef exprtk::function_compositor<T>  compositor_t;
    typedef typename compositor_t::function   function_t;
 
+   const std::string nthroot_via_bisection_program =
+                  " for (var x := -30; x <= 30; x += 1)  "
+                  " {                                    "
+                  "   println('[', x, ']',               "
+                  "           ' sqrt = ', nthroot(x,2),  "
+                  "           ' cbrt = ', nthroot(x,3)); "
+                  " }                                    ";
+
    exprtk::rtl::io::println<T> println;
 
    symbol_table_t symbol_table;
@@ -67,14 +75,6 @@ void nthroot_via_bisection()
            "     hi := mid;                   "
            " };                               "
           ));
-
-   const std::string nthroot_via_bisection_program =
-                  " for (var x := -30; x <= 30; x += 1)  "
-                  " {                                    "
-                  "   println('[', x, ']',               "
-                  "           ' sqrt = ', nthroot(x,2),  "
-                  "           ' cbrt = ', nthroot(x,3)); "
-                  " }                                    ";
 
    expression_t expression;
    expression.register_symbol_table(symbol_table);

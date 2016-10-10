@@ -2,7 +2,7 @@
  **************************************************************
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
- * Approximation of Pi via Wiener Process based Monte Carlo   *
+ * Approximation of Pi via Wiener process based Monte Carlo   *
  * Author: Arash Partow (1999-2016)                           *
  * URL: http://www.partow.net/programming/exprtk/index.html   *
  *                                                            *
