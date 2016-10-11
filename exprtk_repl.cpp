@@ -113,11 +113,10 @@ public:
 
       symbol_table_.add_function("putch"  ,putch_  );
       symbol_table_.add_function("putint" ,putint_ );
-      symbol_table_.add_function("print"  ,print_  );
-      symbol_table_.add_function("println",println_);
       symbol_table_.add_function("rnd_01" ,rnd_01_ );
       symbol_table_.add_package (fileio_package_   );
       symbol_table_.add_package (vecops_package_   );
+      symbol_table_.add_package (io_package_       );
 
       symbol_table_.add_function("poly01", poly01_);
       symbol_table_.add_function("poly02", poly02_);
@@ -955,10 +954,9 @@ private:
    putch  <T> putch_;
    putint <T> putint_;
    rnd_01 <T> rnd_01_;
-   exprtk::rtl::io::print<T>   print_;
-   exprtk::rtl::io::println<T> println_;
    exprtk::rtl::io::file::package<T> fileio_package_;
    exprtk::rtl::vecops::package<T>   vecops_package_;
+   exprtk::rtl::io::package<T>           io_package_;
 
    exprtk::polynomial<T, 1> poly01_;
    exprtk::polynomial<T, 2> poly02_;
