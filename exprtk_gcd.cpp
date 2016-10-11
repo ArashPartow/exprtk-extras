@@ -24,7 +24,7 @@
 
 
 template <typename T>
-inline T gcd_println(const T& x, const T& y, const T& z)
+inline T gcd_println(T x, T y, T z)
 {
    printf("gcd(%2d,%2d) = %2d\n",
           static_cast<int>(x),
