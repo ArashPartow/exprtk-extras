@@ -43,16 +43,6 @@ void gcd()
    typedef exprtk::function_compositor<T> compositor_t;
    typedef typename compositor_t::function  function_t;
 
-   std::string gcd_program =
-                  " i := 0;                      "
-                  " while ((i += 1) < 100)       "
-                  " {                            "
-                  "   j := 0;                    "
-                  "   repeat                     "
-                  "     println(i, j, gcd(i,j)); "
-                  "   until ((j += 1) >= 100);   "
-                  " };                           ";
-
    symbol_table_t symbol_table;
    symbol_table.add_function("println",gcd_println);
 
@@ -70,6 +60,16 @@ void gcd()
            "   default    : gcd(x, y - x); "
            " }                             ",
            "x","y"));
+
+   std::string gcd_program =
+                  " i := 0;                      "
+                  " while ((i += 1) < 100)       "
+                  " {                            "
+                  "   j := 0;                    "
+                  "   repeat                     "
+                  "     println(i, j, gcd(i,j)); "
+                  "   until ((j += 1) >= 100);   "
+                  " };                           ";
 
    expression_t expression;
    expression.register_symbol_table(symbol_table);

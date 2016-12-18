@@ -37,7 +37,7 @@ void sum_of_primes()
    compositor_t compositor(symbol_table);
 
    compositor
-      .add( // define function: sum_of_primes(x)
+      .add( // define function: sum_of_primes(z)
          function_t("sum_of_primes")
            .var("z")
            .expression(
