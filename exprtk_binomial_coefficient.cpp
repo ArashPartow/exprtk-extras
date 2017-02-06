@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * ExprTk Binomial Coefficient (n-choose-r)                   *
- * Author: Arash Partow (1999-2016)                           *
+ * Author:  Arash Partow (1999-2017)                          *
  * URL: http://www.partow.net/programming/exprtk/index.html   *
  *                                                            *
  * Copyright notice:                                          *
@@ -35,7 +35,7 @@ inline T ncr_println(T n, T r, T ncr)
 }
 
 template <typename T>
-void ncr()
+void n_choose_r()
 {
    typedef exprtk::symbol_table<T>      symbol_table_t;
    typedef exprtk::expression<T>          expression_t;
@@ -82,6 +82,6 @@ void ncr()
 
 int main()
 {
-   ncr<double>();
+   n_choose_r<double>();
    return 0;
 }
