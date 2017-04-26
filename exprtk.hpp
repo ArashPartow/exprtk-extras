@@ -245,7 +245,8 @@ namespace exprtk
               (is_hex_digit(*(itr + 3)))
             )
          {
-            result = hex_to_bin(*(itr + 2)) << 4 | hex_to_bin(*(itr + 3));
+            result = hex_to_bin(static_cast<uchar_t>(*(itr + 2))) << 4 |
+                     hex_to_bin(static_cast<uchar_t>(*(itr + 3))) ;
             itr += 3;
          }
          else
@@ -628,7 +629,7 @@ namespace exprtk
 
                if ('*' == target)
                {
-                  diff_index = std::distance(str.begin(),s_itr);
+                  diff_index = static_cast<std::size_t>(std::distance(str.begin(),s_itr));
                   diff_value = static_cast<char>(std::toupper(*p_itr));
 
                   return false;
@@ -651,7 +652,7 @@ namespace exprtk
                       std::toupper(*p_itr) != std::toupper(*s_itr)
                     )
             {
-               diff_index = std::distance(str.begin(),s_itr);
+               diff_index = static_cast<std::size_t>(std::distance(str.begin(),s_itr));
                diff_value = static_cast<char>(std::toupper(*p_itr));
 
                return false;
@@ -1622,11 +1623,13 @@ namespace exprtk
                return false;
          }
 
-         while ((end != itr) && ('0' == (*itr))) ++itr;
+         static const uchar_t zero = static_cast<uchar_t>('0');
+
+         while ((end != itr) && (zero == (*itr))) ++itr;
 
          bool return_result = true;
          unsigned int digit = 0;
-         const std::size_t length = std::distance(itr,end);
+         const std::size_t length  = static_cast<std::size_t>(std::distance(itr,end));
 
          if (length <= 4)
          {
@@ -1634,19 +1637,32 @@ namespace exprtk
             {
                #ifdef exprtk_use_lut
 
-               #define exprtk_process_digit \
-               if ((digit = details::digit_table[(int)*itr++]) < 10) result = result * 10 + (digit); else { return_result = false; break; }
+               #define exprtk_process_digit                          \
+               if ((digit = details::digit_table[(int)*itr++]) < 10) \
+                  result = result * 10 + (digit);                    \
+               else                                                  \
+               {                                                     \
+                  return_result = false;                             \
+                  break;                                             \
+               }                                                     \
 
                #else
-               #define exprtk_process_digit \
-               if ((digit = (*itr++ - '0')) < 10) result = result * 10 + (digit); else { return_result = false; break; }
+
+               #define exprtk_process_digit         \
+               if ((digit = (*itr++ - zero)) < 10)  \
+                  result = result * T(10) + digit;  \
+               else                                 \
+               {                                    \
+                  return_result = false;            \
+                  break;                            \
+               }                                    \
 
                #endif
 
                case  4 : exprtk_process_digit
                case  3 : exprtk_process_digit
                case  2 : exprtk_process_digit
-               case  1 : if ((digit = (*itr - '0'))>= 10) { digit = 0; return_result = false; }
+               case  1 : if ((digit = (*itr - zero))>= 10) { digit = 0; return_result = false; }
 
                #undef exprtk_process_digit
             }
@@ -1704,7 +1720,7 @@ namespace exprtk
          static const char_t inf_lc[] = "infinity";
          static const std::size_t inf_length = 8;
 
-         const std::size_t length = std::distance(itr,end);
+         const std::size_t length = static_cast<std::size_t>(std::distance(itr,end));
 
          if ((3 != length) && (inf_length != length))
             return false;
@@ -1750,23 +1766,27 @@ namespace exprtk
 
          bool instate = false;
 
-         #define parse_digit_1(d)         \
-         if ((digit = (*itr - '0')) < 10) \
-            { d = d * T(10) + digit; }    \
-         else                             \
-            { break; }                    \
-         if (end == ++itr) break;         \
+         static const char zero = static_cast<uchar_t>('0');
 
-         #define parse_digit_2(d)         \
-         if ((digit = (*itr - '0')) < 10) \
-            { d = d * T(10) + digit; }    \
-         else { break; }                  \
-            ++itr;                        \
+         #define parse_digit_1(d)          \
+         if ((digit = (*itr - zero)) < 10) \
+            { d = d * T(10) + digit; }     \
+         else                              \
+            { break; }                     \
+         if (end == ++itr) break;          \
+
+         #define parse_digit_2(d)          \
+         if ((digit = (*itr - zero)) < 10) \
+            { d = d * T(10) + digit; }     \
+         else { break; }                   \
+            ++itr;                         \
 
          if ('.' != (*itr))
          {
             const Iterator curr = itr;
-            while ((end != itr) && ('0' == (*itr))) ++itr;
+
+            while ((end != itr) && (zero == (*itr))) ++itr;
+
             unsigned int digit;
 
             while (end != itr)
@@ -1958,7 +1978,7 @@ namespace exprtk
             type = tt;
             value.assign(begin,end);
             if (base_begin)
-               position = std::distance(base_begin,begin);
+               position = static_cast<std::size_t>(std::distance(base_begin,begin));
             return *this;
          }
 
@@ -1968,7 +1988,7 @@ namespace exprtk
             type = e_symbol;
             value.assign(begin,end);
             if (base_begin)
-               position = std::distance(base_begin,begin);
+               position = static_cast<std::size_t>(std::distance(base_begin,begin));
             return *this;
          }
 
@@ -1978,7 +1998,7 @@ namespace exprtk
             type = e_number;
             value.assign(begin,end);
             if (base_begin)
-               position = std::distance(base_begin,begin);
+               position = static_cast<std::size_t>(std::distance(base_begin,begin));
             return *this;
          }
 
@@ -1988,7 +2008,7 @@ namespace exprtk
             type = e_string;
             value.assign(begin,end);
             if (base_begin)
-               position = std::distance(base_begin,begin);
+               position = static_cast<std::size_t>(std::distance(base_begin,begin));
             return *this;
          }
 
@@ -2019,7 +2039,7 @@ namespace exprtk
             value.assign(begin,end);
 
             if (base_begin)
-               position = std::distance(base_begin,begin);
+               position = static_cast<std::size_t>(std::distance(base_begin,begin));
 
             return *this;
          }
@@ -2682,8 +2702,12 @@ namespace exprtk
             else
             {
                std::string parsed_string(initial_itr,s_itr_);
+
                details::cleanup_escapes(parsed_string);
-               t.set_string(parsed_string, std::distance(base_itr_,initial_itr));
+
+               t.set_string(
+                    parsed_string,
+                    static_cast<std::size_t>(std::distance(base_itr_,initial_itr)));
             }
 
             token_list_.push_back(t);
@@ -2891,9 +2915,13 @@ namespace exprtk
                            break;
                }
 
+               typedef std::iterator_traits<typename generator::token_list_t::iterator>::difference_type diff_t;
+
                if ((insert_index >= 0) && (insert_index <= (static_cast<int>(stride_) + 1)))
                {
-                  g.token_list_.insert(g.token_list_.begin() + (i + insert_index),t);
+                  g.token_list_.insert(
+                     g.token_list_.begin() + static_cast<diff_t>(i + static_cast<std::size_t>(insert_index)), t);
+
                   changes++;
                }
             }
@@ -2956,6 +2984,8 @@ namespace exprtk
 
          inline std::size_t process_stride_2(generator& g)
          {
+            typedef typename std::iterator_traits<generator::token_list_t::iterator>::difference_type diff_t;
+
             if (g.token_list_.size() < 2)
                return 0;
 
@@ -2969,7 +2999,7 @@ namespace exprtk
                {
                   g.token_list_[i] = t;
 
-                  g.token_list_.erase(g.token_list_.begin() + (i + 1));
+                  g.token_list_.erase(g.token_list_.begin() + static_cast<diff_t>(i + 1));
 
                   ++changes;
                }
@@ -2980,6 +3010,8 @@ namespace exprtk
 
          inline std::size_t process_stride_3(generator& g)
          {
+            typedef typename std::iterator_traits<generator::token_list_t::iterator>::difference_type diff_t;
+
             if (g.token_list_.size() < 3)
                return 0;
 
@@ -2993,8 +3025,8 @@ namespace exprtk
                {
                   g.token_list_[i] = t;
 
-                  g.token_list_.erase(g.token_list_.begin() + (i + 1),
-                                      g.token_list_.begin() + (i + 3));
+                  g.token_list_.erase(g.token_list_.begin() + static_cast<diff_t>(i + 1),
+                                      g.token_list_.begin() + static_cast<diff_t>(i + 3));
                   ++changes;
                }
             }
@@ -4396,10 +4428,10 @@ namespace exprtk
                     const unsigned int loop_batch_size = global_loop_batch_size)
             : batch_size(loop_batch_size),
               remainder (vsize % batch_size),
-              upper_bound(static_cast<int>(vsize) - (remainder ? loop_batch_size : 0))
+              upper_bound(static_cast<int>(vsize - (remainder ? loop_batch_size : 0)))
             {}
 
-            int  batch_size;
+            unsigned int batch_size;
             int   remainder;
             int upper_bound;
          };
@@ -20748,7 +20780,7 @@ namespace exprtk
       }
 
       template <std::size_t MaxNumberofParameters>
-      inline int parse_base_function_call(expression_node_ptr (&param_list)[MaxNumberofParameters])
+      inline std::size_t parse_base_function_call(expression_node_ptr (&param_list)[MaxNumberofParameters])
       {
          std::fill_n(param_list,MaxNumberofParameters,reinterpret_cast<expression_node_ptr>(0));
 
@@ -20766,9 +20798,9 @@ namespace exprtk
             return 0;
          }
 
-         int param_index = 0;
+         std::size_t param_index = 0;
 
-         for (; param_index < static_cast<int>(MaxNumberofParameters); ++param_index)
+         for (; param_index < MaxNumberofParameters; ++param_index)
          {
             param_list[param_index] = parse_expression();
 
@@ -20814,7 +20846,7 @@ namespace exprtk
          static const std::size_t MaxNumberofParameters = 4;
          expression_node_ptr param_list[MaxNumberofParameters] = {0};
 
-         std::size_t parameter_count = parse_base_function_call(param_list);
+         const std::size_t parameter_count = parse_base_function_call(param_list);
 
          if (0 == parameter_count)
          {
@@ -23220,7 +23252,8 @@ namespace exprtk
             return error_node();
          }
 
-         const unsigned int id = (current_token().value[2] - '0') * 10 + (current_token().value[3] - '0');
+         const int id = (current_token().value[2] - '0') * 10 +
+                        (current_token().value[3] - '0');
 
          if (id >= details::e_sffinal)
          {
@@ -23232,9 +23265,9 @@ namespace exprtk
             return error_node();
          }
 
-         const std::size_t sf_3_to_4 = details::e_sf48;
+         const int sf_3_to_4                   = details::e_sf48;
          const details::operator_type opt_type = details::operator_type(id + 1000);
-         const std::size_t NumberOfParameters = (id < (sf_3_to_4 - 1000)) ? 3 : 4;
+         const std::size_t NumberOfParameters  = (id < (sf_3_to_4 - 1000)) ? 3U : 4U;
 
          switch (NumberOfParameters)
          {
@@ -27468,7 +27501,7 @@ namespace exprtk
          inline expression_node_ptr cardinal_pow_optimisation(const T& v, const T& c)
          {
             const bool not_recipricol = (c >= T(0));
-            const int p = details::numeric::to_int32(details::numeric::abs(c));
+            const unsigned int p = static_cast<unsigned int>(details::numeric::to_int32(details::numeric::abs(c)));
 
             if (0 == p)
                return node_allocator_->allocate_c<literal_node_t>(T(1));
@@ -27495,7 +27528,7 @@ namespace exprtk
          {
             const Type c = static_cast<details::literal_node<Type>*>(branch[1])->value();
             const bool not_recipricol = (c >= T(0));
-            const int p = details::numeric::to_int32(details::numeric::abs(c));
+            const unsigned int p = static_cast<unsigned int>(details::numeric::to_int32(details::numeric::abs(c)));
 
             node_allocator_->free(branch[1]);
 
@@ -27839,21 +27872,21 @@ namespace exprtk
 
                free_node(*expr_gen.node_allocator_,branch[0]);
 
-               if ((T(0) == c) && (details::e_mul == operation))
+               if (std::equal_to<T>()(T(0),c) && (details::e_mul == operation))
                {
                   free_node(*expr_gen.node_allocator_,branch[1]);
 
                   return expr_gen(T(0));
                }
-               else if ((T(0) == c) && (details::e_div == operation))
+               else if (std::equal_to<T>()(T(0),c) && (details::e_div == operation))
                {
                   free_node(*expr_gen.node_allocator_, branch[1]);
 
                   return expr_gen(T(0));
                }
-               else if ((T(0) == c) && (details::e_add == operation))
+               else if (std::equal_to<T>()(T(0),c) && (details::e_add == operation))
                   return branch[1];
-               else if ((T(1) == c) && (details::e_mul == operation))
+               else if (std::equal_to<T>()(T(1),c) && (details::e_mul == operation))
                   return branch[1];
 
                if (details::is_cob_node(branch[1]))
@@ -27973,21 +28006,21 @@ namespace exprtk
 
                details::free_node(*(expr_gen.node_allocator_),branch[1]);
 
-               if ((T(0) == c) && (details::e_mul == operation))
+               if (std::equal_to<T>()(T(0),c) && (details::e_mul == operation))
                {
                   free_node(*expr_gen.node_allocator_,branch[0]);
 
                   return expr_gen(T(0));
                }
-               else if ((T(0) == c) && (details::e_div == operation))
+               else if (std::equal_to<T>()(T(0),c) && (details::e_div == operation))
                {
                   free_node(*expr_gen.node_allocator_, branch[0]);
 
                   return expr_gen(std::numeric_limits<T>::quiet_NaN());
                }
-               else if ((T(0) == c) && (details::e_add == operation))
+               else if (std::equal_to<T>()(T(0),c) && (details::e_add == operation))
                   return branch[0];
-               else if ((T(1) == c) && (details::e_mul == operation))
+               else if (std::equal_to<T>()(T(1),c) && (details::e_mul == operation))
                   return branch[0];
 
                if (details::is_boc_node(branch[0]))
@@ -28092,31 +28125,31 @@ namespace exprtk
                   details::cob_base_node<Type>* cobnode = static_cast<details::cob_base_node<Type>*>(branch[0]);
                   const Type c = static_cast<details::literal_node<Type>*>(branch[1])->value();
 
-                  if ((T(0) == c) && (details::e_mul == operation))
+                  if (std::equal_to<T>()(T(0),c) && (details::e_mul == operation))
                   {
                      free_node(*expr_gen.node_allocator_,branch[0]);
                      free_node(*expr_gen.node_allocator_,branch[1]);
 
                      return expr_gen(T(0));
                   }
-                  else if ((T(0) == c) && (details::e_div == operation))
+                  else if (std::equal_to<T>()(T(0),c) && (details::e_div == operation))
                   {
                      free_node(*expr_gen.node_allocator_,branch[0]);
                      free_node(*expr_gen.node_allocator_,branch[1]);
 
                      return expr_gen(T(std::numeric_limits<T>::quiet_NaN()));
                   }
-                  else if ((T(0) == c) && (details::e_add == operation))
+                  else if (std::equal_to<T>()(T(0),c) && (details::e_add == operation))
                   {
                      free_node(*expr_gen.node_allocator_, branch[1]);
                      return branch[0];
                   }
-                  else if ((T(1) == c) && (details::e_mul == operation))
+                  else if (std::equal_to<T>()(T(1),c) && (details::e_mul == operation))
                   {
                      free_node(*expr_gen.node_allocator_, branch[1]);
                      return branch[0];
                   }
-                  else if ((T(1) == c) && (details::e_div == operation))
+                  else if (std::equal_to<T>()(T(1),c) && (details::e_div == operation))
                   {
                      free_node(*expr_gen.node_allocator_, branch[1]);
                      return branch[0];
@@ -28176,26 +28209,26 @@ namespace exprtk
                   details::cob_base_node<Type>* cobnode = static_cast<details::cob_base_node<Type>*>(branch[1]);
                   const Type c = static_cast<details::literal_node<Type>*>(branch[0])->value();
 
-                  if ((T(0) == c) && (details::e_mul == operation))
+                  if (std::equal_to<T>()(T(0),c) && (details::e_mul == operation))
                   {
                      free_node(*expr_gen.node_allocator_,branch[0]);
                      free_node(*expr_gen.node_allocator_,branch[1]);
 
                      return expr_gen(T(0));
                   }
-                  else if ((T(0) == c) && (details::e_div == operation))
+                  else if (std::equal_to<T>()(T(0),c) && (details::e_div == operation))
                   {
                      free_node(*expr_gen.node_allocator_,branch[0]);
                      free_node(*expr_gen.node_allocator_,branch[1]);
 
                      return expr_gen(T(0));
                   }
-                  else if ((T(0) == c) && (details::e_add == operation))
+                  else if (std::equal_to<T>()(T(0),c) && (details::e_add == operation))
                   {
                      free_node(*expr_gen.node_allocator_, branch[0]);
                      return branch[1];
                   }
-                  else if ((T(1) == c) && (details::e_mul == operation))
+                  else if (std::equal_to<T>()(T(1),c) && (details::e_mul == operation))
                   {
                      free_node(*expr_gen.node_allocator_, branch[0]);
                      return branch[1];
@@ -28489,13 +28522,13 @@ namespace exprtk
 
                details::free_node(*(expr_gen.node_allocator_),branch[0]);
 
-               if ((T(0) == c) && (details::e_mul == operation))
+               if (std::equal_to<T>()(T(0),c) && (details::e_mul == operation))
                   return expr_gen(T(0));
-               else if ((T(0) == c) && (details::e_div == operation))
+               else if (std::equal_to<T>()(T(0),c) && (details::e_div == operation))
                   return expr_gen(T(0));
-               else if ((T(0) == c) && (details::e_add == operation))
+               else if (std::equal_to<T>()(T(0),c) && (details::e_add == operation))
                   return static_cast<details::variable_node<Type>*>(branch[1]);
-               else if ((T(1) == c) && (details::e_mul == operation))
+               else if (std::equal_to<T>()(T(1),c) && (details::e_mul == operation))
                   return static_cast<details::variable_node<Type>*>(branch[1]);
 
                switch (operation)
@@ -28531,15 +28564,15 @@ namespace exprtk
                   else
                      return expr_gen.cardinal_pow_optimisation(v,c);
                }
-               else if ((T(0) == c) && (details::e_mul == operation))
+               else if (std::equal_to<T>()(T(0),c) && (details::e_mul == operation))
                   return expr_gen(T(0));
-               else if ((T(0) == c) && (details::e_div == operation))
+               else if (std::equal_to<T>()(T(0),c) && (details::e_div == operation))
                   return expr_gen(std::numeric_limits<T>::quiet_NaN());
-               else if ((T(0) == c) && (details::e_add == operation))
+               else if (std::equal_to<T>()(T(0),c) && (details::e_add == operation))
                   return static_cast<details::variable_node<Type>*>(branch[0]);
-               else if ((T(1) == c) && (details::e_mul == operation))
+               else if (std::equal_to<T>()(T(1),c) && (details::e_mul == operation))
                   return static_cast<details::variable_node<Type>*>(branch[0]);
-               else if ((T(1) == c) && (details::e_div == operation))
+               else if (std::equal_to<T>()(T(1),c) && (details::e_div == operation))
                   return static_cast<details::variable_node<Type>*>(branch[0]);
 
                switch (operation)
@@ -34807,6 +34840,7 @@ namespace exprtk
          void copy(const lvr_vec_t& src_v, var_t& dest_v)
          {
             typename var_t::iterator itr = dest_v.begin();
+            typedef  typename std::iterator_traits<typename var_t::iterator>::difference_type diff_t;
 
             for (std::size_t i = 0; i < src_v.size(); ++i)
             {
@@ -34816,8 +34850,8 @@ namespace exprtk
                   *itr++ = (*vr.first);
                else
                {
-                  std::copy(vr.first,vr.first + vr.second,itr);
-                  itr += vr.second;
+                  std::copy(vr.first, vr.first + vr.second, itr);
+                  itr += static_cast<diff_t>(vr.second);
                }
             }
          }
@@ -34825,6 +34859,7 @@ namespace exprtk
          void copy(const var_t& src_v, lvr_vec_t& dest_v)
          {
             typename var_t::const_iterator itr = src_v.begin();
+            typedef  typename std::iterator_traits<typename var_t::iterator>::difference_type diff_t;
 
             for (std::size_t i = 0; i < src_v.size(); ++i)
             {
@@ -34834,8 +34869,8 @@ namespace exprtk
                   (*vr.first) = *itr++;
                else
                {
-                  std::copy(itr,itr + vr.second,vr.first);
-                  itr += vr.second;
+                  std::copy(itr, itr + static_cast<diff_t>(vr.second), vr.first);
+                  itr += static_cast<diff_t>(vr.second);
                }
             }
          }
@@ -35570,8 +35605,8 @@ namespace exprtk
          {
             if (stop_time_.tv_sec >= start_time_.tv_sec)
             {
-               return 1000000 * (stop_time_.tv_sec  - start_time_.tv_sec ) +
-                                (stop_time_.tv_usec - start_time_.tv_usec);
+               return 1000000LLU * static_cast<unsigned long long int>(stop_time_.tv_sec  - start_time_.tv_sec ) +
+                                   static_cast<unsigned long long int>(stop_time_.tv_usec - start_time_.tv_usec) ;
             }
             else
                return std::numeric_limits<unsigned long long int>::max();
@@ -37374,9 +37409,9 @@ namespace exprtk
    namespace information
    {
       static const char* library = "Mathematical Expression Toolkit";
-      static const char* version = "2.71828182845904523536028747135266249775724709"
-                                   "3699959574966967627724076630353547594571382178";
-      static const char* date    = "20170404";
+      static const char* version = "2.718281828459045235360287471352662497757247093"
+                                   "69995957496696762772407663035354759457138217852";
+      static const char* date    = "20170424";
 
       static inline std::string data()
       {
