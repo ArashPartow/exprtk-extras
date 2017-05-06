@@ -2848,7 +2848,7 @@ namespace exprtk
 
       private:
 
-         std::size_t stride_;
+         const std::size_t stride_;
       };
 
       class token_modifier : public helper_interface
@@ -2953,7 +2953,7 @@ namespace exprtk
 
       private:
 
-         std::size_t stride_;
+         const std::size_t stride_;
       };
 
       class token_joiner : public helper_interface
@@ -3034,7 +3034,7 @@ namespace exprtk
             return changes;
          }
 
-         std::size_t stride_;
+         const std::size_t stride_;
       };
 
       namespace helper
@@ -4039,7 +4039,7 @@ namespace exprtk
 
    private:
 
-      std::size_t size_;
+      const std::size_t size_;
       data_ptr_t  data_;
       std::vector<data_ptr_t*> data_ref_;
    };
@@ -5411,7 +5411,7 @@ namespace exprtk
       private:
 
          expression_ptr branch_;
-         bool branch_deletable_;
+         const bool branch_deletable_;
          bool equality_;
       };
 
@@ -5933,9 +5933,9 @@ namespace exprtk
          expression_ptr test_;
          expression_ptr consequent_;
          expression_ptr alternative_;
-         bool test_deletable_;
-         bool consequent_deletable_;
-         bool alternative_deletable_;
+         const bool test_deletable_;
+         const bool consequent_deletable_;
+         const bool alternative_deletable_;
       };
 
       template <typename T>
@@ -5977,8 +5977,8 @@ namespace exprtk
 
          expression_ptr test_;
          expression_ptr consequent_;
-         bool test_deletable_;
-         bool consequent_deletable_;
+         const bool test_deletable_;
+         const bool consequent_deletable_;
       };
 
       #ifndef exprtk_disable_break_continue
@@ -6033,7 +6033,7 @@ namespace exprtk
       private:
 
          expression_ptr return_;
-         bool return_deletable_;
+         const bool return_deletable_;
       };
 
       template <typename T>
@@ -6104,8 +6104,8 @@ namespace exprtk
 
          expression_ptr condition_;
          expression_ptr loop_body_;
-         bool condition_deletable_;
-         bool loop_body_deletable_;
+         const bool condition_deletable_;
+         const bool loop_body_deletable_;
       };
 
       template <typename T>
@@ -6157,8 +6157,8 @@ namespace exprtk
 
          expression_ptr condition_;
          expression_ptr loop_body_;
-         bool condition_deletable_;
-         bool loop_body_deletable_;
+         const bool condition_deletable_;
+         const bool loop_body_deletable_;
       };
 
       template <typename T>
@@ -6238,14 +6238,14 @@ namespace exprtk
 
       private:
 
-         expression_ptr initialiser_;
-         expression_ptr condition_  ;
-         expression_ptr incrementor_;
-         expression_ptr loop_body_  ;
-         bool initialiser_deletable_;
-         bool condition_deletable_  ;
-         bool incrementor_deletable_;
-         bool loop_body_deletable_  ;
+         expression_ptr initialiser_      ;
+         expression_ptr condition_        ;
+         expression_ptr incrementor_      ;
+         expression_ptr loop_body_        ;
+         const bool initialiser_deletable_;
+         const bool condition_deletable_  ;
+         const bool incrementor_deletable_;
+         const bool loop_body_deletable_  ;
       };
 
       #ifndef exprtk_disable_break_continue
@@ -6306,8 +6306,8 @@ namespace exprtk
 
          expression_ptr condition_;
          expression_ptr loop_body_;
-         bool condition_deletable_;
-         bool loop_body_deletable_;
+         const bool condition_deletable_;
+         const bool loop_body_deletable_;
       };
 
       template <typename T>
@@ -6368,8 +6368,8 @@ namespace exprtk
 
          expression_ptr condition_;
          expression_ptr loop_body_;
-         bool condition_deletable_;
-         bool loop_body_deletable_;
+         const bool condition_deletable_;
+         const bool loop_body_deletable_;
       };
 
       template <typename T>
@@ -6472,10 +6472,10 @@ namespace exprtk
          expression_ptr condition_  ;
          expression_ptr incrementor_;
          expression_ptr loop_body_  ;
-         bool initialiser_deletable_;
-         bool condition_deletable_  ;
-         bool incrementor_deletable_;
-         bool loop_body_deletable_  ;
+         const bool initialiser_deletable_;
+         const bool condition_deletable_  ;
+         const bool incrementor_deletable_;
+         const bool loop_body_deletable_  ;
       };
       #endif
 
@@ -6679,22 +6679,12 @@ namespace exprtk
          static T null_value;
 
          explicit variable_node()
-         : value_(&null_value),
-           delete_value_(false)
+         : value_(&null_value)
          {}
 
          variable_node(T& v)
-         : value_(&v),
-           delete_value_(false)
+         : value_(&v)
          {}
-
-        ~variable_node()
-         {
-            if (delete_value_)
-            {
-               delete value_;
-            }
-         }
 
          inline bool operator <(const variable_node<T>& v) const
          {
@@ -6721,15 +6711,9 @@ namespace exprtk
             return expression_node<T>::e_variable;
          }
 
-         inline bool& delete_value()
-         {
-            return delete_value_;
-         }
-
       private:
 
          T* value_;
-         bool delete_value_;
       };
 
       template <typename T>
@@ -7036,7 +7020,7 @@ namespace exprtk
          expression_ptr index_;
          vector_holder_ptr vec_holder_;
          T* vector_base_;
-         bool index_deletable_;
+         const bool index_deletable_;
       };
 
       template <typename T>
@@ -7095,7 +7079,7 @@ namespace exprtk
       private:
 
          expression_ptr index_;
-         bool index_deletable_;
+         const bool index_deletable_;
          vector_holder_ptr vector_holder_;
          vds_t             vds_;
       };
@@ -7146,7 +7130,7 @@ namespace exprtk
 
       private:
 
-         std::size_t index_;
+         const std::size_t index_;
          vector_holder_ptr vector_holder_;
          vds_t vds_;
       };
@@ -7752,14 +7736,14 @@ namespace exprtk
 
       private:
 
-         bool               initialised_;
-         expression_ptr          branch_;
-         bool          branch_deletable_;
-         str_base_ptr      str_base_ptr_;
-         irange_ptr       str_range_ptr_;
-         mutable range_t     base_range_;
-         mutable range_t          range_;
-         mutable std::string      value_;
+         bool                initialised_;
+         expression_ptr           branch_;
+         const bool     branch_deletable_;
+         str_base_ptr       str_base_ptr_;
+         irange_ptr        str_range_ptr_;
+         mutable range_t      base_range_;
+         mutable range_t           range_;
+         mutable std::string       value_;
       };
 
       template <typename T>
@@ -8220,9 +8204,9 @@ namespace exprtk
 
       private:
 
-         expression_ptr branch_;
-         bool branch_deletable_;
-         str_base_ptr str_base_ptr_;
+         expression_ptr           branch_;
+         const bool     branch_deletable_;
+         str_base_ptr       str_base_ptr_;
       };
 
       struct asn_assignment
@@ -9392,8 +9376,8 @@ namespace exprtk
       private:
 
          vector_interface<T>* ivec_ptr_;
-         expression_ptr v_;
-         bool v_deletable_;
+         expression_ptr              v_;
+         const bool        v_deletable_;
       };
 
       template <typename T>
@@ -11205,9 +11189,9 @@ namespace exprtk
 
       private:
 
-         ifunction* function_;
+         ifunction*  function_;
          std::size_t parameter_count_;
-         branch_t branch_[N];
+         branch_t    branch_[N];
       };
 
       template <typename T, typename IFunction>
@@ -11494,9 +11478,9 @@ namespace exprtk
       private:
 
          std::vector<expression_ptr> arg_list_;
-         std::vector<branch_t> branch_;
-         mutable tmp_vs_t expr_as_vec1_store_;
-         mutable range_list_t range_list_;
+         std::vector<branch_t>         branch_;
+         mutable tmp_vs_t  expr_as_vec1_store_;
+         mutable range_list_t      range_list_;
       };
 
       #ifndef exprtk_disable_string_capabilities
@@ -11675,7 +11659,7 @@ namespace exprtk
 
       private:
 
-         std::size_t param_seq_index_;
+         const std::size_t param_seq_index_;
       };
       #endif
 
@@ -11798,7 +11782,7 @@ namespace exprtk
          results_context_t* results_context_;
          mutable bool       return_invoked_;
          expression_ptr     body_;
-         bool               body_deletable_;
+         const bool         body_deletable_;
       };
       #endif
 
@@ -14527,7 +14511,7 @@ namespace exprtk
          cob_node(const cob_node<T,Operation>&);
          cob_node<T,Operation>& operator=(const cob_node<T,Operation>&);
 
-         const T c_;
+         const T  c_;
          branch_t branch_[1];
       };
 
@@ -14588,7 +14572,7 @@ namespace exprtk
          boc_node(const boc_node<T,Operation>&);
          boc_node<T,Operation>& operator=(const boc_node<T,Operation>&);
 
-         const T c_;
+         const T  c_;
          branch_t branch_[1];
       };
 
