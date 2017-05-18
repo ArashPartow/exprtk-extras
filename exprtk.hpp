@@ -2915,7 +2915,7 @@ namespace exprtk
                            break;
                }
 
-               typedef std::iterator_traits<typename generator::token_list_t::iterator>::difference_type diff_t;
+               typedef std::iterator_traits<generator::token_list_t::iterator>::difference_type diff_t;
 
                if ((insert_index >= 0) && (insert_index <= (static_cast<int>(stride_) + 1)))
                {
@@ -2984,7 +2984,7 @@ namespace exprtk
 
          inline std::size_t process_stride_2(generator& g)
          {
-            typedef typename std::iterator_traits<generator::token_list_t::iterator>::difference_type diff_t;
+            typedef std::iterator_traits<generator::token_list_t::iterator>::difference_type diff_t;
 
             if (g.token_list_.size() < 2)
                return 0;
@@ -3010,7 +3010,7 @@ namespace exprtk
 
          inline std::size_t process_stride_3(generator& g)
          {
-            typedef typename std::iterator_traits<generator::token_list_t::iterator>::difference_type diff_t;
+            typedef std::iterator_traits<generator::token_list_t::iterator>::difference_type diff_t;
 
             if (g.token_list_.size() < 3)
                return 0;
