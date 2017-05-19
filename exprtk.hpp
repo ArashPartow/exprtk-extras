@@ -18163,7 +18163,7 @@ namespace exprtk
                if (se.depth > current_depth)
                   continue;
                else if (
-                         (se.name  == var_name) &&
+                         details::imatch(se.name, var_name) &&
                          (se.index == index)
                        )
                   return se;
@@ -18184,8 +18184,8 @@ namespace exprtk
                if (se.depth > current_depth)
                   continue;
                else if (
-                         (se.name  == var_name) &&
-                         (se.index == index)    &&
+                         details::imatch(se.name, var_name) &&
+                         (se.index == index)                &&
                          (se.active)
                        )
                   return se;
@@ -18201,11 +18201,11 @@ namespace exprtk
                scope_element& cse = element_[i];
 
                if (
-                    (cse.name  == se.name ) &&
-                    (cse.depth <= se.depth) &&
-                    (cse.index == se.index) &&
-                    (cse.size  == se.size ) &&
-                    (cse.type  == se.type ) &&
+                    details::imatch(cse.name, se.name) &&
+                    (cse.depth <= se.depth)            &&
+                    (cse.index == se.index)            &&
+                    (cse.size  == se.size )            &&
+                    (cse.type  == se.type )            &&
                     (cse.active)
                   )
                   return false;
@@ -22609,8 +22609,8 @@ namespace exprtk
          const scope_element& se = sem_.get_active_element(symbol);
 
          if (
-              (se.name != symbol)             ||
-              (se.depth > state_.scope_depth) ||
+              !details::imatch(se.name, symbol) ||
+              (se.depth > state_.scope_depth)   ||
               (scope_element::e_vector != se.type)
             )
          {
@@ -24458,7 +24458,7 @@ namespace exprtk
          {
             scope_element& se = sem_.get_active_element(symbol);
 
-            if (se.active && (se.name == symbol))
+            if (se.active && details::imatch(se.name, symbol))
             {
                if (scope_element::e_variable == se.type)
                {
