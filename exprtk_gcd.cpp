@@ -61,15 +61,15 @@ void gcd()
            " }                             ",
            "x","y"));
 
-   std::string gcd_program =
-                  " i := 0;                      "
-                  " while ((i += 1) < 100)       "
-                  " {                            "
-                  "   j := 0;                    "
-                  "   repeat                     "
-                  "     println(i, j, gcd(i,j)); "
-                  "   until ((j += 1) >= 100);   "
-                  " };                           ";
+   const std::string gcd_program =
+                     " i := 0;                      "
+                     " while ((i += 1) < 100)       "
+                     " {                            "
+                     "   j := 0;                    "
+                     "   repeat                     "
+                     "     println(i, j, gcd(i,j)); "
+                     "   until ((j += 1) >= 100);   "
+                     " };                           ";
 
    expression_t expression;
    expression.register_symbol_table(symbol_table);

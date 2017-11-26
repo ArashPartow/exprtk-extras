@@ -47,17 +47,17 @@ void monte_carlo_pi()
    typedef exprtk::expression<T>     expression_t;
    typedef exprtk::parser<T>             parser_t;
 
-   std::string monte_carlo_pi_program =
-                  " var max_samples := 5 * 10^7;              "
-                  " var count       := 0;                     "
-                  "                                           "
-                  " for (var i := 0; i < max_samples; i += 1) "
-                  " {                                         "
-                  "   if ((rnd_01^2 + rnd_01^2) <= 1)         "
-                  "    count += 1;                            "
-                  " };                                        "
-                  "                                           "
-                  " (4 * count) / max_samples;                ";
+   const std::string monte_carlo_pi_program =
+                     " var max_samples := 5 * 10^7;              "
+                     " var count       := 0;                     "
+                     "                                           "
+                     " for (var i := 0; i < max_samples; i += 1) "
+                     " {                                         "
+                     "   if ((rnd_01^2 + rnd_01^2) <= 1)         "
+                     "    count += 1;                            "
+                     " };                                        "
+                     "                                           "
+                     " (4 * count) / max_samples;                ";
 
    rnd_01<T> rnd01;
 

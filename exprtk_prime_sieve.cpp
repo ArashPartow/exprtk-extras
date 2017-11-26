@@ -29,7 +29,7 @@ void sieve_of_eratosthenes()
    typedef exprtk::expression<T> expression_t;
    typedef exprtk::parser<T>         parser_t;
 
-   std::string sieve_of_eratosthenes_program =
+   const std::string sieve_of_eratosthenes_program =
                      " var sieve[10^8] := [false];                 "
                      " var m := trunc(sqrt(sieve[]));              "
                      "                                             "

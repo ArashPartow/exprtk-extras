@@ -32,25 +32,25 @@ struct bsm_parameters
    T v;
 };
 
-bsm_parameters<double> bsm_list[] =
-                         {
-                            { 60.11, 65.11, 0.25, 0.08,  0.31 },
-                            { 60.22, 65.22, 0.25, 0.08,  0.32 },
-                            { 60.33, 65.33, 0.25, 0.08,  0.33 },
-                            { 60.44, 65.44, 0.25, 0.08,  0.34 },
-                            { 60.55, 65.55, 0.25, 0.08,  0.35 },
-                            { 60.66, 65.66, 0.25, 0.08,  0.36 },
-                            { 60.77, 65.77, 0.25, 0.08,  0.37 },
-                            { 60.88, 65.88, 0.25, 0.08,  0.38 },
-                            { 60.11, 65.11, 0.25, 0.08,  0.31 },
-                            { 60.22, 65.22, 0.25, 0.08,  0.32 },
-                            { 60.33, 65.33, 0.25, 0.08,  0.33 },
-                            { 60.44, 65.44, 0.25, 0.08,  0.34 },
-                            { 60.55, 65.55, 0.25, 0.08,  0.35 },
-                            { 60.66, 65.66, 0.25, 0.08,  0.36 },
-                            { 60.77, 65.77, 0.25, 0.08,  0.37 },
-                            { 60.88, 65.88, 0.25, 0.08,  0.38 }
-                         };
+const bsm_parameters<double> bsm_list[] =
+                               {
+                                  { 60.11, 65.11, 0.25, 0.08,  0.31 },
+                                  { 60.22, 65.22, 0.25, 0.08,  0.32 },
+                                  { 60.33, 65.33, 0.25, 0.08,  0.33 },
+                                  { 60.44, 65.44, 0.25, 0.08,  0.34 },
+                                  { 60.55, 65.55, 0.25, 0.08,  0.35 },
+                                  { 60.66, 65.66, 0.25, 0.08,  0.36 },
+                                  { 60.77, 65.77, 0.25, 0.08,  0.37 },
+                                  { 60.88, 65.88, 0.25, 0.08,  0.38 },
+                                  { 60.11, 65.11, 0.25, 0.08,  0.31 },
+                                  { 60.22, 65.22, 0.25, 0.08,  0.32 },
+                                  { 60.33, 65.33, 0.25, 0.08,  0.33 },
+                                  { 60.44, 65.44, 0.25, 0.08,  0.34 },
+                                  { 60.55, 65.55, 0.25, 0.08,  0.35 },
+                                  { 60.66, 65.66, 0.25, 0.08,  0.36 },
+                                  { 60.77, 65.77, 0.25, 0.08,  0.37 },
+                                  { 60.88, 65.88, 0.25, 0.08,  0.38 }
+                               };
 
 const std::size_t bsm_list_size = sizeof (bsm_list) / sizeof(bsm_parameters<double>);
 
@@ -61,7 +61,7 @@ void black_scholes_merton_model()
    typedef exprtk::expression<T>     expression_t;
    typedef exprtk::parser<T>             parser_t;
 
-   std::string bsm_model_program =
+   const std::string bsm_model_program =
                   " var d1 := (log(s / x) + (r + v^2 / 2) * t) / (v * sqrt(t)); "
                   " var d2 := d1 - v * sqrt(t);                                 "
                   "                                                             "
@@ -71,7 +71,7 @@ void black_scholes_merton_model()
                   "   x * e^(-r * t) * ncdf(-d2) - s * ncdf(-d1);               "
                   "                                                             ";
 
-   std::string bsm_model_program_opt =
+   const std::string bsm_model_program_opt =
                   " var v_sqrtt := (v * sqrt(t));                               "
                   " var d1   := (log(s / x) + (r + v * v / 2) * t) / v_sqrtt;   "
                   " var d2   := d1 - v_sqrtt;                                   "
@@ -121,7 +121,7 @@ void black_scholes_merton_model()
 
       for (std::size_t k = 0; k < rounds; ++k)
       {
-         bsm_parameters<T>& params = bsm_list[k % bsm_list_size];
+         const bsm_parameters<T>& params = bsm_list[k % bsm_list_size];
 
          s = params.s;
          x = params.x;
@@ -152,7 +152,7 @@ void black_scholes_merton_model()
 
       for (std::size_t k = 0; k < rounds; ++k)
       {
-         bsm_parameters<T>& params = bsm_list[k % bsm_list_size];
+         const bsm_parameters<T>& params = bsm_list[k % bsm_list_size];
 
          s = params.s;
          x = params.x;
@@ -177,10 +177,10 @@ void black_scholes_merton_model()
 }
 
 template <typename T>
-inline T bsm_model(const std::string& callput_flag, T s, T x, T t, T r, T v)
+inline T bsm_model(const std::string& callput_flag, const T s, const T x, const T t, const T r, const T v)
 {
-   T d1 = (std::log(s / x) + (r + (v * v) / 2) * t) / (v * std::sqrt(t));
-   T d2 = d1 - v * sqrt(t);
+   const T d1 = (std::log(s / x) + (r + (v * v) / 2) * t) / (v * std::sqrt(t));
+   const T d2 = d1 - v * sqrt(t);
 
    if (callput_flag == "call")
       return  s * exprtk::details::numeric::ncdf(d1) - x * exp(-r * t) * exprtk::details::numeric::ncdf(d2);
@@ -208,7 +208,7 @@ void bsm_native()
 
    for (std::size_t k = 0; k < rounds; ++k)
    {
-      bsm_parameters<T>& params = bsm_list[k % bsm_list_size];
+      const bsm_parameters<T>& params = bsm_list[k % bsm_list_size];
 
       s = params.s;
       x = params.x;

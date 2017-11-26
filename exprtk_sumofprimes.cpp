@@ -59,11 +59,11 @@ void sum_of_primes()
 
    symbol_table.add_function("println",println);
 
-   std::string sum_of_primes_program =
-                  " for (var i := 1; i <= 100; i += 1) "
-                  " {                                  "
-                  "   println(i, sum_of_primes(i));    "
-                  " }                                  ";
+   const std::string sum_of_primes_program =
+                        " for (var i := 1; i <= 100; i += 1) "
+                        " {                                  "
+                        "   println(i, sum_of_primes(i));    "
+                        " }                                  ";
 
    expression_t expression;
    expression.register_symbol_table(symbol_table);

@@ -50,14 +50,14 @@ void collatz()
            " }                                      ",
            "x"));
 
-   std::string collatz_program =
-                  " x := 0;             "
-                  " repeat              "
-                  "   print(x += 1);    "
-                  "   collatz_trace(x); "
-                  "   print('\n\n');    "
-                  " until (x > 100);    "
-                  " println;            ";
+   const std::string collatz_program =
+                     " x := 0;             "
+                     " repeat              "
+                     "   print(x += 1);    "
+                     "   collatz_trace(x); "
+                     "   print('\n\n');    "
+                     " until (x > 100);    "
+                     " println;            ";
 
    expression_t expression;
    expression.register_symbol_table(symbol_table);

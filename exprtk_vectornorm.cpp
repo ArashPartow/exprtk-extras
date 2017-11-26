@@ -152,27 +152,27 @@ void norm_of_vector()
 
    symbol_table.add_function("norm",norm_);
 
-   std::string vector_norm_program[] =
-               {
-                  " norm(x)          ",
-                  " norm(x,1)        ",
-                  " norm(x,2)        ",
-                  " norm(x,3)        ",
-                  " norm(x,4)        ",
-                  " norm(x,5)        ",
-                  " norm(2x+1)       ",
-                  " norm(2x+1,1)     ",
-                  " norm(2x+1,2)     ",
-                  " norm(2x+1,3)     ",
-                  " norm(2x+1,4)     ",
-                  " norm(2x+1,5)     ",
-                  " norm(2x+y/3-4)   ",
-                  " norm(2x+y/3-4,1) ",
-                  " norm(2x+y/3-4,2) ",
-                  " norm(2x+y/3-4,3) ",
-                  " norm(2x+y/3-4,4) ",
-                  " norm(2x+y/3-4,5) "
-               };
+   const std::string vector_norm_program[] =
+                     {
+                        " norm(x)          ",
+                        " norm(x,1)        ",
+                        " norm(x,2)        ",
+                        " norm(x,3)        ",
+                        " norm(x,4)        ",
+                        " norm(x,5)        ",
+                        " norm(2x+1)       ",
+                        " norm(2x+1,1)     ",
+                        " norm(2x+1,2)     ",
+                        " norm(2x+1,3)     ",
+                        " norm(2x+1,4)     ",
+                        " norm(2x+1,5)     ",
+                        " norm(2x+y/3-4)   ",
+                        " norm(2x+y/3-4,1) ",
+                        " norm(2x+y/3-4,2) ",
+                        " norm(2x+y/3-4,3) ",
+                        " norm(2x+y/3-4,4) ",
+                        " norm(2x+y/3-4,5) "
+                     };
 
    const std::size_t vecnorm_program_size = sizeof(vector_norm_program) / sizeof(std::string);
 

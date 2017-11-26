@@ -434,7 +434,7 @@ public:
          list_symbols();
       else if ("$clear_functions" == expression)
          clear_functions();
-      else if ((0 == expression.find("$batch_run ")) && (expression.size() > 12))
+      else if ((0 == expression.find("$batch_run ")) && (expression.size() >= 12))
          process_batch_run(expression.substr(11,expression.size() - 11));
       else if ((0 == expression.find("$load ")) && (expression.size() > 7))
          process_from_file(expression.substr(6,expression.size() - 6));
