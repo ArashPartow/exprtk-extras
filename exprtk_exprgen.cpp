@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * Functional Test Expression Generator                       *
- * Author: Arash Partow (1999-2017)                           *
+ * Author: Arash Partow (1999-2018)                           *
  * URL: http://www.partow.net/programming/exprtk/index.html   *
  *                                                            *
  * Copyright notice:                                          *
