@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * ExprTk Nth-Root via Bisection Method                       *
- * Author: Arash Partow (1999-2018)                           *
+ * Author: Arash Partow (1999-2021)                           *
  * URL: http://www.partow.net/programming/exprtk/index.html   *
  *                                                            *
  * Copyright notice:                                          *
@@ -33,12 +33,12 @@ void nthroot_via_bisection()
    typedef typename compositor_t::function   function_t;
 
    const std::string nthroot_via_bisection_program =
-                     " for (var x := -30; x <= 30; x += 1)  "
-                     " {                                    "
-                     "   println('[', x, ']',               "
-                     "           ' sqrt = ', nthroot(x,2),  "
-                     "           ' cbrt = ', nthroot(x,3)); "
-                     " }                                    ";
+                  " for (var x := -30; x <= 30; x += 1)  "
+                  " {                                    "
+                  "   println('[', x, ']',               "
+                  "           ' sqrt = ', nthroot(x,2),  "
+                  "           ' cbrt = ', nthroot(x,3)); "
+                  " }                                    ";
 
    exprtk::rtl::io::println<T> println;
 

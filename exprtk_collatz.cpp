@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * ExprTk Collatz Example                                     *
- * Author: Arash Partow (1999-2018)                           *
+ * Author: Arash Partow (1999-2021)                           *
  * URL: http://www.partow.net/programming/exprtk/index.html   *
  *                                                            *
  * Copyright notice:                                          *
@@ -51,13 +51,13 @@ void collatz()
            "x"));
 
    const std::string collatz_program =
-                     " x := 0;             "
-                     " repeat              "
-                     "   print(x += 1);    "
-                     "   collatz_trace(x); "
-                     "   print('\n\n');    "
-                     " until (x > 100);    "
-                     " println;            ";
+                  " x := 0;             "
+                  " repeat              "
+                  "   print(x += 1);    "
+                  "   collatz_trace(x); "
+                  "   print('\n\n');    "
+                  " until (x > 100);    "
+                  " println;            ";
 
    expression_t expression;
    expression.register_symbol_table(symbol_table);

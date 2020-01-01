@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * ExprTk Maximum Subarray Problem                            *
- * Author: Arash Partow (1999-2018)                           *
+ * Author: Arash Partow (1999-2021)                           *
  * URL: http://www.partow.net/programming/exprtk/index.html   *
  *                                                            *
  * Copyright notice:                                          *
@@ -31,26 +31,26 @@ void max_subarray_sum()
    typedef exprtk::parser<T>             parser_t;
 
    const std::string max_subarray_sum_program =
-                     " var zero       := 0;                "
-                     " var curr_sum   := 0;                "
-                     " var curr_start := 0;                "
-                     "                                     "
-                     " for (var i := 0; i < vec[]; i += 1) "
-                     " {                                   "
-                     "   curr_sum += vec[i];               "
-                     "                                     "
-                     "   if (curr_sum < zero)              "
-                     "   {                                 "
-                     "     curr_sum   := 0;                "
-                     "     curr_start := i + 1;            "
-                     "   }                                 "
-                     "   else if (curr_sum > max_sum)      "
-                     "   {                                 "
-                     "     max_sum   := curr_sum;          "
-                     "     max_start := curr_start;        "
-                     "     max_end   := i;                 "
-                     "   }                                 "
-                     " }                                   ";
+                  " var zero       := 0;                "
+                  " var curr_sum   := 0;                "
+                  " var curr_start := 0;                "
+                  "                                     "
+                  " for (var i := 0; i < vec[]; i += 1) "
+                  " {                                   "
+                  "   curr_sum += vec[i];               "
+                  "                                     "
+                  "   if (curr_sum < zero)              "
+                  "   {                                 "
+                  "     curr_sum   := 0;                "
+                  "     curr_start := i + 1;            "
+                  "   }                                 "
+                  "   else if (curr_sum > max_sum)      "
+                  "   {                                 "
+                  "     max_sum   := curr_sum;          "
+                  "     max_start := curr_start;        "
+                  "     max_end   := i;                 "
+                  "   }                                 "
+                  " }                                   ";
 
    T max_sum   = T(0);
    T max_start = T(0);

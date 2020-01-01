@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * ExprTk Multi-Threaded Vector Processing Benchmark          *
- * Author: Arash Partow (1999-2018)                           *
+ * Author: Arash Partow (1999-2021)                           *
  * URL: http://www.partow.net/programming/exprtk/index.html   *
  *                                                            *
  * Copyright notice:                                          *
@@ -25,6 +25,7 @@
 #include <thread>
 
 #include "exprtk.hpp"
+
 
 struct test_expression
 {

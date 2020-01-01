@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * ExprTk Fizz-Buzz Example                                   *
- * Author: Arash Partow (1999-2018)                           *
+ * Author: Arash Partow (1999-2021)                           *
  * URL: http://www.partow.net/programming/exprtk/index.html   *
  *                                                            *
  * Copyright notice:                                          *
@@ -31,18 +31,18 @@ void fizzbuzz()
    typedef exprtk::parser<T>              parser_t;
 
    const std::string fizzbuzz_program =
-                     " var x := 1;                            "
-                     " repeat                                 "
-                     "  var div3 := ((x % 3) == 0);           "
-                     "  var div5 := ((x % 5) == 0);           "
-                     "  [*]                                   "
-                     "  {                                     "
-                     "    case div3          : print('fizz'); "
-                     "    case div5          : print('buzz'); "
-                     "    case div3 nor div5 : print(x);      "
-                     "  };                                    "
-                     "  print('\n')                           "
-                     " until ((x += 1) > 100);                ";
+                  " var x := 1;                            "
+                  " repeat                                 "
+                  "  var div3 := ((x % 3) == 0);           "
+                  "  var div5 := ((x % 5) == 0);           "
+                  "  [*]                                   "
+                  "  {                                     "
+                  "    case div3          : print('fizz'); "
+                  "    case div5          : print('buzz'); "
+                  "    case div3 nor div5 : print(x);      "
+                  "  };                                    "
+                  "  print('\n')                           "
+                  " until ((x += 1) > 100);                ";
 
    exprtk::rtl::io::print<T> print;
 

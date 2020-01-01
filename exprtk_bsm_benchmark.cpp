@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * ExprTk Black Scholes Merton Benchmark                      *
- * Author: Arash Partow (1999-2018)                           *
+ * Author: Arash Partow (1999-2021)                           *
  * URL: http://www.partow.net/programming/exprtk/index.html   *
  *                                                            *
  * Copyright notice:                                          *
@@ -18,18 +18,20 @@
 
 #include <cstdio>
 #include <string>
+
 #include "exprtk.hpp"
 
-static const std::size_t rounds = 10000000;
+
+static const std::size_t rounds = 20000000;
 
 template <typename T>
 struct bsm_parameters
 {
-   T s;
-   T x;
-   T t;
-   T r;
-   T v;
+   T s; // Stock price
+   T x; // Strike price
+   T t; // Years to maturity
+   T r; // Risk free rate
+   T v; // Volatility
 };
 
 const bsm_parameters<double> bsm_list[] =
@@ -71,7 +73,7 @@ void black_scholes_merton_model()
                   "   x * e^(-r * t) * ncdf(-d2) - s * ncdf(-d1);               "
                   "                                                             ";
 
-   const std::string bsm_model_program_opt =
+   const std::string bsm_model_program_opt1 =
                   " var v_sqrtt := (v * sqrt(t));                               "
                   " var d1   := (log(s / x) + (r + v * v / 2) * t) / v_sqrtt;   "
                   " var d2   := d1 - v_sqrtt;                                   "
@@ -82,6 +84,18 @@ void black_scholes_merton_model()
                   " else if (callput_flag == 'put')                             "
                   "   xert * ncdf(-d2) - s * ncdf(-d1);                         "
                   "                                                             ";
+
+   const std::string bsm_model_program_opt2 =
+                  " var v_sqrtt := (v * sqrt(t));                               "
+                  " var d1   := (log(s / x) + (r + v * v / 2) * t) / v_sqrtt;   "
+                  " var d2   := d1 - v_sqrtt;                                   "
+                  "                                                             "
+                  " if (callput_flag == 'call')                                 "
+                  "   s * ncdf(d1) - (x * exp(-r * t)) * ncdf(d2);              "
+                  " else if (callput_flag == 'put')                             "
+                  "   (x * exp(-r * t)) * ncdf(-d2) - s * ncdf(-d1);            "
+                  "                                                             ";
+
 
    T s = T(0);
    T x = T(0);
@@ -102,16 +116,15 @@ void black_scholes_merton_model()
    symbol_table.add_constant("e",e);
    symbol_table.add_stringvar("callput_flag",callput_flag);
 
-   expression_t bsm_expression;
-   bsm_expression.register_symbol_table(symbol_table);
-
-   expression_t bsm_expression_opt;
-   bsm_expression_opt.register_symbol_table(symbol_table);
+   expression_t bsm_expression     (symbol_table);
+   expression_t bsm_expression_opt1(symbol_table);
+   expression_t bsm_expression_opt2(symbol_table);
 
    parser_t parser;
 
-   parser.compile(bsm_model_program,    bsm_expression    );
-   parser.compile(bsm_model_program_opt,bsm_expression_opt);
+   parser.compile(bsm_model_program,      bsm_expression     );
+   parser.compile(bsm_model_program_opt1, bsm_expression_opt1);
+   parser.compile(bsm_model_program_opt2, bsm_expression_opt2);
 
    {
       exprtk::timer timer;
@@ -161,15 +174,46 @@ void black_scholes_merton_model()
          v = params.v;
 
          callput_flag = "call";
-         total += bsm_expression_opt.value();
+         total += bsm_expression_opt1.value();
 
          callput_flag = "put";
-         total += bsm_expression_opt.value();
+         total += bsm_expression_opt1.value();
       }
 
       timer.stop();
 
       printf("[exprtk1] Total: %16.5f\tTime:%8.3fsec\tRate:%16.3f\n",
+             total,
+             timer.time(),
+             (2.0 * rounds) / timer.time());
+   }
+
+   {
+      exprtk::timer timer;
+      timer.start();
+
+      T total = T(0);
+
+      for (std::size_t k = 0; k < rounds; ++k)
+      {
+         const bsm_parameters<T>& params = bsm_list[k % bsm_list_size];
+
+         s = params.s;
+         x = params.x;
+         t = params.t;
+         r = params.r;
+         v = params.v;
+
+         callput_flag = "call";
+         total += bsm_expression_opt2.value();
+
+         callput_flag = "put";
+         total += bsm_expression_opt2.value();
+      }
+
+      timer.stop();
+
+      printf("[exprtk2] Total: %16.5f\tTime:%8.3fsec\tRate:%16.3f\n",
              total,
              timer.time(),
              (2.0 * rounds) / timer.time());
@@ -217,10 +261,10 @@ void bsm_native()
       v = params.v;
 
       callput_flag = "call";
-      total += bsm_model(callput_flag,s,x,t,r,v);
+      total += bsm_model(callput_flag, s, x, t, r, v);
 
       callput_flag = "put";
-      total += bsm_model(callput_flag,s,x,t,r,v);
+      total += bsm_model(callput_flag, s, x, t, r, v);
    }
 
    timer.stop();

@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * Function Call Benchmark (Custom vs Composite vs Native)    *
- * Author: Arash Partow (1999-2018)                           *
+ * Author: Arash Partow (1999-2021)                           *
  * URL: http://www.partow.net/programming/exprtk/index.html   *
  *                                                            *
  * Copyright notice:                                          *
@@ -38,7 +38,7 @@ struct func0 : public exprtk::ifunction<T>
 };
 
 template <typename T>
-inline T func2(const T& v1, const T& v2)
+inline T func1(T v1, T v2)
 {
    return T(1) + std::cos(v1 * v2) / T(3);
 }
@@ -61,27 +61,25 @@ void function_call_benchmark()
 
    symbol_table.add_constants();
 
-   symbol_table.add_variable("v1"   ,v1);
-   symbol_table.add_variable("v2"   ,v2);
-   symbol_table.add_function("func0",f0);
-
+   symbol_table.add_variable("v1"   ,            v1);
+   symbol_table.add_variable("v2"   ,            v2);
+   symbol_table.add_function("func0",            f0);
+   symbol_table.add_function("func1", func1<double>);
    compositor_t compositor(symbol_table);
 
    compositor
       .add(
-      function_t(
-           "func1",
-           " 1 + cos(v1 * v2) / 3;",
-           "v1","v2"));
+        function_t("func2")
+        .var("v1").var("v2")
+        .expression(" 1 + cos(v1 * v2) / 3;"));
 
    std::string program0 = "func0(v1,v2);";
    std::string program1 = "func1(v1,v2);";
+   std::string program2 = "func2(v1,v2);";
 
-   expression_t expression0;
-   expression_t expression1;
-
-   expression0.register_symbol_table(symbol_table);
-   expression1.register_symbol_table(symbol_table);
+   expression_t expression0(symbol_table);
+   expression_t expression1(symbol_table);
+   expression_t expression2(symbol_table);
 
    parser_t parser;
 
@@ -95,6 +93,15 @@ void function_call_benchmark()
    }
 
    if (!parser.compile(program1,expression1))
+   {
+      printf("Error: %s\tExpression: %s\n",
+             parser.error().c_str(),
+             program1.c_str());
+
+      return;
+   }
+
+   if (!parser.compile(program2,expression2))
    {
       printf("Error: %s\tExpression: %s\n",
              parser.error().c_str(),
@@ -139,6 +146,26 @@ void function_call_benchmark()
 
       timer.stop();
 
+      printf("[free function  ]  Total time: %8.3fsec\tRate: %15.3f\tTotal:%20.5f\n",
+             timer.time(),
+             rounds / timer.time(),
+             total);
+   }
+
+   {
+      T total = T(0);
+
+      exprtk::timer timer;
+      timer.start();
+
+      for (std::size_t r = 0; r < rounds; ++r)
+      {
+         total += expression2.value();
+         std::swap(v1,v2);
+      }
+
+      timer.stop();
+
       printf("[compositor     ]  Total time: %8.3fsec\tRate: %15.3f\tTotal:%20.5f\n",
              timer.time(),
              rounds / timer.time(),
@@ -153,7 +180,7 @@ void function_call_benchmark()
 
       for (std::size_t r = 0; r < rounds; ++r)
       {
-         total += func2<T>(v1,v2);
+         total += func1<T>(v1,v2);
          std::swap(v1,v2);
       }
 

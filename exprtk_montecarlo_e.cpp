@@ -2,7 +2,7 @@
  **************************************************************
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
- * Approximation of Pi via Monte-Carlo Method                 *
+ * Approximation of e via Monte-Carlo Method                  *
  * Author: Arash Partow (1999-2021)                           *
  * URL: http://www.partow.net/programming/exprtk/index.html   *
  *                                                            *
@@ -41,23 +41,26 @@ struct rnd_01 : public exprtk::ifunction<T>
 };
 
 template <typename T>
-void monte_carlo_pi()
+void monte_carlo_e()
 {
    typedef exprtk::symbol_table<T> symbol_table_t;
    typedef exprtk::expression<T>     expression_t;
    typedef exprtk::parser<T>             parser_t;
 
-   const std::string monte_carlo_pi_program =
-                  " var max_samples := 5 * 10^7;              "
-                  " var count       := 0;                     "
+   const std::string monte_carlo_e_program =
+                  " var max_samples := 10^7;                  "
+                  " var trials      := 0;                     "
                   "                                           "
                   " for (var i := 0; i < max_samples; i += 1) "
                   " {                                         "
-                  "   if ((rnd_01^2 + rnd_01^2) <= 1)         "
-                  "    count += 1;                            "
+                  "   var rand_sum := 0;                      "
+                  "   repeat                                  "
+                  "     rand_sum += rnd_01;                   "
+                  "     trials += 1;                          "
+                  "   until (rand_sum > 1);                   "
                   " };                                        "
                   "                                           "
-                  " (4 * count) / max_samples;                ";
+                  " trials / max_samples;                     ";
 
    rnd_01<T> rnd01;
 
@@ -68,19 +71,19 @@ void monte_carlo_pi()
    expression.register_symbol_table(symbol_table);
 
    parser_t parser;
-   parser.compile(monte_carlo_pi_program,expression);
+   parser.compile(monte_carlo_e_program,expression);
 
-   const T approximate_pi = expression.value();
+   const T approximate_e = expression.value();
 
-   const T real_pi = T(3.141592653589793238462643383279502); // or close enough...
+   const T real_e = T(2.718281828459045235360287471352662); // or close enough...
 
-   printf("pi ~ %20.17f\terror: %20.17f\n",
-          approximate_pi,
-          std::abs(real_pi - approximate_pi));
+   printf("e ~ %20.17f\terror: %20.17f\n",
+          approximate_e,
+          std::abs(real_e - approximate_e));
 }
 
 int main()
 {
-   monte_carlo_pi<double>();
+   monte_carlo_e<double>();
    return 0;
 }
