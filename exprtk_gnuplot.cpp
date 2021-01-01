@@ -30,10 +30,10 @@ class exprtk_gnuplot_fx
 public:
 
    exprtk_gnuplot_fx()
-   : min_x_(0.0),
-     max_x_(0.0),
-     min_y_(0.0),
-     max_y_(0.0)
+   : min_x_(0.0)
+   , max_x_(0.0)
+   , min_y_(0.0)
+   , max_y_(0.0)
    {}
 
    exprtk_gnuplot_fx& set_title(const std::string& title)
@@ -88,8 +88,8 @@ private:
    bool generate_data()
    {
       typedef exprtk::symbol_table<double> symbol_table_t;
-      typedef exprtk::expression<double>     expression_t;
-      typedef exprtk::parser<double>             parser_t;
+      typedef exprtk::expression<double>   expression_t;
+      typedef exprtk::parser<double>       parser_t;
 
       double x = 0.0;
 

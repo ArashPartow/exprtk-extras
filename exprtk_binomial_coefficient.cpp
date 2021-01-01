@@ -37,11 +37,11 @@ inline T ncr_println(T n, T r, T ncr)
 template <typename T>
 void n_choose_r()
 {
-   typedef exprtk::symbol_table<T>      symbol_table_t;
-   typedef exprtk::expression<T>          expression_t;
-   typedef exprtk::parser<T>                  parser_t;
-   typedef exprtk::function_compositor<T> compositor_t;
-   typedef typename compositor_t::function  function_t;
+   typedef exprtk::symbol_table<T>         symbol_table_t;
+   typedef exprtk::expression<T>           expression_t;
+   typedef exprtk::parser<T>               parser_t;
+   typedef exprtk::function_compositor<T>  compositor_t;
+   typedef typename compositor_t::function function_t;
 
    symbol_table_t symbol_table;
    symbol_table.add_function("println",ncr_println);

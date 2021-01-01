@@ -46,11 +46,11 @@ inline T func1(T v1, T v2)
 template <typename T>
 void function_call_benchmark()
 {
-   typedef exprtk::symbol_table<T>      symbol_table_t;
-   typedef exprtk::expression<T>          expression_t;
-   typedef exprtk::parser<T>                  parser_t;
-   typedef exprtk::function_compositor<T> compositor_t;
-   typedef typename compositor_t::function  function_t;
+   typedef exprtk::symbol_table<T>         symbol_table_t;
+   typedef exprtk::expression<T>           expression_t;
+   typedef exprtk::parser<T>               parser_t;
+   typedef exprtk::function_compositor<T>  compositor_t;
+   typedef typename compositor_t::function function_t;
 
    T v1 = T(1);
    T v2 = T(2);
@@ -61,10 +61,11 @@ void function_call_benchmark()
 
    symbol_table.add_constants();
 
-   symbol_table.add_variable("v1"   ,            v1);
-   symbol_table.add_variable("v2"   ,            v2);
-   symbol_table.add_function("func0",            f0);
+   symbol_table.add_variable("v1"   , v1           );
+   symbol_table.add_variable("v2"   , v2           );
+   symbol_table.add_function("func0", f0           );
    symbol_table.add_function("func1", func1<double>);
+
    compositor_t compositor(symbol_table);
 
    compositor
@@ -73,9 +74,9 @@ void function_call_benchmark()
         .var("v1").var("v2")
         .expression(" 1 + cos(v1 * v2) / 3;"));
 
-   std::string program0 = "func0(v1,v2);";
-   std::string program1 = "func1(v1,v2);";
-   std::string program2 = "func2(v1,v2);";
+   const std::string program0 = "func0(v1,v2);";
+   const std::string program1 = "func1(v1,v2);";
+   const std::string program2 = "func2(v1,v2);";
 
    expression_t expression0(symbol_table);
    expression_t expression1(symbol_table);

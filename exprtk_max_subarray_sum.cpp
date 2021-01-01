@@ -27,8 +27,8 @@ template <typename T>
 void max_subarray_sum()
 {
    typedef exprtk::symbol_table<T> symbol_table_t;
-   typedef exprtk::expression<T>     expression_t;
-   typedef exprtk::parser<T>             parser_t;
+   typedef exprtk::expression<T>   expression_t;
+   typedef exprtk::parser<T>       parser_t;
 
    const std::string max_subarray_sum_program =
                   " var zero       := 0;                "

@@ -129,8 +129,8 @@ private:
    bool generate_data(const std::size_t index, exprtk_fx_curve& curve)
    {
       typedef exprtk::symbol_table<double> symbol_table_t;
-      typedef exprtk::expression<double>     expression_t;
-      typedef exprtk::parser<double>             parser_t;
+      typedef exprtk::expression<double>   expression_t;
+      typedef exprtk::parser<double>       parser_t;
 
       double x = 0.0;
 

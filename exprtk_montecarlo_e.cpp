@@ -44,8 +44,8 @@ template <typename T>
 void monte_carlo_e()
 {
    typedef exprtk::symbol_table<T> symbol_table_t;
-   typedef exprtk::expression<T>     expression_t;
-   typedef exprtk::parser<T>             parser_t;
+   typedef exprtk::expression<T>   expression_t;
+   typedef exprtk::parser<T>       parser_t;
 
    const std::string monte_carlo_e_program =
                   " var max_samples := 10^7;                  "

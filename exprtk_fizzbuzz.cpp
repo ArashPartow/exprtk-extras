@@ -26,9 +26,9 @@
 template <typename T>
 void fizzbuzz()
 {
-   typedef exprtk::symbol_table<T>  symbol_table_t;
-   typedef exprtk::expression<T>      expression_t;
-   typedef exprtk::parser<T>              parser_t;
+   typedef exprtk::symbol_table<T> symbol_table_t;
+   typedef exprtk::expression<T>   expression_t;
+   typedef exprtk::parser<T>       parser_t;
 
    const std::string fizzbuzz_program =
                   " var x := 1;                            "

@@ -34,8 +34,8 @@ template <typename T>
 void mandelbrot()
 {
    typedef exprtk::symbol_table<T> symbol_table_t;
-   typedef exprtk::expression<T>     expression_t;
-   typedef exprtk::parser<T>             parser_t;
+   typedef exprtk::expression<T>   expression_t;
+   typedef exprtk::parser<T>       parser_t;
 
    const std::string mandelbrot_program =
                   " width    := 118;                              "
@@ -81,8 +81,8 @@ void mandelbrot()
    exprtk::rtl::io::println<T> println;
 
    symbol_table_t symbol_table;
-   symbol_table.add_function("putch"  ,putch  );
-   symbol_table.add_function("println",println);
+   symbol_table.add_function("putch"  , putch  );
+   symbol_table.add_function("println", println);
 
    expression_t expression;
    expression.register_symbol_table(symbol_table);

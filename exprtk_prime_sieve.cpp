@@ -27,7 +27,7 @@ template <typename T>
 void sieve_of_eratosthenes()
 {
    typedef exprtk::expression<T> expression_t;
-   typedef exprtk::parser<T>         parser_t;
+   typedef exprtk::parser<T>     parser_t;
 
    const std::string sieve_of_eratosthenes_program =
                   " var sieve[10^8] := [false];                 "
@@ -59,7 +59,7 @@ void sieve_of_eratosthenes()
    exprtk::timer timer;
    timer.start();
 
-   T result = expression.value();
+   const T result = expression.value();
 
    timer.stop();
 

@@ -143,7 +143,7 @@ inline bool test_gen(const std::string& expr_file)
    {
       T result = expression_list[i].value();
 
-      printf("equal((%050.30Lf),(%s))\n",
+      printf("equal((%050.30f),(%s))\n",
              result,
              expr_str_list[i].c_str());
    }
@@ -160,7 +160,7 @@ int main(int argc, char* argv[])
    }
 
    const std::string file_name = argv[1];
-   test_gen<long double>(file_name);
+   test_gen<double>(file_name);
 
    return 0;
 }

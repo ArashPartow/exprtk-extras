@@ -26,11 +26,11 @@
 template <typename T>
 void nthroot_via_bisection()
 {
-   typedef exprtk::symbol_table<T>       symbol_table_t;
+   typedef exprtk::symbol_table<T>         symbol_table_t;
    typedef exprtk::expression<T>           expression_t;
-   typedef exprtk::parser<T>                   parser_t;
+   typedef exprtk::parser<T>               parser_t;
    typedef exprtk::function_compositor<T>  compositor_t;
-   typedef typename compositor_t::function   function_t;
+   typedef typename compositor_t::function function_t;
 
    const std::string nthroot_via_bisection_program =
                   " for (var x := -30; x <= 30; x += 1)  "

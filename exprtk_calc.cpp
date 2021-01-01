@@ -26,9 +26,9 @@
 int main()
 {
    typedef exprtk::symbol_table<double> symbol_table_t;
-   typedef exprtk::expression<double>     expression_t;
-   typedef exprtk::parser<double>             parser_t;
-   typedef exprtk::parser_error::type          error_t;
+   typedef exprtk::expression<double>   expression_t;
+   typedef exprtk::parser<double>       parser_t;
+   typedef exprtk::parser_error::type   error_t;
 
    for ( ; ; )
    {

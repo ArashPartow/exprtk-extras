@@ -76,47 +76,47 @@ class expression_processor
 {
 public:
 
-   typedef exprtk::symbol_table<T>             symbol_table_t;
-   typedef exprtk::expression<T>                 expression_t;
-   typedef exprtk::parser<T>                         parser_t;
-   typedef exprtk::parser_error::type                 error_t;
-   typedef exprtk::function_compositor<T>        compositor_t;
-   typedef typename compositor_t::function         function_t;
+   typedef exprtk::symbol_table<T>           symbol_table_t;
+   typedef exprtk::expression<T>             expression_t;
+   typedef exprtk::parser<T>                 parser_t;
+   typedef exprtk::parser_error::type        error_t;
+   typedef exprtk::function_compositor<T>    compositor_t;
+   typedef typename compositor_t::function   function_t;
    typedef typename parser_t::settings_store settings_store_t;
-   typedef exprtk::lexer::parser_helper            prsrhlpr_t;
+   typedef exprtk::lexer::parser_helper      prsrhlpr_t;
 
    typedef typename parser_t::dependent_entity_collector::symbol_t symbol_t;
    typedef std::vector<symbol_t> symbol_list_t;
 
    expression_processor()
-   : persist_symbol_table_      (false),
-     symbol_dump_               (false),
-     assignment_dump_           (false),
-     display_total_time_        (false),
-     display_total_compile_time_(false),
-     enable_usr_                (false),
-     disable_local_vardef_      (false),
-     batch_runs_cnt_            (0),
-     compositor_(function_symbol_table_)
-     #ifdef exprtk_enable_repl_variables
-     ,s0_("abcdefghijk"),
-      s1_("abcdefghijk0123456789"),
-      s2_("012345678901234567890123456789"),
-      v0_({1,1,1}),
-      v1_({2,2,2,2,2}),
-      v2_({3,3,3,3,3,3,3}),
-      v3_({4,4,4,4,4,4,4,4}),
-      vv_(exprtk::make_vector_view(v2_,v2_.size()))
-     #endif
+   : persist_symbol_table_      (false)
+   , symbol_dump_               (false)
+   , assignment_dump_           (false)
+   , display_total_time_        (false)
+   , display_total_compile_time_(false)
+   , enable_usr_                (false)
+   , disable_local_vardef_      (false)
+   , batch_runs_cnt_            (0    )
+   , compositor_(function_symbol_table_)
+   #ifdef exprtk_enable_repl_variables
+   , s0_("abcdefghijk")
+   , s1_("abcdefghijk0123456789")
+   , s2_("012345678901234567890123456789")
+   , v0_({1,1,1})
+   , v1_({2,2,2,2,2})
+   , v2_({3,3,3,3,3,3,3})
+   , v3_({4,4,4,4,4,4,4,4})
+   , vv_(exprtk::make_vector_view(v2_,v2_.size()))
+   #endif
    {
       symbol_table_.add_constants();
 
-      symbol_table_.add_function("putch"  ,putch_  );
-      symbol_table_.add_function("putint" ,putint_ );
-      symbol_table_.add_function("rnd_01" ,rnd_01_ );
-      symbol_table_.add_package (fileio_package_   );
-      symbol_table_.add_package (vecops_package_   );
-      symbol_table_.add_package (io_package_       );
+      symbol_table_.add_function("putch"  , putch_  );
+      symbol_table_.add_function("putint" , putint_ );
+      symbol_table_.add_function("rnd_01" , rnd_01_ );
+      symbol_table_.add_package (fileio_package_    );
+      symbol_table_.add_package (vecops_package_    );
+      symbol_table_.add_package (io_package_        );
 
       symbol_table_.add_function("poly01", poly01_);
       symbol_table_.add_function("poly02", poly02_);
@@ -132,16 +132,16 @@ public:
       symbol_table_.add_function("poly12", poly12_);
 
       #ifdef exprtk_enable_repl_variables
-      symbol_table_.add_stringvar("s0",s0_);
-      symbol_table_.add_stringvar("s1",s1_);
-      symbol_table_.add_stringvar("s2",s2_);
-      symbol_table_.add_vector   ("v0",v0_);
-      symbol_table_.add_vector   ("v1",v1_);
-      symbol_table_.add_vector   ("v2",v2_);
-      symbol_table_.add_vector   ("v3",v3_);
+      symbol_table_.add_stringvar("s0", s0_);
+      symbol_table_.add_stringvar("s1", s1_);
+      symbol_table_.add_stringvar("s2", s2_);
+      symbol_table_.add_vector   ("v0", v0_);
+      symbol_table_.add_vector   ("v1", v1_);
+      symbol_table_.add_vector   ("v2", v2_);
+      symbol_table_.add_vector   ("v3", v3_);
 
       vv_ = exprtk::make_vector_view(v2_,v2_.size());
-      symbol_table_.add_vector   ("vv",vv_);
+      symbol_table_.add_vector   ("vv", vv_);
       #endif
 
       compositor_.add_auxiliary_symtab(symbol_table_);
@@ -217,8 +217,8 @@ public:
       if (!persist_symbol_table_)
       {
          symbol_table_.clear_variables();
-         symbol_table_.add_constants();
-         symbol_table_.add_constant ("e",exprtk::details::numeric::constant::e);
+         symbol_table_.add_constants  ();
+         symbol_table_.add_constant ("e", exprtk::details::numeric::constant::e);
       }
    }
 
@@ -336,7 +336,7 @@ public:
       exprtk::timer timer;
       timer.start();
 
-      T result = expression.value();
+      const T result = expression.value();
 
       timer.stop();
 
@@ -956,7 +956,7 @@ private:
    rnd_01 <T> rnd_01_;
    exprtk::rtl::io::file::package<T> fileio_package_;
    exprtk::rtl::vecops::package<T>   vecops_package_;
-   exprtk::rtl::io::package<T>           io_package_;
+   exprtk::rtl::io::package<T>       io_package_;
 
    exprtk::polynomial<T, 1> poly01_;
    exprtk::polynomial<T, 2> poly02_;

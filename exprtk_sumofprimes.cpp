@@ -26,11 +26,11 @@
 template <typename T>
 void sum_of_primes()
 {
-   typedef exprtk::symbol_table<T>      symbol_table_t;
-   typedef exprtk::expression<T>          expression_t;
-   typedef exprtk::parser<T>                  parser_t;
-   typedef exprtk::function_compositor<T> compositor_t;
-   typedef typename compositor_t::function  function_t;
+   typedef exprtk::symbol_table<T>         symbol_table_t;
+   typedef exprtk::expression<T>           expression_t;
+   typedef exprtk::parser<T>               parser_t;
+   typedef exprtk::function_compositor<T>  compositor_t;
+   typedef typename compositor_t::function function_t;
 
    symbol_table_t symbol_table;
 
