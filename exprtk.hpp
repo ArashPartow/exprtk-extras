@@ -814,15 +814,15 @@ namespace exprtk
             template <typename T>
             struct epsilon_type {};
 
-            #define exprtk_define_epsilon_type(Type, Epsilon) \
-            template <> struct epsilon_type<Type>             \
-            {                                                 \
-               static inline Type value()                     \
-               {                                              \
-                  const Type epsilon = static_cast<Type>(Epsilon);         \
-                  return epsilon;                             \
-               }                                              \
-            };                                                \
+            #define exprtk_define_epsilon_type(Type, Epsilon)      \
+            template <> struct epsilon_type<Type>                  \
+            {                                                      \
+               static inline Type value()                          \
+               {                                                   \
+                  const Type epsilon = static_cast<Type>(Epsilon); \
+                  return epsilon;                                  \
+               }                                                   \
+            };                                                     \
 
             exprtk_define_epsilon_type(float      ,      0.000001f)
             exprtk_define_epsilon_type(double     ,   0.0000000001)
@@ -1560,17 +1560,17 @@ namespace exprtk
             }
          };
 
-         template <typename T> struct fast_exp<T,10> { static inline T result(T v) { T v_5 = fast_exp<T,5>::result(v); return v_5 * v_5; } };
-         template <typename T> struct fast_exp<T, 9> { static inline T result(T v) { return fast_exp<T,8>::result(v) * v; } };
-         template <typename T> struct fast_exp<T, 8> { static inline T result(T v) { T v_4 = fast_exp<T,4>::result(v); return v_4 * v_4; } };
-         template <typename T> struct fast_exp<T, 7> { static inline T result(T v) { return fast_exp<T,6>::result(v) * v; } };
-         template <typename T> struct fast_exp<T, 6> { static inline T result(T v) { T v_3 = fast_exp<T,3>::result(v); return v_3 * v_3; } };
-         template <typename T> struct fast_exp<T, 5> { static inline T result(T v) { return fast_exp<T,4>::result(v) * v; } };
-         template <typename T> struct fast_exp<T, 4> { static inline T result(T v) { T v_2 = v * v; return v_2 * v_2; } };
-         template <typename T> struct fast_exp<T, 3> { static inline T result(T v) { return v * v * v; } };
-         template <typename T> struct fast_exp<T, 2> { static inline T result(T v) { return v * v;     } };
-         template <typename T> struct fast_exp<T, 1> { static inline T result(T v) { return v;         } };
-         template <typename T> struct fast_exp<T, 0> { static inline T result(T  ) { return T(1);      } };
+         template <typename T> struct fast_exp<T,10> { static inline T result(const T v) { T v_5 = fast_exp<T,5>::result(v); return v_5 * v_5; } };
+         template <typename T> struct fast_exp<T, 9> { static inline T result(const T v) { return fast_exp<T,8>::result(v) * v; } };
+         template <typename T> struct fast_exp<T, 8> { static inline T result(const T v) { T v_4 = fast_exp<T,4>::result(v); return v_4 * v_4; } };
+         template <typename T> struct fast_exp<T, 7> { static inline T result(const T v) { return fast_exp<T,6>::result(v) * v; } };
+         template <typename T> struct fast_exp<T, 6> { static inline T result(const T v) { T v_3 = fast_exp<T,3>::result(v); return v_3 * v_3; } };
+         template <typename T> struct fast_exp<T, 5> { static inline T result(const T v) { return fast_exp<T,4>::result(v) * v; } };
+         template <typename T> struct fast_exp<T, 4> { static inline T result(const T v) { T v_2 = v * v; return v_2 * v_2; } };
+         template <typename T> struct fast_exp<T, 3> { static inline T result(const T v) { return v * v * v; } };
+         template <typename T> struct fast_exp<T, 2> { static inline T result(const T v) { return v * v;     } };
+         template <typename T> struct fast_exp<T, 1> { static inline T result(const T v) { return v;         } };
+         template <typename T> struct fast_exp<T, 0> { static inline T result(const T  ) { return T(1);      } };
 
          #define exprtk_define_unary_function(FunctionName)        \
          template <typename T>                                     \
@@ -8402,7 +8402,7 @@ namespace exprtk
 
                if (
                     range      (str_r0, str_r1, base_str_size) &&
-                    base_range_(    r0,     r1, base_str_size)
+                    base_range_(    r0,     r1, base_str_size - str_r0)
                   )
                {
                   const std::size_t size = (r1 - r0) + 1;
@@ -9624,14 +9624,14 @@ namespace exprtk
       #endif
 
       template <typename T, std::size_t N>
-      inline T axn(T a, T x)
+      inline T axn(const T a, const T x)
       {
          // a*x^n
          return a * exprtk::details::numeric::fast_exp<T,N>::result(x);
       }
 
       template <typename T, std::size_t N>
-      inline T axnb(T a, T x, T b)
+      inline T axnb(const T a, const T x, const T b)
       {
          // a*x^n+b
          return a * exprtk::details::numeric::fast_exp<T,N>::result(x) + b;
@@ -19801,7 +19801,7 @@ namespace exprtk
                   continue;
                else if (!local_data(i).stringvar_store.symbol_exists(symbol_name))
                   continue;
-               else if ( local_data(i).stringvar_store.is_constant(symbol_name))
+               else if (local_data(i).stringvar_store.is_constant(symbol_name))
                   return true;
             }
 
@@ -21699,11 +21699,11 @@ namespace exprtk
             if (0 != (right_branch = parse_expression(current_state.right)))
             {
                if (
-                    details::is_return_node(  expression) ||
+                    details::is_return_node(expression  ) ||
                     details::is_return_node(right_branch)
                   )
                {
-                  free_node(node_allocator_,   expression);
+                  free_node(node_allocator_, expression  );
                   free_node(node_allocator_, right_branch);
 
                   set_error(
@@ -21736,7 +21736,7 @@ namespace exprtk
                                 exprtk_error_location));
                }
 
-               free_node(node_allocator_,   expression);
+               free_node(node_allocator_, expression  );
                free_node(node_allocator_, right_branch);
 
                return error_node();
@@ -22370,7 +22370,7 @@ namespace exprtk
          #ifndef exprtk_disable_string_capabilities
          if (result)
          {
-            const bool consq_is_str = is_generally_string_node( consequent);
+            const bool consq_is_str = is_generally_string_node(consequent );
             const bool alter_is_str = is_generally_string_node(alternative);
 
             if (consq_is_str || alter_is_str)
@@ -22521,7 +22521,7 @@ namespace exprtk
          #ifndef exprtk_disable_string_capabilities
          if (result)
          {
-            const bool consq_is_str = is_generally_string_node( consequent);
+            const bool consq_is_str = is_generally_string_node(consequent );
             const bool alter_is_str = is_generally_string_node(alternative);
 
             if (consq_is_str || alter_is_str)
@@ -22545,8 +22545,8 @@ namespace exprtk
 
          if (!result)
          {
-            free_node(node_allocator_,   condition);
-            free_node(node_allocator_,  consequent);
+            free_node(node_allocator_, condition  );
+            free_node(node_allocator_, consequent );
             free_node(node_allocator_, alternative);
 
             return error_node();
@@ -22679,7 +22679,7 @@ namespace exprtk
          #ifndef exprtk_disable_string_capabilities
          if (result)
          {
-            const bool consq_is_str = is_generally_string_node( consequent);
+            const bool consq_is_str = is_generally_string_node(consequent );
             const bool alter_is_str = is_generally_string_node(alternative);
 
             if (consq_is_str || alter_is_str)
@@ -22703,8 +22703,8 @@ namespace exprtk
 
          if (!result)
          {
-            free_node(node_allocator_,   condition);
-            free_node(node_allocator_,  consequent);
+            free_node(node_allocator_, condition  );
+            free_node(node_allocator_, consequent );
             free_node(node_allocator_, alternative);
 
             return error_node();
@@ -22802,8 +22802,8 @@ namespace exprtk
 
          if (!result)
          {
-            free_node(node_allocator_,      branch);
-            free_node(node_allocator_,   condition);
+            free_node(node_allocator_, branch     );
+            free_node(node_allocator_, condition  );
             free_node(node_allocator_, result_node);
 
             brkcnt_list_.pop_front();
@@ -22938,7 +22938,7 @@ namespace exprtk
                           "ERR065 - Expected ')' after condition of repeat until loop",
                           exprtk_error_location));
 
-            free_node(node_allocator_,    branch);
+            free_node(node_allocator_, branch   );
             free_node(node_allocator_, condition);
 
             brkcnt_list_.pop_front();
@@ -23181,9 +23181,9 @@ namespace exprtk
             }
 
             free_node(node_allocator_, initialiser);
-            free_node(node_allocator_,   condition);
+            free_node(node_allocator_, condition  );
             free_node(node_allocator_, incrementor);
-            free_node(node_allocator_,   loop_body);
+            free_node(node_allocator_, loop_body  );
 
             if (!brkcnt_list_.empty())
             {
@@ -23280,7 +23280,7 @@ namespace exprtk
                                 "ERR082 - Expected ';' at end of case for switch statement",
                                 exprtk_error_location));
 
-                  free_node(node_allocator_,  condition);
+                  free_node(node_allocator_, condition );
                   free_node(node_allocator_, consequent);
 
                   return error_node();
@@ -23289,12 +23289,12 @@ namespace exprtk
                // Can we optimise away the case statement?
                if (is_constant_node(condition) && is_false(condition))
                {
-                  free_node(node_allocator_,  condition);
+                  free_node(node_allocator_, condition );
                   free_node(node_allocator_, consequent);
                }
                else
                {
-                  arg_list.push_back( condition);
+                  arg_list.push_back(condition );
                   arg_list.push_back(consequent);
                }
 
@@ -23452,12 +23452,12 @@ namespace exprtk
             // Can we optimise away the case statement?
             if (is_constant_node(condition) && is_false(condition))
             {
-               free_node(node_allocator_,  condition);
+               free_node(node_allocator_, condition );
                free_node(node_allocator_, consequent);
             }
             else
             {
-               arg_list.push_back( condition);
+               arg_list.push_back(condition );
                arg_list.push_back(consequent);
             }
 
@@ -27754,8 +27754,8 @@ namespace exprtk
          {
             if ((0 == condition) || (0 == consequent))
             {
-               free_node(*node_allocator_,   condition);
-               free_node(*node_allocator_,  consequent);
+               free_node(*node_allocator_, condition  );
+               free_node(*node_allocator_, consequent );
                free_node(*node_allocator_, alternative);
 
                return error_node();
@@ -27766,7 +27766,7 @@ namespace exprtk
                // True branch
                if (details::is_true(condition))
                {
-                  free_node(*node_allocator_,   condition);
+                  free_node(*node_allocator_, condition  );
                   free_node(*node_allocator_, alternative);
 
                   return consequent;
@@ -27774,7 +27774,7 @@ namespace exprtk
                // False branch
                else
                {
-                  free_node(*node_allocator_,  condition);
+                  free_node(*node_allocator_, condition );
                   free_node(*node_allocator_, consequent);
 
                   if (alternative)
@@ -27800,8 +27800,8 @@ namespace exprtk
          {
             if ((0 == condition) || (0 == consequent))
             {
-               free_node(*node_allocator_,   condition);
-               free_node(*node_allocator_,  consequent);
+               free_node(*node_allocator_, condition  );
+               free_node(*node_allocator_, consequent );
                free_node(*node_allocator_, alternative);
 
                return error_node();
@@ -27812,7 +27812,7 @@ namespace exprtk
                // True branch
                if (details::is_true(condition))
                {
-                  free_node(*node_allocator_,   condition);
+                  free_node(*node_allocator_, condition  );
                   free_node(*node_allocator_, alternative);
 
                   return consequent;
@@ -27820,7 +27820,7 @@ namespace exprtk
                // False branch
                else
                {
-                  free_node(*node_allocator_,  condition);
+                  free_node(*node_allocator_, condition );
                   free_node(*node_allocator_, consequent);
 
                   if (alternative)
@@ -27872,7 +27872,7 @@ namespace exprtk
                   result = node_allocator_->allocate<details::null_node<Type> >();
 
                free_node(*node_allocator_, condition);
-               free_node(*node_allocator_,    branch);
+               free_node(*node_allocator_, branch   );
 
                return result;
             }
@@ -27919,7 +27919,7 @@ namespace exprtk
                }
 
                free_node(*node_allocator_, condition);
-               free_node(*node_allocator_,    branch);
+               free_node(*node_allocator_, branch   );
 
                return error_node();
             }
@@ -27966,16 +27966,16 @@ namespace exprtk
                   result = node_allocator_->allocate<details::null_node<Type> >();
 
                free_node(*node_allocator_, initialiser);
-               free_node(*node_allocator_,   condition);
+               free_node(*node_allocator_, condition  );
                free_node(*node_allocator_, incrementor);
-               free_node(*node_allocator_,   loop_body);
+               free_node(*node_allocator_, loop_body  );
 
                return result;
             }
             else if (details::is_null_node(condition) || (0 == condition))
             {
                free_node(*node_allocator_, initialiser);
-               free_node(*node_allocator_,   condition);
+               free_node(*node_allocator_, condition  );
                free_node(*node_allocator_, incrementor);
 
                return loop_body;
@@ -38068,7 +38068,7 @@ namespace exprtk
          {
             const T v = T(123.456 + i);
 
-            if (details::is_true(details::numeric::nequal(details::numeric::fast_exp<T, 1>::result(v),details::numeric::pow(v,T( 1)))))
+            if (details::is_true(details::numeric::nequal(details::numeric::fast_exp<T, 1>::result(v),details::numeric::pow(v,T(1)))))
                return false;
 
             #define else_stmt(N)                                                                                                           \
