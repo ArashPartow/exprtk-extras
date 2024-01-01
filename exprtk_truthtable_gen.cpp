@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * ExprTk Truth Table Generator                               *
- * Author: Arash Partow (1999-2023)                           *
+ * Author: Arash Partow (1999-2024)                           *
  * URL: https://www.partow.net/programming/exprtk/index.html  *
  *                                                            *
  * Copyright notice:                                          *
@@ -11,6 +11,7 @@
  * permitted under the guidelines and in accordance with the  *
  * most current version of the MIT License.                   *
  * https://www.opensource.org/licenses/MIT                    *
+ * SPDX-License-Identifier: MIT                               *
  *                                                            *
  **************************************************************
 */
@@ -26,10 +27,10 @@
 template <typename T>
 void truth_table_generator(const std::string& boolean_expression)
 {
-   typedef exprtk::symbol_table<T>       symbol_table_t;
-   typedef exprtk::expression<T>           expression_t;
-   typedef exprtk::parser<T>                   parser_t;
-   typedef exprtk::parser_error::type           error_t;
+   typedef exprtk::symbol_table<T>    symbol_table_t;
+   typedef exprtk::expression<T>      expression_t;
+   typedef exprtk::parser<T>          parser_t;
+   typedef exprtk::parser_error::type err_t;
    typedef typename parser_t::settings_store settings_t;
 
    symbol_table_t symbol_table;
@@ -37,13 +38,18 @@ void truth_table_generator(const std::string& boolean_expression)
    expression_t expression;
    expression.register_symbol_table(symbol_table);
 
-   parser_t parser(
-                    settings_t(
-                      settings_t::compile_all_opts +
-                      settings_t::e_disable_usr_on_rsrvd)
+   static const std::size_t compile_options =
+      settings_t::e_replacer            +
+      settings_t::e_joiner              +
+      settings_t::e_numeric_check       +
+      settings_t::e_bracket_check       +
+      settings_t::e_sequence_check      +
+      settings_t::e_strength_reduction  +
+      settings_t::e_disable_usr_on_rsrvd;
+
+   parser_t parser(settings_t(compile_options)
                      .disable_all_base_functions    ()
-                     .disable_all_control_structures()
-                  );
+                     .disable_all_control_structures());
 
    parser.enable_unknown_symbol_resolver();
 
@@ -58,7 +64,7 @@ void truth_table_generator(const std::string& boolean_expression)
 
       for (std::size_t i = 0; i < parser.error_count(); ++i)
       {
-         error_t error = parser.get_error(i);
+         err_t error = parser.get_error(i);
 
          printf("Error: %02d Position: %02d "
                 "Type: [%s] "
@@ -69,6 +75,13 @@ void truth_table_generator(const std::string& boolean_expression)
                 exprtk::parser_error::to_str(error.mode).c_str(),
                 error.diagnostic.c_str(),
                 boolean_expression.c_str());
+
+         exprtk::parser_error::update_error(error,boolean_expression);
+
+         printf("Error[%02d] at line: %d column: %d\n",
+                static_cast<int>(i),
+                static_cast<int>(error.line_no),
+                static_cast<int>(error.column_no));
       }
 
       return;
@@ -111,7 +124,7 @@ void truth_table_generator(const std::string& boolean_expression)
 
    unsigned int upper_bound = 1 << symbol_list.size();
 
-   int index_width = static_cast<int>(std::ceil(std::log10(upper_bound)));
+   const int index_width = static_cast<int>(std::ceil(std::log10(upper_bound)));
 
    // Print truth table header
    printf(" #%s ",std::string(index_width - 1,' ').c_str());
@@ -123,23 +136,23 @@ void truth_table_generator(const std::string& boolean_expression)
 
    printf("| %s \n",boolean_expression.c_str());
 
-   for (unsigned int i = 0; i < upper_bound; ++i)
+   for (std::size_t i = 0; i < upper_bound; ++i)
    {
       for (std::size_t j = 0; j < symbol_list.size(); ++j)
       {
          symbol_table.get_variable(symbol_list[j].first)->ref() = T((i & (1 << (symbol_list.size() - j - 1))) ? 0 : 1);
       }
 
-      int result = static_cast<int>(expression.value());
+      const std::size_t result = static_cast<std::size_t>(expression.value());
 
-      printf(" %*d ",index_width,i);
+      printf(" %*d ", index_width, static_cast<int>(i));
 
       for (std::size_t j = 0; j < symbol_list.size(); ++j)
       {
          printf("| %d ",static_cast<int>(symbol_table.get_variable(symbol_list[j].first)->value()));
       }
 
-      printf("| %d \n",result);
+      printf("| %d \n", static_cast<int>(result));
    }
 }
 

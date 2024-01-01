@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * Functional Test Expression Generator                       *
- * Author: Arash Partow (1999-2023)                           *
+ * Author: Arash Partow (1999-2024)                           *
  * URL: https://www.partow.net/programming/exprtk/index.html  *
  *                                                            *
  * Copyright notice:                                          *
@@ -11,6 +11,7 @@
  * permitted under the guidelines and in accordance with the  *
  * most current version of the MIT License.                   *
  * https://www.opensource.org/licenses/MIT                    *
+ * SPDX-License-Identifier: MIT                               *
  *                                                            *
  **************************************************************
 */
@@ -32,10 +33,10 @@
 */
 
 
-void gen_perm(const std::string& s,
-              const std::size_t n,
-              std::deque<std::string>& perm_list,
-              const std::string prefix = "")
+inline void gen_perm(const std::string& s,
+                     const std::size_t n,
+                     std::deque<std::string>& perm_list,
+                     const std::string prefix = "")
 {
    if (n == 0)
    {
@@ -66,27 +67,27 @@ int main()
 
    {
       std::deque<std::string> operator_list;
-      gen_perm("+-*/",2,operator_list);
+      gen_perm("+-*/", 2, operator_list);
 
       std::string expr[] =
-                  {
-                    "((xAy)Bz)",
-                    "(xA(yBz))",
-                    "((3.579Ay)Bz)",
-                    "(3.579A(yBz))",
-                    "((xA5.793)Bz)",
-                    "(xA(5.793Bz))",
-                    "((xAy)B7.935)",
-                    "(xA(yB7.935))",
-                    "((3.579A5.793)Bz)",
-                    "(3.579A(5.793Bz))",
-                    "((3.579Ay)B7.935)",
-                    "(3.579A(yB7.935))",
-                    "((xA5.793)B7.935)",
-                    "(xA(5.793B7.935))",
-                    "((3.579A5.793)B7.935)",
-                    "(3.579A(5.793B7.935))"
-                  };
+         {
+            "((xAy)Bz)",
+            "(xA(yBz))",
+            "((3.579Ay)Bz)",
+            "(3.579A(yBz))",
+            "((xA5.793)Bz)",
+            "(xA(5.793Bz))",
+            "((xAy)B7.935)",
+            "(xA(yB7.935))",
+            "((3.579A5.793)Bz)",
+            "(3.579A(5.793Bz))",
+            "((3.579Ay)B7.935)",
+            "(3.579A(yB7.935))",
+            "((xA5.793)B7.935)",
+            "(xA(5.793B7.935))",
+            "((3.579A5.793)B7.935)",
+            "(3.579A(5.793B7.935))"
+         };
 
       for (std::size_t i = 0; i < sizeof(expr) / sizeof(std::string); ++i)
       {
@@ -112,71 +113,71 @@ int main()
 
    {
       std::deque<std::string> operator_list;
-      gen_perm("+-*/",3,operator_list);
+      gen_perm("+-*/", 3, operator_list);
 
       std::string expr[] =
-                  {
-                    "((xAy)B(zCw))",
-                    "((xA(yB(zCw))))",
-                    "((xA((yBz)Cw)))",
-                    "((((xAy)Bz)Cw))",
-                    "(((xA(yBz))Cw))",
-                    "((3.579Ay)B(zCw))",
-                    "((3.579A(yB(zCw))))",
-                    "((3.579A((yBz)Cw)))",
-                    "((((3.579Ay)Bz)Cw))",
-                    "(((3.579A(yBz))Cw))",
-                    "((xA5.793)B(zCw))",
-                    "((xA(5.793B(zCw))))",
-                    "((xA((5.793Bz)Cw)))",
-                    "((((xA5.793)Bz)Cw))",
-                    "(((xA(5.793Bz))Cw))",
-                    "((xAy)B(7.935Cw))",
-                    "((xA(yB(7.935Cw))))",
-                    "((xA((yB7.935)Cw)))",
-                    "((((xAy)B7.935)Cw))",
-                    "(((xA(yB7.935))Cw))",
-                    "((xAy)B(zC9.357))",
-                    "((xA(yB(zC9.357))))",
-                    "((xA((yBz)C9.357)))",
-                    "((((xAy)Bz)C9.357))",
-                    "(((xA(yBz))C9.357))",
-                    "((3.579A5.793)B(zCw))",
-                    "((3.579A(5.793B(zCw))))",
-                    "((3.579A((5.793Bz)Cw)))",
-                    "((((3.579A5.793)Bz)Cw))",
-                    "(((3.579A(5.793Bz))Cw))",
-                    "((3.579Ay)B(5.793Cw))",
-                    "((3.579A(yB(5.793Cw))))",
-                    "((3.579A((yB5.793)Cw)))",
-                    "((((3.579Ay)B5.793)Cw))",
-                    "(((3.579A(yB5.793))Cw))",
-                    "((3.579Ay)B(zC9.357))",
-                    "((3.579A(yB(zC9.357))))",
-                    "((3.579A((yBz)C9.357)))",
-                    "((((3.579Ay)Bz)C9.357))",
-                    "(((3.579A(yBz))C9.357))",
-                    "((xA5.793)B(7.935Cw))",
-                    "((xA(5.793B(7.935Cw))))",
-                    "((xA((5.793B7.935)Cw)))",
-                    "((((xA5.793)B7.935)Cw))",
-                    "(((xA(5.793B7.935))Cw))",
-                    "((xA5.793)B(zC9.357))",
-                    "((xA(5.793B(zC9.357))))",
-                    "((xA((5.793Bz)C9.357)))",
-                    "((((xA5.793)Bz)C9.357))",
-                    "(((xA(5.793Bz))C9.357))",
-                    "((xAy)B(7.935C9.357))",
-                    "((xA(yB(7.935C9.357))))",
-                    "((xA((yB7.935)C9.357)))",
-                    "((((xAy)B7.935)C9.357))",
-                    "(((xA(yB7.935))C9.357))",
-                    "((3.579A5.793)B(7.935C9.357))",
-                    "((3.579A(5.793B(7.935C9.357))))",
-                    "((3.579A((5.793B7.935)C9.357)))",
-                    "((((3.579A5.793)B7.935)C9.357))",
-                    "(((3.579A(5.793B7.935))C9.357))"
-                  };
+      {
+         "((xAy)B(zCw))",
+         "((xA(yB(zCw))))",
+         "((xA((yBz)Cw)))",
+         "((((xAy)Bz)Cw))",
+         "(((xA(yBz))Cw))",
+         "((3.579Ay)B(zCw))",
+         "((3.579A(yB(zCw))))",
+         "((3.579A((yBz)Cw)))",
+         "((((3.579Ay)Bz)Cw))",
+         "(((3.579A(yBz))Cw))",
+         "((xA5.793)B(zCw))",
+         "((xA(5.793B(zCw))))",
+         "((xA((5.793Bz)Cw)))",
+         "((((xA5.793)Bz)Cw))",
+         "(((xA(5.793Bz))Cw))",
+         "((xAy)B(7.935Cw))",
+         "((xA(yB(7.935Cw))))",
+         "((xA((yB7.935)Cw)))",
+         "((((xAy)B7.935)Cw))",
+         "(((xA(yB7.935))Cw))",
+         "((xAy)B(zC9.357))",
+         "((xA(yB(zC9.357))))",
+         "((xA((yBz)C9.357)))",
+         "((((xAy)Bz)C9.357))",
+         "(((xA(yBz))C9.357))",
+         "((3.579A5.793)B(zCw))",
+         "((3.579A(5.793B(zCw))))",
+         "((3.579A((5.793Bz)Cw)))",
+         "((((3.579A5.793)Bz)Cw))",
+         "(((3.579A(5.793Bz))Cw))",
+         "((3.579Ay)B(5.793Cw))",
+         "((3.579A(yB(5.793Cw))))",
+         "((3.579A((yB5.793)Cw)))",
+         "((((3.579Ay)B5.793)Cw))",
+         "(((3.579A(yB5.793))Cw))",
+         "((3.579Ay)B(zC9.357))",
+         "((3.579A(yB(zC9.357))))",
+         "((3.579A((yBz)C9.357)))",
+         "((((3.579Ay)Bz)C9.357))",
+         "(((3.579A(yBz))C9.357))",
+         "((xA5.793)B(7.935Cw))",
+         "((xA(5.793B(7.935Cw))))",
+         "((xA((5.793B7.935)Cw)))",
+         "((((xA5.793)B7.935)Cw))",
+         "(((xA(5.793B7.935))Cw))",
+         "((xA5.793)B(zC9.357))",
+         "((xA(5.793B(zC9.357))))",
+         "((xA((5.793Bz)C9.357)))",
+         "((((xA5.793)Bz)C9.357))",
+         "(((xA(5.793Bz))C9.357))",
+         "((xAy)B(7.935C9.357))",
+         "((xA(yB(7.935C9.357))))",
+         "((xA((yB7.935)C9.357)))",
+         "((((xAy)B7.935)C9.357))",
+         "(((xA(yB7.935))C9.357))",
+         "((3.579A5.793)B(7.935C9.357))",
+         "((3.579A(5.793B(7.935C9.357))))",
+         "((3.579A((5.793B7.935)C9.357)))",
+         "((((3.579A5.793)B7.935)C9.357))",
+         "(((3.579A(5.793B7.935))C9.357))"
+      };
 
       for (std::size_t i = 0; i < sizeof(expr) / sizeof(std::string); ++i)
       {
