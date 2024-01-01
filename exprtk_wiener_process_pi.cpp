@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * Approximation of Pi via Wiener process based Monte Carlo   *
- * Author: Arash Partow (1999-2023)                           *
+ * Author: Arash Partow (1999-2024)                           *
  * URL: https://www.partow.net/programming/exprtk/index.html  *
  *                                                            *
  * Copyright notice:                                          *
@@ -11,6 +11,7 @@
  * permitted under the guidelines and in accordance with the  *
  * most current version of the MIT License.                   *
  * https://www.opensource.org/licenses/MIT                    *
+ * SPDX-License-Identifier: MIT                               *
  *                                                            *
  **************************************************************
 */
@@ -44,19 +45,19 @@ template <typename T>
 void wiener_process_pi()
 {
    typedef exprtk::symbol_table<T> symbol_table_t;
-   typedef exprtk::expression<T>     expression_t;
-   typedef exprtk::parser<T>             parser_t;
+   typedef exprtk::expression<T>   expression_t;
+   typedef exprtk::parser<T>       parser_t;
 
    const std::string wiener_process_pi_program =
-                        " var w[10^4] := [0];                         "
-                        "                                             "
-                        " for (var i := 0; i < w[]; i += 1)           "
-                        " {                                           "
-                        "   var x[10^4] := [(rnd_01 < 0.5) ? -1 : 1]; "
-                        "   w[i]        := sum(x);                    "
-                        " }                                           "
-                        "                                             "
-                        " (2 * w[]) / avg(abs(w))^2;                  ";
+      " var w[10^4] := [0];                            "
+      "                                                "
+      " for (var i := 0; i < w[]; i += 1)              "
+      " {                                              "
+      "    var x[10^4] := [(rnd_01 < 1 / 2) ? -1 : 1]; "
+      "    w[i]        := sum(x);                      "
+      " }                                              "
+      "                                                "
+      " (2 * w[]) / avg(abs(w))^2;                     ";
 
    rnd_01<T> rnd01;
 

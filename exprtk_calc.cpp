@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * ExprTk Simple Calculator Example                           *
- * Author: Arash Partow (1999-2023)                           *
+ * Author: Arash Partow (1999-2024)                           *
  * URL: https://www.partow.net/programming/exprtk/index.html  *
  *                                                            *
  * Copyright notice:                                          *
@@ -11,6 +11,7 @@
  * permitted under the guidelines and in accordance with the  *
  * most current version of the MIT License.                   *
  * https://www.opensource.org/licenses/MIT                    *
+ * SPDX-License-Identifier: MIT                               *
  *                                                            *
  **************************************************************
 */
@@ -28,7 +29,7 @@ int main()
    typedef exprtk::symbol_table<double> symbol_table_t;
    typedef exprtk::expression<double>   expression_t;
    typedef exprtk::parser<double>       parser_t;
-   typedef exprtk::parser_error::type   error_t;
+   typedef exprtk::parser_error::type   err_t;
 
    for ( ; ; )
    {
@@ -53,7 +54,7 @@ int main()
 
       std::string expression_str;
 
-      std::cout << ">> ";
+      printf(">> ");
       std::getline(std::cin,expression_str);
 
       if (expression_str.empty())
@@ -73,8 +74,8 @@ int main()
 
          for (std::size_t i = 0; i < parser.error_count(); ++i)
          {
-            error_t error = parser.get_error(i);
-            printf("Err: %02d Pos: %02d Type: [%14s] Msg: %s\tExpression: %s\n",
+            err_t error = parser.get_error(i);
+            printf("Error: %02d Pos: %02d Type: [%14s] Message: %s\tExpression: %s\n",
                    static_cast<unsigned int>(i),
                    static_cast<unsigned int>(error.token.position),
                    exprtk::parser_error::to_str(error.mode).c_str(),

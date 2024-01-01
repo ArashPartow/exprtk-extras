@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * ExprTk L-Norm Of A Vector                                  *
- * Author: Arash Partow (1999-2023)                           *
+ * Author: Arash Partow (1999-2024)                           *
  * URL: https://www.partow.net/programming/exprtk/index.html  *
  *                                                            *
  * Copyright notice:                                          *
@@ -11,6 +11,7 @@
  * permitted under the guidelines and in accordance with the  *
  * most current version of the MIT License.                   *
  * https://www.opensource.org/licenses/MIT                    *
+ * SPDX-License-Identifier: MIT                               *
  *                                                            *
  **************************************************************
 */
@@ -18,7 +19,6 @@
 
 #include <cmath>
 #include <cstdio>
-#include <iostream>
 #include <string>
 #include <vector>
 
@@ -129,10 +129,8 @@ template <typename T>
 void norm_of_vector()
 {
    typedef exprtk::symbol_table<T> symbol_table_t;
-   typedef exprtk::expression<T>     expression_t;
-   typedef exprtk::parser<T>             parser_t;
-
-   symbol_table_t symbol_table;
+   typedef exprtk::expression<T>   expression_t;
+   typedef exprtk::parser<T>       parser_t;
 
    T x[] = { T(1), T(2), T(3), T(4), T(5) };
 
@@ -142,6 +140,7 @@ void norm_of_vector()
    y.push_back(T(7)); y.push_back(T(8));
    y.push_back(T(9)); y.push_back(T(0));
 
+   symbol_table_t symbol_table;
    symbol_table.add_vector("x", x);
    symbol_table.add_vector("y", y);
 
@@ -150,26 +149,26 @@ void norm_of_vector()
    symbol_table.add_function("norm",norm_);
 
    const std::string vector_norm_program[] =
-                     {
-                        " norm(x)          ",
-                        " norm(x,1)        ",
-                        " norm(x,2)        ",
-                        " norm(x,3)        ",
-                        " norm(x,4)        ",
-                        " norm(x,5)        ",
-                        " norm(2x+1)       ",
-                        " norm(2x+1,1)     ",
-                        " norm(2x+1,2)     ",
-                        " norm(2x+1,3)     ",
-                        " norm(2x+1,4)     ",
-                        " norm(2x+1,5)     ",
-                        " norm(2x+y/3-4)   ",
-                        " norm(2x+y/3-4,1) ",
-                        " norm(2x+y/3-4,2) ",
-                        " norm(2x+y/3-4,3) ",
-                        " norm(2x+y/3-4,4) ",
-                        " norm(2x+y/3-4,5) "
-                     };
+      {
+         " norm(x)          ",
+         " norm(x,1)        ",
+         " norm(x,2)        ",
+         " norm(x,3)        ",
+         " norm(x,4)        ",
+         " norm(x,5)        ",
+         " norm(2x+1)       ",
+         " norm(2x+1,1)     ",
+         " norm(2x+1,2)     ",
+         " norm(2x+1,3)     ",
+         " norm(2x+1,4)     ",
+         " norm(2x+1,5)     ",
+         " norm(2x+y/3-4)   ",
+         " norm(2x+y/3-4,1) ",
+         " norm(2x+y/3-4,2) ",
+         " norm(2x+y/3-4,3) ",
+         " norm(2x+y/3-4,4) ",
+         " norm(2x+y/3-4,5) "
+      };
 
    const std::size_t vecnorm_program_size = sizeof(vector_norm_program) / sizeof(std::string);
 

@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * Approximation of e via Monte-Carlo Method                  *
- * Author: Arash Partow (1999-2023)                           *
+ * Author: Arash Partow (1999-2024)                           *
  * URL: https://www.partow.net/programming/exprtk/index.html  *
  *                                                            *
  * Copyright notice:                                          *
@@ -11,6 +11,7 @@
  * permitted under the guidelines and in accordance with the  *
  * most current version of the MIT License.                   *
  * https://www.opensource.org/licenses/MIT                    *
+ * SPDX-License-Identifier: MIT                               *
  *                                                            *
  **************************************************************
 */
@@ -48,19 +49,19 @@ void monte_carlo_e()
    typedef exprtk::parser<T>       parser_t;
 
    const std::string monte_carlo_e_program =
-                  " var max_samples := 10^7;                  "
-                  " var trials      := 0;                     "
-                  "                                           "
-                  " for (var i := 0; i < max_samples; i += 1) "
-                  " {                                         "
-                  "   var rand_sum := 0;                      "
-                  "   repeat                                  "
-                  "     rand_sum += rnd_01;                   "
-                  "     trials += 1;                          "
-                  "   until (rand_sum > 1);                   "
-                  " };                                        "
-                  "                                           "
-                  " trials / max_samples;                     ";
+      " var max_samples := 10^8;                  "
+      " var trials      := 0;                     "
+      "                                           "
+      " for (var i := 0; i < max_samples; i += 1) "
+      " {                                         "
+      "    var rand_sum := 0;                     "
+      "    repeat                                 "
+      "       rand_sum += rnd_01;                 "
+      "       trials   += 1;                      "
+      "    until (rand_sum > 1);                  "
+      " };                                        "
+      "                                           "
+      " trials / max_samples;                     ";
 
    rnd_01<T> rnd01;
 

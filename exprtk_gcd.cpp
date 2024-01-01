@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * ExprTk Greatest Common Divisor Example                     *
- * Author: Arash Partow (1999-2023)                           *
+ * Author: Arash Partow (1999-2024)                           *
  * URL: https://www.partow.net/programming/exprtk/index.html  *
  *                                                            *
  * Copyright notice:                                          *
@@ -11,20 +11,20 @@
  * permitted under the guidelines and in accordance with the  *
  * most current version of the MIT License.                   *
  * https://www.opensource.org/licenses/MIT                    *
+ * SPDX-License-Identifier: MIT                               *
  *                                                            *
  **************************************************************
 */
 
 
 #include <cstdio>
-#include <iostream>
 #include <string>
 
 #include "exprtk.hpp"
 
 
 template <typename T>
-inline T gcd_println(T x, T y, T z)
+T gcd_println(T x, T y, T z)
 {
    printf("gcd(%2d,%2d) = %2d\n",
           static_cast<int>(x),
@@ -47,29 +47,32 @@ void gcd()
    symbol_table.add_function("println",gcd_println);
 
    compositor_t compositor(symbol_table);
-   compositor
-      .add(
-      function_t( // define function: gcd(x,y)
-           "gcd",
-           " switch                        "
-           " {                             "
-           "   case 0 = x : 0;             "
-           "   case 0 = y : x;             "
-           "   case x = y : x;             "
-           "   case x > y : gcd(x - y, y); "
-           "   default    : gcd(x, y - x); "
-           " }                             ",
-           "x","y"));
+
+   // define function: gcd(x,y)
+   compositor.add(
+      function_t("gcd")
+      .vars("x","y")
+      .expression
+      (
+         " switch                         "
+         " {                              "
+         "    case 0 = x : 0;             "
+         "    case 0 = y : x;             "
+         "    case x = y : x;             "
+         "    case x > y : gcd(x - y, y); "
+         "    default    : gcd(x, y - x); "
+         " }                              "
+      ));
 
    const std::string gcd_program =
-                     " i := 0;                      "
-                     " while ((i += 1) < 100)       "
-                     " {                            "
-                     "   j := 0;                    "
-                     "   repeat                     "
-                     "     println(i, j, gcd(i,j)); "
-                     "   until ((j += 1) >= 100);   "
-                     " };                           ";
+      " i := 0;                        "
+      " while ((i += 1) < 100)         "
+      " {                              "
+      "    j := 0;                     "
+      "    repeat                      "
+      "       println(i, j, gcd(i,j)); "
+      "    until ((j += 1) >= 100);    "
+      " };                             ";
 
    expression_t expression;
    expression.register_symbol_table(symbol_table);

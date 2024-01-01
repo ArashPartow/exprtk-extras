@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * Function Call Benchmark (Custom vs Composite vs Native)    *
- * Author: Arash Partow (1999-2023)                           *
+ * Author: Arash Partow (1999-2024)                           *
  * URL: https://www.partow.net/programming/exprtk/index.html  *
  *                                                            *
  * Copyright notice:                                          *
@@ -11,6 +11,7 @@
  * permitted under the guidelines and in accordance with the  *
  * most current version of the MIT License.                   *
  * https://www.opensource.org/licenses/MIT                    *
+ * SPDX-License-Identifier: MIT                               *
  *                                                            *
  **************************************************************
 */
@@ -44,7 +45,7 @@ inline T func1(T v1, T v2)
 }
 
 template <typename T>
-void function_call_benchmark()
+void function_call_benchmark01()
 {
    typedef exprtk::symbol_table<T>         symbol_table_t;
    typedef exprtk::expression<T>           expression_t;
@@ -68,11 +69,10 @@ void function_call_benchmark()
 
    compositor_t compositor(symbol_table);
 
-   compositor
-      .add(
-        function_t("func2")
-        .var("v1").var("v2")
-        .expression(" 1 + cos(v1 * v2) / 3;"));
+   compositor.add(
+      function_t("func2")
+      .var("v1").var("v2")
+      .expression(" 1 + cos(v1 * v2) / 3;"));
 
    const std::string program0 = "func0(v1,v2);";
    const std::string program1 = "func1(v1,v2);";
@@ -196,6 +196,6 @@ void function_call_benchmark()
 
 int main()
 {
-   function_call_benchmark<double>();
+   function_call_benchmark01<double>();
    return 0;
 }

@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * Approximation of Pi via Monte-Carlo Method                 *
- * Author: Arash Partow (1999-2023)                           *
+ * Author: Arash Partow (1999-2024)                           *
  * URL: https://www.partow.net/programming/exprtk/index.html  *
  *                                                            *
  * Copyright notice:                                          *
@@ -11,6 +11,7 @@
  * permitted under the guidelines and in accordance with the  *
  * most current version of the MIT License.                   *
  * https://www.opensource.org/licenses/MIT                    *
+ * SPDX-License-Identifier: MIT                               *
  *                                                            *
  **************************************************************
 */
@@ -48,16 +49,16 @@ void monte_carlo_pi()
    typedef exprtk::parser<T>       parser_t;
 
    const std::string monte_carlo_pi_program =
-                  " var max_samples := 5 * 10^7;              "
-                  " var count       := 0;                     "
-                  "                                           "
-                  " for (var i := 0; i < max_samples; i += 1) "
-                  " {                                         "
-                  "   if ((rnd_01^2 + rnd_01^2) <= 1)         "
-                  "    count += 1;                            "
-                  " };                                        "
-                  "                                           "
-                  " (4 * count) / max_samples;                ";
+      " var max_samples := 5 * 10^7;              "
+      " var count       := 0;                     "
+      "                                           "
+      " for (var i := 0; i < max_samples; i += 1) "
+      " {                                         "
+      "    if ((rnd_01^2 + rnd_01^2) <= 1)        "
+      "       count += 1;                         "
+      " };                                        "
+      "                                           "
+      " (4 * count) / max_samples;                ";
 
    rnd_01<T> rnd01;
 

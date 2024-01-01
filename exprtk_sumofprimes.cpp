@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * ExprTk Summation of Prime Factors                          *
- * Author: Arash Partow (1999-2023)                           *
+ * Author: Arash Partow (1999-2024)                           *
  * URL: https://www.partow.net/programming/exprtk/index.html  *
  *                                                            *
  * Copyright notice:                                          *
@@ -11,13 +11,13 @@
  * permitted under the guidelines and in accordance with the  *
  * most current version of the MIT License.                   *
  * https://www.opensource.org/licenses/MIT                    *
+ * SPDX-License-Identifier: MIT                               *
  *                                                            *
  **************************************************************
 */
 
 
 #include <cstdio>
-#include <iostream>
 #include <string>
 
 #include "exprtk.hpp"
@@ -36,40 +36,40 @@ void sum_of_primes()
 
    compositor_t compositor(symbol_table);
 
-   compositor
-      .add( // define function: sum_of_primes(z)
-         function_t("sum_of_primes")
-           .var("z")
-           .expression(
-             " var i     := 2;     "
-             " var total := 0;     "
-             " while (z > 1)       "
-             " {                   "
-             "   if (0 == (z % i)) "
-             "   {                 "
-             "     total += i;     "
-             "     z /= i;         "
-             "   }                 "
-             "   else              "
-             "     i += 1;         "
-             " };                  "
-             " total;              "));
+   // define function: sum_of_primes(z)
+   compositor.add(
+      function_t("sum_of_primes")
+        .var("z")
+        .expression(
+          " var i     := 2;      "
+          " var total := 0;      "
+          " while (z > 1)        "
+          " {                    "
+          "    if (0 == (z % i)) "
+          "    {                 "
+          "       total += i;    "
+          "       z /= i;        "
+          "    }                 "
+          "    else              "
+          "       i += 1;        "
+          " };                   "
+          " total;               "));
 
    exprtk::rtl::io::println<T> println;
 
    symbol_table.add_function("println",println);
 
-   const std::string sum_of_primes_program =
-                        " for (var i := 1; i <= 100; i += 1) "
-                        " {                                  "
-                        "   println(i, sum_of_primes(i));    "
-                        " }                                  ";
+   const std::string sum_of_prime_factors_program =
+      " for (var i := 1; i <= 100; i += 1) "
+      " {                                  "
+      "    println(i, sum_of_primes(i));   "
+      " }                                  ";
 
    expression_t expression;
    expression.register_symbol_table(symbol_table);
 
    parser_t parser;
-   parser.compile(sum_of_primes_program,expression);
+   parser.compile(sum_of_prime_factors_program,expression);
 
    expression.value();
 }

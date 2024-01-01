@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * ExprTk GNUPlot Multi-Curve Example                         *
- * Author: Arash Partow (1999-2023)                           *
+ * Author: Arash Partow (1999-2024)                           *
  * URL: https://www.partow.net/programming/exprtk/index.html  *
  *                                                            *
  * Copyright notice:                                          *
@@ -11,6 +11,7 @@
  * permitted under the guidelines and in accordance with the  *
  * most current version of the MIT License.                   *
  * https://www.opensource.org/licenses/MIT                    *
+ * SPDX-License-Identifier: MIT                               *
  *                                                            *
  **************************************************************
 */
@@ -166,7 +167,7 @@ private:
 
       for (x = curve.min_x_; x <= curve.max_x_; x += increment)
       {
-         double y = expression.value();
+         const double y = expression.value();
 
               if (y < curve.min_y_) curve.min_y_ = y;
          else if (y > curve.max_y_) curve.max_y_ = y;
@@ -174,8 +175,8 @@ private:
          stream << x << "\t" << y << "\n";
       }
 
-      double diff_y  = std::abs(curve.max_y_ - curve.min_y_);
-      double perc7_5 = diff_y * 0.075; //7.5%
+      const double diff_y  = std::abs(curve.max_y_ - curve.min_y_);
+      const double perc7_5 = diff_y * 0.075; //7.5%
 
       curve.min_y_ -= perc7_5;
       curve.max_y_ += perc7_5;
@@ -211,7 +212,7 @@ int main()
 
 /*
    Build and Run:
-   1. c++ -ansi -pedantic-errors -Wall -Wextra -Werror -Wno-long-long -o exprtk_gnuplot_multi exprtk_gnuplot_multi.cpp -lstdc++
+   1. c++ -pedantic-errors -Wall -Wextra -Werror -Wno-long-long -O3 -DNDEBUG -o exprtk_gnuplot_multi exprtk_gnuplot_multi.cpp -lstdc++
    2. ./exprtk_gnuplot_multi
    3. gnuplot plot.gp
 */

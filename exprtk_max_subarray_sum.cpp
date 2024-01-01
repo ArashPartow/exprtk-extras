@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * ExprTk Maximum Subarray Problem                            *
- * Author: Arash Partow (1999-2023)                           *
+ * Author: Arash Partow (1999-2024)                           *
  * URL: https://www.partow.net/programming/exprtk/index.html  *
  *                                                            *
  * Copyright notice:                                          *
@@ -11,13 +11,13 @@
  * permitted under the guidelines and in accordance with the  *
  * most current version of the MIT License.                   *
  * https://www.opensource.org/licenses/MIT                    *
+ * SPDX-License-Identifier: MIT                               *
  *                                                            *
  **************************************************************
 */
 
 
 #include <cstdio>
-#include <iostream>
 #include <string>
 
 #include "exprtk.hpp"
@@ -31,26 +31,26 @@ void max_subarray_sum()
    typedef exprtk::parser<T>       parser_t;
 
    const std::string max_subarray_sum_program =
-                  " var zero       := 0;                "
-                  " var curr_sum   := 0;                "
-                  " var curr_start := 0;                "
-                  "                                     "
-                  " for (var i := 0; i < vec[]; i += 1) "
-                  " {                                   "
-                  "   curr_sum += vec[i];               "
-                  "                                     "
-                  "   if (curr_sum < zero)              "
-                  "   {                                 "
-                  "     curr_sum   := 0;                "
-                  "     curr_start := i + 1;            "
-                  "   }                                 "
-                  "   else if (curr_sum > max_sum)      "
-                  "   {                                 "
-                  "     max_sum   := curr_sum;          "
-                  "     max_start := curr_start;        "
-                  "     max_end   := i;                 "
-                  "   }                                 "
-                  " }                                   ";
+      " var zero       := 0;                "
+      " var curr_sum   := 0;                "
+      " var curr_start := 0;                "
+      "                                     "
+      " for (var i := 0; i < vec[]; i += 1) "
+      " {                                   "
+      "    curr_sum += vec[i];              "
+      "                                     "
+      "    if (curr_sum < zero)             "
+      "    {                                "
+      "       curr_sum   := 0;              "
+      "       curr_start := i + 1;          "
+      "    }                                "
+      "    else if (curr_sum > max_sum)     "
+      "    {                                "
+      "       max_sum   := curr_sum;        "
+      "       max_start := curr_start;      "
+      "       max_end   := i;               "
+      "    }                                "
+      " }                                   ";
 
    T max_sum   = T(0);
    T max_start = T(0);
@@ -60,10 +60,10 @@ void max_subarray_sum()
 
    symbol_table_t symbol_table;
 
-   symbol_table.add_variable("max_sum"  ,max_sum  );
-   symbol_table.add_variable("max_start",max_start);
-   symbol_table.add_variable("max_end"  ,max_end  );
-   symbol_table.add_vector  ("vec"      ,vec      );
+   symbol_table.add_variable("max_sum"  , max_sum  );
+   symbol_table.add_variable("max_start", max_start);
+   symbol_table.add_variable("max_end"  , max_end  );
+   symbol_table.add_vector  ("vec"      , vec      );
 
    expression_t expression;
    expression.register_symbol_table(symbol_table);
