@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * ExprTk Binomial Coefficient (n-choose-r)                   *
- * Author: Arash Partow (1999-2023)                           *
+ * Author: Arash Partow (1999-2024)                           *
  * URL: https://www.partow.net/programming/exprtk/index.html  *
  *                                                            *
  * Copyright notice:                                          *
@@ -11,13 +11,13 @@
  * permitted under the guidelines and in accordance with the  *
  * most current version of the MIT License.                   *
  * https://www.opensource.org/licenses/MIT                    *
+ * SPDX-License-Identifier: MIT                               *
  *                                                            *
  **************************************************************
 */
 
 
 #include <cstdio>
-#include <iostream>
 #include <string>
 
 #include "exprtk.hpp"
@@ -48,28 +48,27 @@ void n_choose_r()
 
    compositor_t compositor(symbol_table);
 
-   compositor
-      .add( // define function: ncr(n,r)
-         function_t("ncr")
-         .var("n")
-         .var("r")
-         .expression
-         (
-           " switch                              "
-           " {                                   "
-           "   case n <= r : 1;                  "
-           "   case r <= 0 : 1;                  "
-           "   default     : ncr(n - 1, r - 1) + "
-           "                 ncr(n - 1, r    ) ; "
-           " }                                   "
-         ));
+   // define function: ncr(n,r)
+   compositor.add(
+      function_t("ncr")
+      .vars("n", "r")
+      .expression
+      (
+        " switch                               "
+        " {                                    "
+        "    case n <= r : 1;                  "
+        "    case r <= 0 : 1;                  "
+        "    default     : ncr(n - 1, r - 1) + "
+        "                  ncr(n - 1, r    ) ; "
+        " }                                    "
+      ));
 
    const std::string ncr_program =
-                  " var n := 25;                    "
-                  " for (var r := 1; r < n; r += 1) "
-                  " {                               "
-                  "   println(n, r, ncr(n,r));      "
-                  " };                              ";
+      " var n := 25;                     "
+      " for (var r := 1; r < n; r += 1)  "
+      " {                                "
+      "    println(n, r, ncr(n,r));      "
+      " };                               ";
 
    expression_t expression;
    expression.register_symbol_table(symbol_table);

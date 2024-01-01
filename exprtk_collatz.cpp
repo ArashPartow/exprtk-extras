@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * ExprTk Collatz Example                                     *
- * Author: Arash Partow (1999-2023)                           *
+ * Author: Arash Partow (1999-2024)                           *
  * URL: https://www.partow.net/programming/exprtk/index.html  *
  *                                                            *
  * Copyright notice:                                          *
@@ -11,13 +11,13 @@
  * permitted under the guidelines and in accordance with the  *
  * most current version of the MIT License.                   *
  * https://www.opensource.org/licenses/MIT                    *
+ * SPDX-License-Identifier: MIT                               *
  *                                                            *
  **************************************************************
 */
 
 
 #include <cstdio>
-#include <iostream>
 #include <string>
 
 #include "exprtk.hpp"
@@ -39,25 +39,27 @@ void collatz()
 
    compositor_t compositor(symbol_table);
 
-   compositor
-      .add(
-      function_t( // define function: collatz_trace(x)
-           "collatz_trace",
-           " while (x > 1)                          "
-           " {                                      "
-           "   x := if (x % 2 == 0, x / 2, 3x + 1); "
-           "   print(x);                            "
-           " }                                      ",
-           "x"));
+   // define function: collatz_trace(x)
+   compositor.add(
+      function_t("collatz_trace")
+      .var("x")
+      .expression
+      (
+         " while (x > 1)                           "
+         " {                                       "
+         "    x := (x % 2 == 0) ? x / 2 : 3x + 1;  "
+         "    print(x);                            "
+         " }                                       "
+      ));
 
    const std::string collatz_program =
-                  " x := 0;             "
-                  " repeat              "
-                  "   print(x += 1);    "
-                  "   collatz_trace(x); "
-                  "   print('\n\n');    "
-                  " until (x > 100);    "
-                  " println;            ";
+      " x := 0;              "
+      " repeat               "
+      "    print(x += 1);    "
+      "    collatz_trace(x); "
+      "    print('\n\n');    "
+      " until (x > 100);     "
+      " println;             ";
 
    expression_t expression;
    expression.register_symbol_table(symbol_table);
