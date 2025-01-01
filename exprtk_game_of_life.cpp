@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * ExprTk Conway's Game Of Life                               *
- * Author: Arash Partow (1999-2024)                           *
+ * Author: Arash Partow (1999-2025)                           *
  * URL: https://www.partow.net/programming/exprtk/index.html  *
  *                                                            *
  * Copyright notice:                                          *
@@ -61,8 +61,8 @@ void game_of_life()
    typedef exprtk::function_compositor<T>  compositor_t;
    typedef typename compositor_t::function function_t;
 
-   const std::size_t width  = 60;
-   const std::size_t height = 30;
+   const std::size_t width  = 80;
+   const std::size_t height = 40;
 
    std::vector<T> world(width * height, T(0));
    rnd_01<T> rnd01;
@@ -74,19 +74,29 @@ void game_of_life()
    symbol_table.add_vector  ("world" , world);
    symbol_table.add_package (io_package);
    symbol_table.add_function("random", rnd01);
-   symbol_table.add_function("sleep" ,
-                             [](T time_ms) -> T
-                             {
-                               std::this_thread::sleep_for(
-                               std::chrono::milliseconds(static_cast<std::size_t>(time_ms)));
-                               return T(1);
-                             });
+
+   symbol_table.
+      add_function("sleep",
+      [](T time_ms) -> T
+      {
+         std::this_thread::sleep_for(
+         std::chrono::milliseconds(static_cast<std::size_t>(time_ms)));
+         return T(1);
+      });
+
+   symbol_table.
+      add_function("clear",
+      [](T full) -> T
+      {
+         printf("%s\033[H", full == T(1) ? "" : "\033[2J");
+         std::fflush(stdout);
+         return T(1);
+      });
 
    compositor_t compositor(symbol_table);
 
    compositor.load_variables(true);
    compositor.load_vectors  (true);
-
 
    compositor.add(
       function_t("point")
@@ -98,10 +108,28 @@ void game_of_life()
 
    compositor.add(
       function_t("set_point")
-      .vars("x","y","value")
+      .vars("x", "y", "value")
       .expression
       (
-         " world[y * width + x] := value; "
+         " if (                              "
+         "      (x >= 0) and (y >= 0) and    "
+         "      (x < width) and (y < height) "
+         "    )                              "
+         " {                                 "
+         "    world[y * width + x] := value; "
+         " }                                 "
+      ));
+
+   compositor.add(
+      function_t("set_glider")
+      .vars("x", "y")
+      .expression
+      (
+         " set_point(x + 1, y,     1); "
+         " set_point(x + 2, y + 1, 1); "
+         " set_point(x,     y + 2, 1); "
+         " set_point(x + 1, y + 2, 1); "
+         " set_point(x + 2, y + 2, 1); "
       ));
 
    compositor.add(
@@ -168,24 +196,29 @@ void game_of_life()
       ));
 
    const std::string game_of_life_driver =
-      " /* Randomly setup the initial state of the world */ "
-      " for (var x := 0; x < width; x += 1)                 "
-      " {                                                   "
-      "    for (var y := 0; y < height; y += 1)             "
-      "    {                                                "
-      "       set_point(x, y, (random() < 0.15) ? 1 : 0);   "
-      "    }                                                "
-      " };                                                  "
-      "                                                     "
-      " var num_generations := 200;                         "
-      "                                                     "
-      " for (var i := 0; i < num_generations; i += 1)       "
-      " {                                                   "
-      "    println('Generation: ', i);                      "
-      "    render();                                        "
-      "    evolve();                                        "
-      "    sleep(200);                                      "
-      " }                                                   ";
+      " /* Setup the initial state of the world */            "
+      " for (var x := 0; x < width; x += 1)                   "
+      " {                                                     "
+      "    for (var y := 0; y < height; y += 1)               "
+      "    {                                                  "
+      "       switch                                          "
+      "       {                                               "
+      "          case (random() < 0.10) : set_glider(x,y);    "
+      "          case (random() < 0.10) : set_point (x,y,1);  "
+      "       };                                              "
+      "    }                                                  "
+      " };                                                    "
+      "                                                       "
+      " var num_generations := 1000;                          "
+      "                                                       "
+      " for (var i := 0; i < num_generations; i += 1)         "
+      " {                                                     "
+      "    clear(i % 50 == 0);                                "
+      "    println('Generation: ', i);                        "
+      "    render();                                          "
+      "    evolve();                                          "
+      "    sleep(10);                                         "
+      " }                                                     ";
 
    expression_t expression;
    expression.register_symbol_table(symbol_table);
