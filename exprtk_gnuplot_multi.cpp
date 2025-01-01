@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * ExprTk GNUPlot Multi-Curve Example                         *
- * Author: Arash Partow (1999-2024)                           *
+ * Author: Arash Partow (1999-2025)                           *
  * URL: https://www.partow.net/programming/exprtk/index.html  *
  *                                                            *
  * Copyright notice:                                          *

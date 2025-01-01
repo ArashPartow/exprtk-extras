@@ -3,7 +3,7 @@
  *         C++ Mathematical Expression Toolkit Library        *
  *                                                            *
  * ExprTk Nth-Root via Bisection Method                       *
- * Author: Arash Partow (1999-2024)                           *
+ * Author: Arash Partow (1999-2025)                           *
  * URL: https://www.partow.net/programming/exprtk/index.html  *
  *                                                            *
  * Copyright notice:                                          *
@@ -34,7 +34,7 @@ void nthroot_via_bisection()
    typedef typename compositor_t::function function_t;
 
    const std::string nthroot_via_bisection_program =
-      " for (var x := -30; x <= 30; x += 1)   "
+      " for (var x := -30; x <= 30; x += 1/2) "
       " {                                     "
       "    println('[', x, ']',               "
       "            ' sqrt = ', nthroot(x,2),  "
@@ -55,26 +55,26 @@ void nthroot_via_bisection()
       .var("n")
       .expression
       (
-        " if (abs(frac(n)) > 0)            "
-        "    return [null];                "
-        " else if (x < 0 and (n % 2 == 0)) "
-        "    return [null];                "
-        "                                  "
-        " var lo := min(0,x);              "
-        " var hi := max(0,x);              "
-        "                                  "
-        " while (true)                     "
-        " {                                "
-        "    var mid := avg(lo,hi);        "
-        "    var y   := pow(mid,n);        "
-        "                                  "
-        "    if (equal(y, x))              "
-        "       break [mid];               "
-        "    else if (y < x)               "
-        "       lo := mid;                 "
-        "    else                          "
-        "       hi := mid;                 "
-        " };                               "
+        " if ((n < 0) or (abs(frac(n)) > 0))   "
+        "    return [null];                    "
+        " else if (x < 0 and (n % 2 == 0))     "
+        "    return [null];                    "
+        "                                      "
+        " var lo := (x >= 0) ? 0 : min(-1, x); "
+        " var hi := (x  < 0) ? 0 : max( 1, x); "
+        "                                      "
+        " while (true)                         "
+        " {                                    "
+        "    var mid := avg(lo,hi);            "
+        "    var y   := pow(mid,n);            "
+        "                                      "
+        "    if (equal(y, x))                  "
+        "       break [mid];                   "
+        "    else if (y < x)                   "
+        "       lo := mid;                     "
+        "    else                              "
+        "       hi := mid;                     "
+        " };                                   "
        ));
 
    expression_t expression;
